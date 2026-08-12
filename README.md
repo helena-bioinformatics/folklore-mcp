@@ -1,2 +1,65 @@
-# folklore-mcp
-Public metadata and integration guide for the Folklore Variant Evidence MCP server by Helena Bioinformatics.
+# Folklore Variant Evidence MCP
+
+Folklore Variant Evidence is a public, read-only MCP server from [Helena Bioinformatics](https://helena.bio). It resolves one supported GRCh38 germline variant and returns structured evidence for ACMG/AMP classification.
+
+The service accepts genomic, coding, and protein HGVS expressions. It normalizes the query to GRCh38 and returns the resolved variant, gene and consequence, automated classification, applied evidence codes, ClinVar assertions, population frequency, in-silico and splice predictions, source versions, provenance, limitations, and a link to the public Folklore Variant Details record.
+
+## Connect
+
+- **Endpoint:** `https://api.helena.bio/folklore/v1/mcp`
+- **Transport:** Streamable HTTP
+- **Authentication:** None
+- **Tool:** `search_variant_evidence`
+
+Example client configuration:
+
+```json
+{
+  "mcpServers": {
+    "folklore": {
+      "url": "https://api.helena.bio/folklore/v1/mcp"
+    }
+  }
+}
+```
+
+## Query
+
+Send one supported germline variant. For example:
+
+```text
+ENST00000226413.5:c.317A>G
+```
+
+The same variant may be submitted as a supported genomic or protein HGVS expression.
+
+## Response
+
+The tool returns structured, source-backed data suitable for machine use and a rendered Variant Details view for compatible chat clients. Results may include:
+
+- input resolution status and warnings;
+- GRCh38 genomic, coding, and protein HGVS;
+- gene, transcript, consequence, exon, and identifiers;
+- automated ACMG/AMP classification and evidence codes;
+- ClinVar significance, review status, and associated conditions;
+- gnomAD population frequency;
+- in-silico, splice, conservation, and gene-constraint evidence;
+- classifier and source-data versions;
+- provenance, limitations, and a public Folklore record URL.
+
+## Scope and safety
+
+Folklore provides computational decision support, not a diagnosis. Results must be reviewed by a qualified genetics professional in the relevant clinical context.
+
+The public service accepts one variant query at a time. It does not accept patient records, expose private Helena Bioinformatics systems, or publish backend source code or implementation details.
+
+## Official links
+
+- [Folklore](https://folklore.helena.bio)
+- [Helena Bioinformatics](https://helena.bio)
+- [Official MCP Registry](https://registry.modelcontextprotocol.io/?q=io.github.helena-bioinformatics%2Ffolklore)
+- [Product demonstration](https://www.youtube.com/watch?v=nOrn43cmZLs)
+
+## Contact
+
+[contact@helena.bio](mailto:contact@helena.bio)
