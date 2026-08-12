@@ -1,6 +1,6 @@
-# Folklore Variant Evidence MCP
+# Folklore
 
-Folklore Variant Evidence is a public, read-only MCP server from [Helena Bioinformatics](https://helena.bio). It resolves one supported GRCh38 germline variant and returns structured evidence for ACMG/AMP classification.
+Folklore is a public, read-only MCP server from [Helena Bioinformatics](https://helena.bio). Its current Variant Evidence capability resolves one supported GRCh38 germline variant and returns structured evidence for ACMG/AMP classification.
 
 The service accepts genomic, coding, and protein HGVS expressions. It normalizes the query to GRCh38 and returns the resolved variant, gene and consequence, automated classification, applied evidence codes, ClinVar assertions, population frequency, in-silico and splice predictions, source versions, provenance, limitations, and a link to the public Folklore Variant Details record.
 
