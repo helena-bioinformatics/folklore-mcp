@@ -23,6 +23,17 @@ Example client configuration:
 }
 ```
 
+## Registry build
+
+The `Dockerfile` in this repository is a small distribution bridge used by
+registries that build and inspect MCP servers from source. It runs a pinned
+version of [`mcp-proxy`](https://github.com/sparfenyuk/mcp-proxy) and connects
+its standard-input transport to the public Folklore Streamable HTTP endpoint.
+
+The bridge contains no Folklore backend implementation, private data, secrets,
+or patient information. Clients that support Streamable HTTP should use the
+public endpoint above directly.
+
 ## Query
 
 Send one supported germline variant. For example:
