@@ -93,6 +93,13 @@ See [SECURITY.md](SECURITY.md) for reporting instructions and supported versions
 
 Machine-readable metadata is under [`registry/`](registry/).
 
+## Citation and archival releases
+
+Citation metadata is available in [`CITATION.cff`](CITATION.cff). Versioned
+software releases are archived in Zenodo from this public repository; each
+archived release receives a persistent DOI. The DOI for the current release is
+added here after Zenodo completes the archive.
+
 ## License
 
 Apache License 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).

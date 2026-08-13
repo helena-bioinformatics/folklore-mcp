@@ -11,4 +11,5 @@ All notable changes to the public Folklore MCP adapter are documented here.
 - Added distribution metadata, container packaging, locked dependencies, CI, security policy, and contribution guidance.
 - Preserved the existing pinned registry bridge and added standalone adapter packaging separately as `Dockerfile.adapter`.
 - Submitted Folklore to three specialized medical and bioinformatics directories and recorded the pending editorial states under `registry/`.
+- Added citation and Zenodo deposition metadata for a versioned, DOI-backed software archive.
 - Excluded backend interpretation logic, internal routing and authentication, deployment manifests, private data, credentials, and private Git history.

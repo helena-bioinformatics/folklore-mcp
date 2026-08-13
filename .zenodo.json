@@ -1,0 +1,36 @@
+{
+  "title": "Folklore Clinical Variant Interpretation MCP",
+  "description": "The official public, read-only Model Context Protocol adapter for Folklore by Helena Bioinformatics. It gives AI clients structured access to public germline variant evidence, automated ACMG/AMP decision support, provenance, and related literature. The adapter accepts no patient, phenotype, family, or case context. Folklore's proprietary interpretation backend and evidence database are not included.",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "Helena Bioinformatics",
+      "affiliation": "Helena Bioinformatics"
+    }
+  ],
+  "version": "1.2.2",
+  "publication_date": "2026-08-13",
+  "access_right": "open",
+  "license": "apache-2.0",
+  "language": "eng",
+  "keywords": [
+    "clinical variant interpretation",
+    "genomics",
+    "bioinformatics",
+    "ACMG/AMP",
+    "Model Context Protocol",
+    "germline variants"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/helena-bioinformatics/folklore-mcp",
+      "relation": "isIdenticalTo",
+      "resource_type": "software"
+    },
+    {
+      "identifier": "https://folklore.helena.bio",
+      "relation": "isSupplementTo",
+      "resource_type": "other"
+    }
+  ]
+}
