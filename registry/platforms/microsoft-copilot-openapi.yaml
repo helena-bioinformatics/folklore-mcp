@@ -1,0 +1,28 @@
+swagger: '2.0'
+info:
+  title: Folklore Clinical Variant Interpretation MCP
+  description: Read-only clinical variant interpretation using public Folklore evidence.
+  version: 1.0.0
+host: api.helena.bio
+basePath: /folklore/v1
+schemes: [https]
+consumes: [application/json]
+produces: [application/json]
+paths:
+  /mcp:
+    post:
+      summary: Invoke the Folklore Clinical Variant Interpretation MCP server
+      operationId: InvokeFolkloreMCP
+      x-ms-agentic-protocol: mcp-streamable-1.0
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema: {type: object, additionalProperties: true}
+      responses:
+        '200':
+          description: MCP response
+          schema: {type: object, additionalProperties: true}
+        default:
+          description: MCP protocol error
+          schema: {type: object, additionalProperties: true}

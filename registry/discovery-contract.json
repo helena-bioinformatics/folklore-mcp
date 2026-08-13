@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1",
+  "registryName": "io.github.helena-bioinformatics/folklore",
+  "title": "Folklore Clinical Variant Interpretation MCP",
+  "description": "Helena Bioinformatics MCP for clinical variant interpretation, ACMG/AMP evidence and literature.",
+  "publisher": "Helena Bioinformatics",
+  "version": "1.2.2",
+  "protocolVersion": "2026-07-28",
+  "endpoint": "https://api.helena.bio/folklore/v1/mcp",
+  "health": "https://api.helena.bio/folklore/v1/health",
+  "readiness": "https://api.helena.bio/folklore/v1/ready",
+  "website": "https://folklore.helena.bio",
+  "serverCard": "https://folklore.helena.bio/.well-known/mcp/server-card.json",
+  "icon": "https://folklore.helena.bio/images/logos/folklore.png",
+  "tools": [
+    "search_variant_evidence",
+    "search_variant_literature",
+    "get_publication_details"
+  ],
+  "resources": [
+    "ui://folklore/variant-evidence/v1.html"
+  ],
+  "surfaces": {
+    "officialRegistry": "https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.helena-bioinformatics%2Ffolklore&version=latest",
+    "glamaConnector": "https://glama.ai/mcp/connectors/io.github.helena-bioinformatics/folklore",
+    "glamaRepository": "https://glama.ai/api/mcp/v1/servers/helena-bioinformatics/folklore-mcp",
+    "mcpBeat": "https://mcpbeat.com/mcp-servers/helena-bioinformatics/folklore/",
+    "mcpServersOrg": "https://mcpservers.org/servers/folklore-helena-bio",
+    "mcpSoSubmission": "https://api.github.com/repos/chatmcp/mcpso/issues/3525",
+    "awesomeMcpServers": "https://api.github.com/repos/punkpeye/awesome-mcp-servers/pulls/11977"
+  },
+  "slo": {
+    "canonicalExactMatch": true,
+    "automaticAggregatorRefreshHours": 24,
+    "editorialFollowUpHours": 24
+  }
+}

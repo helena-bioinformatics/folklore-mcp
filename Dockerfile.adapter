@@ -1,0 +1,27 @@
+ARG PYTHON_BASE=python:3.12.13-slim-bookworm@sha256:d50fb7611f86d04a3b0471b46d7557818d88983fc3136726336b2a4c657aa30b
+
+FROM ${PYTHON_BASE} AS builder
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+WORKDIR /build/folklore-mcp
+COPY pyproject.toml ./
+COPY requirements.lock ./
+COPY README.md ./
+COPY src/ ./src/
+RUN python3.12 -m pip install --user --no-cache-dir --no-deps -r requirements.lock \
+    && python3.12 -m pip install --user --no-cache-dir --no-deps .
+
+FROM ${PYTHON_BASE} AS production
+
+ENV PATH=/home/folklore/.local/bin:$PATH \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+RUN useradd --create-home --uid 1000 --shell /usr/sbin/nologin folklore
+WORKDIR /app
+COPY --from=builder --chown=folklore:folklore /root/.local /home/folklore/.local
+USER folklore
+EXPOSE 9017
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD ["python3.12", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:9017/folklore/v1/health', timeout=2)"]
+CMD ["folklore-mcp"]

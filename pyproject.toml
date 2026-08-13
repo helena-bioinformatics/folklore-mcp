@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "folklore-mcp-service"
+version = "1.2.2"
+description = "Read-only adapter for Folklore Clinical Variant Interpretation MCP by Helena Bioinformatics"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "Apache-2.0"
+authors = [{name = "Helena Bioinformatics", email = "contact@helena.bio"}]
+keywords = ["MCP", "bioinformatics", "genomics", "clinical genetics", "ACMG"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+dependencies = [
+    "fastapi>=0.115.0,<1.0",
+    "httpx>=0.27.0,<1.0",
+    "mcp==2.0.0",
+    "prometheus-client>=0.21.0,<1.0",
+    "pydantic>=2.9.0,<3.0",
+    "pydantic-settings>=2.5.0,<3.0",
+    "structlog>=24.4.0,<26.0",
+    "uvicorn[standard]>=0.32.0,<1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0,<10.0",
+    "pytest-asyncio>=0.24.0,<2.0",
+    "respx>=0.22.0,<1.0",
+    "ruff>=0.8.0,<1.0",
+]
+
+[project.scripts]
+folklore-mcp = "folklore_mcp_service.main:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["folklore_mcp_service*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+addopts = ["-q", "--strict-markers"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "C4", "UP"]
+ignore = ["E501"]
