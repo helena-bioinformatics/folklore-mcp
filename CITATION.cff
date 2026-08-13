@@ -9,6 +9,7 @@ authors:
     website: https://helena.bio
 version: 1.2.2
 date-released: 2026-08-13
+doi: 10.5281/zenodo.21922952
 url: https://folklore.helena.bio
 repository-code: https://github.com/helena-bioinformatics/folklore-mcp
 license: Apache-2.0

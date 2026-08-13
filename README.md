@@ -1,6 +1,7 @@
 # Folklore Clinical Variant Interpretation MCP
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21922951.svg)](https://doi.org/10.5281/zenodo.21922951)
 
 The official public, read-only Model Context Protocol adapter for
 [Folklore](https://folklore.helena.bio) by Helena Bioinformatics.
@@ -97,8 +98,10 @@ Machine-readable metadata is under [`registry/`](registry/).
 
 Citation metadata is available in [`CITATION.cff`](CITATION.cff). Versioned
 software releases are archived in Zenodo from this public repository; each
-archived release receives a persistent DOI. The DOI for the current release is
-added here after Zenodo completes the archive.
+archived release receives a persistent DOI. Cite version `1.2.2` using
+[`10.5281/zenodo.21922952`](https://doi.org/10.5281/zenodo.21922952). Use the
+concept DOI [`10.5281/zenodo.21922951`](https://doi.org/10.5281/zenodo.21922951)
+to refer to Folklore MCP across all versions.
 
 ## License
 
