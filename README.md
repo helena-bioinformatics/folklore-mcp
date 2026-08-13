@@ -1,6 +1,6 @@
-# Folklore
+# Folklore Clinical Variant Interpretation
 
-Folklore is a public, read-only MCP server from [Helena Bioinformatics](https://helena.bio). Its current Variant Evidence capability resolves one supported GRCh38 germline variant and returns structured evidence for ACMG/AMP classification.
+Folklore Clinical Variant Interpretation is a public, read-only MCP server from [Helena Bioinformatics](https://helena.bio). It resolves one supported GRCh38 germline variant and returns structured evidence for ACMG/AMP interpretation, together with related variant literature.
 
 The service accepts genomic, coding, and protein HGVS expressions. It normalizes the query to GRCh38 and returns the resolved variant, gene and consequence, automated classification, applied evidence codes, ClinVar assertions, population frequency, in-silico and splice predictions, source versions, provenance, limitations, and a link to the public Folklore Variant Details record.
 
@@ -9,7 +9,7 @@ The service accepts genomic, coding, and protein HGVS expressions. It normalizes
 - **Endpoint:** `https://api.helena.bio/folklore/v1/mcp`
 - **Transport:** Streamable HTTP
 - **Authentication:** None
-- **Tool:** `search_variant_evidence`
+- **Tools:** `search_variant_evidence`, `search_variant_literature`, `get_publication_details`
 
 Example client configuration:
 
