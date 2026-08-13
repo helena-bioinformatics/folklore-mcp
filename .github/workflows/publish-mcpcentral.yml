@@ -1,0 +1,57 @@
+name: Publish Folklore MCP to MCP Central
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "folklore-mcp-v*"
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    name: Validate and publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: registry
+    steps:
+      - name: Check out the public adapter
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+
+      - name: Verify a release tag matches the registry version
+        if: github.ref_type == 'tag'
+        shell: bash
+        run: |
+          set -euo pipefail
+          declared_version=$(python3 -c "import json; print(json.load(open('server.json'))['version'])")
+          test "${GITHUB_REF_NAME}" = "folklore-mcp-v${declared_version}"
+
+      - name: Download and validate with the pinned MCP publisher
+        shell: bash
+        run: |
+          set -euo pipefail
+          publisher_dir="${RUNNER_TEMP}/mcp-publisher"
+          mkdir -p "${publisher_dir}"
+          curl --fail --silent --show-error --location \
+            --output "${publisher_dir}/publisher.tgz" \
+            https://github.com/modelcontextprotocol/registry/releases/download/v1.8.1/mcp-publisher_linux_amd64.tar.gz
+          printf "%s  %s\n" \
+            a06c9096dcb9727c13555b6be26c7effa707b01f06a4c561ba7a3635443cf2cc \
+            "${publisher_dir}/publisher.tgz" | sha256sum --check --strict
+          tar -xzf "${publisher_dir}/publisher.tgz" -C "${publisher_dir}"
+          chmod 0755 "${publisher_dir}/mcp-publisher"
+          "${publisher_dir}/mcp-publisher" validate
+
+      - name: Authenticate with short-lived GitHub OIDC
+        shell: bash
+        run: >-
+          "${RUNNER_TEMP}/mcp-publisher/mcp-publisher" login github-oidc
+          --registry https://registry.mcpcentral.io
+
+      - name: Publish the immutable version to MCP Central
+        shell: bash
+        run: "${RUNNER_TEMP}/mcp-publisher/mcp-publisher publish"
