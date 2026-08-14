@@ -2,9 +2,6 @@ name: Publish Folklore MCP to MCP Central
 
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - "folklore-mcp-v*"
 
 permissions:
   contents: read
