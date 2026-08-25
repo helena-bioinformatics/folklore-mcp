@@ -90,8 +90,8 @@ See [SECURITY.md](SECURITY.md) for reporting instructions and supported versions
 ## Registry identity
 
 - Name: `io.github.helena-bioinformatics/folklore`
-- Release candidate: `1.3.3`
-- Latest published Registry version: `1.3.2`
+- Current release: `1.3.3`
+- Latest published Registry version: `1.3.3`
 - Publisher: Helena Bioinformatics
 - Website: <https://folklore.helena.bio>
 - Technical guide: <https://folklore.helena.bio/docs/folklore-connector>
@@ -108,7 +108,7 @@ the latest archived Folklore Clinical Variant Interpretation MCP release. The im
 available as [`10.5281/zenodo.21922952`](https://doi.org/10.5281/zenodo.21922952).
 The latest published immutable archive is historical version `1.3.1`, available
 as [`10.5281/zenodo.22093164`](https://doi.org/10.5281/zenodo.22093164).
-Release candidate `1.3.3` does not have a version DOI yet; its exact DOI will be
+Release `1.3.3` does not have a version DOI yet; its exact DOI will be
 recorded only after Zenodo creates the immutable archive.
 
 ## License
