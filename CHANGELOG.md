@@ -2,6 +2,15 @@
 
 All notable changes to the public Folklore MCP adapter are documented here.
 
+## Unreleased
+
+- Added a tested Biomni configuration that connects to Folklore Clinical
+  Variant Interpretation MCP through a digest-pinned, restricted stdio bridge.
+- Added a live smoke test for tool discovery, the strict public input contract,
+  and explicit preservation of an ambiguous public variant result.
+- Synchronized the machine-readable client catalogue with all four tools in
+  release `1.3.3`.
+
 ## 1.3.3 - 2026-08-25
 
 - Made opaque scientific text an explicit security invariant: marker-like strings

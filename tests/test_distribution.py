@@ -2,6 +2,8 @@ import json
 import tomllib
 from pathlib import Path
 
+import yaml
+
 from folklore_mcp_service import __version__
 from folklore_mcp_service.presentation.mcp import (
     MCP_ADAPTER_VERSION,
@@ -45,6 +47,45 @@ def test_registry_identity_and_remote_are_exact() -> None:
         MCP_CORPUS_SEARCH_TOOL_NAME,
     ]
     assert contract["resources"] == [MCP_UI_RESOURCE_URI]
+
+
+def test_biomni_recipe_uses_the_hardened_pinned_stdio_bridge() -> None:
+    client_configs = json.loads(
+        (REPOSITORY / "registry" / "platforms" / "client-configs.json").read_text()
+    )
+    config_path = REPOSITORY / client_configs["clients"]["biomni"]["config"]
+    biomni = yaml.safe_load(config_path.read_text())
+    server = biomni["mcp_servers"]["folklore_clinical_variant_interpretation_mcp"]
+    command = server["command"]
+
+    assert client_configs["tools"] == [
+        MCP_TOOL_NAME,
+        MCP_LITERATURE_TOOL_NAME,
+        MCP_PUBLICATION_DETAILS_TOOL_NAME,
+        MCP_CORPUS_SEARCH_TOOL_NAME,
+    ]
+    assert client_configs["clients"]["biomni"]["title"] == (
+        "Folklore Clinical Variant Interpretation MCP"
+    )
+    assert client_configs["clients"]["biomni"]["publisher"] == ("Helena Bioinformatics")
+    assert server["enabled"] is True
+    assert server["description"].startswith(
+        "Folklore Clinical Variant Interpretation MCP by Helena Bioinformatics"
+    )
+    assert command[:3] == ["docker", "run", "-i"]
+    assert "--rm" in command
+    assert "--read-only" in command
+    assert "--cap-drop=ALL" in command
+    assert "--security-opt=no-new-privileges" in command
+    assert "--user=65532:65532" in command
+    assert "ghcr.io/sparfenyuk/mcp-proxy:v0.12.0@sha256:" in command[8]
+    assert command[-5:] == [
+        "--transport",
+        "streamablehttp",
+        "--log-level",
+        "WARNING",
+        "https://api.helena.bio/folklore/v1/mcp",
+    ]
 
 
 def test_release_candidate_versions_and_dois_are_consistent() -> None:

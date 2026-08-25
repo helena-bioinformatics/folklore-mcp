@@ -1,0 +1,21 @@
+mcp_servers:
+  folklore_clinical_variant_interpretation_mcp:
+    enabled: true
+    description: >-
+      Folklore Clinical Variant Interpretation MCP by Helena Bioinformatics:
+      read-only public clinical variant evidence and literature
+    command:
+      - docker
+      - run
+      - -i
+      - --rm
+      - --read-only
+      - --cap-drop=ALL
+      - --security-opt=no-new-privileges
+      - --user=65532:65532
+      - ghcr.io/sparfenyuk/mcp-proxy:v0.12.0@sha256:ce037447191eeed517faa80640539dedaffb79a3ec107bfd23625a4438b0d06d
+      - --transport
+      - streamablehttp
+      - --log-level
+      - WARNING
+      - https://api.helena.bio/folklore/v1/mcp

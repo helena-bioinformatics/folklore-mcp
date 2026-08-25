@@ -24,6 +24,13 @@ Clients can call `server/discover`, `tools/list`, `tools/call`, `resources/list`
 and `resources/read`. The retired `initialize` exchange is intentionally not
 implemented for this protocol version.
 
+Biomni users can import Folklore Clinical Variant Interpretation MCP through the
+tested, digest-pinned
+[Biomni integration recipe](integrations/biomni/README.md). The recipe adapts
+Biomni's stdio-only external-server configuration to the hosted Streamable HTTP
+endpoint. Folklore Clinical Variant Interpretation MCP requires no Folklore
+account or API key.
+
 ## Public capabilities
 
 - `search_variant_evidence` resolves one supported GRCh38 germline SNV or simple
