@@ -3,6 +3,7 @@ from pathlib import Path
 
 from folklore_mcp_service.presentation.mcp import (
     MCP_ADAPTER_VERSION,
+    MCP_CORPUS_SEARCH_TOOL_NAME,
     MCP_LITERATURE_TOOL_NAME,
     MCP_PROTOCOL_VERSION,
     MCP_PUBLICATION_DETAILS_TOOL_NAME,
@@ -39,6 +40,7 @@ def test_registry_identity_and_remote_are_exact() -> None:
         MCP_TOOL_NAME,
         MCP_LITERATURE_TOOL_NAME,
         MCP_PUBLICATION_DETAILS_TOOL_NAME,
+        MCP_CORPUS_SEARCH_TOOL_NAME,
     ]
     assert contract["resources"] == [MCP_UI_RESOURCE_URI]
 

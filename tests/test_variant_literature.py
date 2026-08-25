@@ -5,8 +5,54 @@ from folklore_mcp_service.application.literature_gateway import LiteratureGatewa
 from folklore_mcp_service.config.settings import Settings
 from folklore_mcp_service.domain.literature_contracts import (
     PublicationDetailsResponse,
+    PublicCorpusSearchResponse,
     SearchVariantLiteratureArguments,
 )
+
+
+def corpus_search_payload() -> dict:
+    return {
+        "contract_version": "1.0",
+        "query": "BRCA1 homologous recombination",
+        "returned_count": 1,
+        "results": [
+            {
+                "work_id": "pmid:12345678",
+                "pmid": "12345678",
+                "title": "A complete publication",
+                "abstract_excerpt": "BRCA1 participates in homologous recombination.",
+                "journal": "Genetics",
+                "publication_date": "2025-06-01",
+                "doi": "10.1000/example",
+                "pmc_id": "PMC1234567",
+                "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
+                "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
+                "match_types": ["gene", "semantic"],
+                "structured_score": 1.0,
+                "semantic_score": 0.91,
+                "rank_score": 1.91,
+                "article_entities": [
+                    {
+                        "entity_type": "gene",
+                        "identifier": "BRCA1",
+                        "label": "BRCA1",
+                        "source_field": "gene_mentions.gene_symbol",
+                        "normalization_state": "normalized",
+                    }
+                ],
+            }
+        ],
+        "has_more": True,
+        "next_cursor": "MToyNTphYmNkZWYxMjM0NTY3ODkw",
+        "searchable_fields": ["title", "abstract", "gene"],
+        "semantic_index_used": True,
+        "semantic_degraded_reason": None,
+        "usage_boundary": {
+            "review_required": True,
+            "patient_context_evaluated": False,
+            "not_for": ["patient_diagnosis", "treatment_decision"],
+        },
+    }
 
 
 def publication_details_payload() -> dict:
@@ -139,4 +185,31 @@ async def test_literature_gateway_calls_public_publication_contract() -> None:
     assert isinstance(result, PublicationDetailsResponse)
     assert result.publication.authors == ["Smith J", "Doe A"]
     assert result.usage_boundary["patient_context_evaluated"] is False
+    await client.aclose()
+
+
+@pytest.mark.asyncio
+async def test_literature_gateway_calls_public_corpus_search_contract() -> None:
+    async def handler(request: httpx.Request) -> httpx.Response:
+        assert request.url.path == "/folklore/v1/literature/corpus/search"
+        assert request.method == "POST"
+        return httpx.Response(
+            200,
+            json=corpus_search_payload(),
+            headers={"Content-Type": "application/json"},
+        )
+
+    client = httpx.AsyncClient(
+        base_url="http://127.0.0.1:9001", transport=httpx.MockTransport(handler)
+    )
+    result = await LiteratureGateway(settings(), client).search_corpus(
+        {
+            "query": "BRCA1 homologous recombination",
+            "limit": 5,
+            "sort": "relevance",
+        }
+    )
+    assert isinstance(result, PublicCorpusSearchResponse)
+    assert result.results[0].article_entities[0].identifier == "BRCA1"
+    assert result.next_cursor == "MToyNTphYmNkZWYxMjM0NTY3ODkw"
     await client.aclose()

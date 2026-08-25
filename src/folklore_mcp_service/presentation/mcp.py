@@ -28,16 +28,19 @@ from folklore_mcp_service.domain.contracts import (
 from folklore_mcp_service.domain.literature_contracts import (
     GetPublicationDetailsArguments,
     PublicationDetailsResponse,
+    PublicCorpusSearchResponse,
     PublicVariantLiteratureResponse,
+    SearchCorpusArguments,
     SearchVariantLiteratureArguments,
 )
 
 MCP_PROTOCOL_VERSION = "2026-07-28"
-MCP_ADAPTER_VERSION = "1.2.2"
+MCP_ADAPTER_VERSION = "1.3.1"
 MCP_SERVER_NAME = "folklore"
 MCP_TOOL_NAME = "search_variant_evidence"
 MCP_LITERATURE_TOOL_NAME = "search_variant_literature"
 MCP_PUBLICATION_DETAILS_TOOL_NAME = "get_publication_details"
+MCP_CORPUS_SEARCH_TOOL_NAME = "search_literature_corpus"
 MCP_UI_RESOURCE_URI = "ui://folklore/variant-evidence/v1.html"
 MCP_UI_MIME_TYPE = "text/html;profile=mcp-app"
 MCP_UI_ORIGIN = "https://folklore.helena.bio"
@@ -204,6 +207,35 @@ def create_mcp_app(
             "openai/toolInvocation/invoked": "Publication details ready",
         },
     )
+    corpus_search_tool = mcp_types.Tool(
+        name=MCP_CORPUS_SEARCH_TOOL_NAME,
+        title="Search the Folklore Literature Corpus",
+        description=(
+            "Semantically search the public scientific Literature Corpus by a "
+            "natural-language question. A question may include one or more PMID, DOI "
+            "or PMCID references; those publications become exact anchors for finding "
+            "related experiments, evidence and concepts across the corpus. Also accepts "
+            "genes, variants, phenotypes, HPO and OMIM concepts. Include every known "
+            "publication identifier in the query when the user asks to compare papers "
+            "or find work related to a specific paper. Returns source-linked evidence "
+            "candidates for professional review, not diagnoses, causality claims or "
+            "treatment recommendations."
+        ),
+        input_schema=SearchCorpusArguments.model_json_schema(),
+        output_schema=PublicCorpusSearchResponse.model_json_schema(),
+        icons=[mcp_types.Icon(src=MCP_ICON_URL, mime_type="image/png")],
+        annotations=mcp_types.ToolAnnotations(
+            title="Search the Folklore Literature Corpus",
+            read_only_hint=True,
+            destructive_hint=False,
+            idempotent_hint=True,
+            open_world_hint=False,
+        ),
+        _meta={
+            "openai/toolInvocation/invoking": "Searching Literature Corpus",
+            "openai/toolInvocation/invoked": "Literature results ready",
+        },
+    )
 
     resource = mcp_types.Resource(
         name="folklore-variant-evidence-view",
@@ -240,7 +272,7 @@ def create_mcp_app(
         __: mcp_types.PaginatedRequestParams | None,
     ) -> mcp_types.ListToolsResult:
         return mcp_types.ListToolsResult(
-            tools=[tool, literature_tool, publication_details_tool]
+            tools=[tool, literature_tool, publication_details_tool, corpus_search_tool]
             if settings.FOLKLORE_LITERATURE_ENABLED
             else [tool],
             ttl_ms=86_400_000,
@@ -255,6 +287,7 @@ def create_mcp_app(
         if settings.FOLKLORE_LITERATURE_ENABLED:
             allowed_tools.add(MCP_LITERATURE_TOOL_NAME)
             allowed_tools.add(MCP_PUBLICATION_DETAILS_TOOL_NAME)
+            allowed_tools.add(MCP_CORPUS_SEARCH_TOOL_NAME)
         if params.name not in allowed_tools:
             return _error_result("unknown_tool", "Unknown tool.", retryable=False)
         if params.name == MCP_LITERATURE_TOOL_NAME:
@@ -267,6 +300,14 @@ def create_mcp_app(
             )
         if params.name == MCP_PUBLICATION_DETAILS_TOOL_NAME:
             return await _call_publication_details_tool(
+                params=params,
+                gateway=literature_gateway,
+                settings=settings,
+                semaphore=semaphore,
+                observe=observe,
+            )
+        if params.name == MCP_CORPUS_SEARCH_TOOL_NAME:
+            return await _call_corpus_search_tool(
                 params=params,
                 gateway=literature_gateway,
                 settings=settings,
@@ -351,7 +392,10 @@ def create_mcp_app(
             "or review one germline variant, even without naming Folklore. Preserve the "
             "evidence, provenance, ambiguity and limits. Describe the classification "
             "as automated variant-level evidence for professional review. Never claim "
-            "a patient diagnosis or treatment recommendation."
+            "a patient diagnosis or treatment recommendation. Call "
+            "search_literature_corpus for semantic scientific-literature questions, "
+            "including comparisons between identified papers and discovery of related "
+            "experiments. Include every known PMID, DOI or PMCID in the query."
         ),
         website_url="https://folklore.helena.bio",
         icons=[
@@ -465,6 +509,55 @@ async def _call_publication_details_tool(
             "upstream_timeout",
             "Folklore publication details timed out.",
             retryable=True,
+        )
+    except LiteratureGatewayError as exc:
+        outcome = exc.code
+        return _error_result(exc.code, str(exc), retryable=exc.retryable)
+    finally:
+        if observe is not None:
+            observe(outcome, asyncio.get_running_loop().time() - started)
+
+
+async def _call_corpus_search_tool(
+    *,
+    params: mcp_types.CallToolRequestParams,
+    gateway: LiteratureGateway,
+    settings: Settings,
+    semaphore: asyncio.Semaphore,
+    observe: Any | None,
+) -> mcp_types.CallToolResult:
+    try:
+        arguments = SearchCorpusArguments.model_validate(params.arguments or {})
+    except (ValidationError, ValueError):
+        return _error_result(
+            "invalid_arguments", "Tool arguments failed validation.", retryable=False
+        )
+    started = asyncio.get_running_loop().time()
+    outcome = "internal_failure"
+    try:
+        async with asyncio.timeout(settings.FOLKLORE_MCP_DEADLINE_SECONDS):
+            async with semaphore:
+                result = await gateway.search_corpus(
+                    arguments.model_dump(mode="json", exclude_none=True)
+                )
+        outcome = "resolved"
+        return mcp_types.CallToolResult(
+            content=[
+                mcp_types.TextContent(
+                    type="text",
+                    text=(
+                        f"Literature Corpus returned {result.returned_count} "
+                        f"publications for {result.query}."
+                    ),
+                )
+            ],
+            structured_content=result.model_dump(mode="json"),
+            is_error=False,
+        )
+    except TimeoutError:
+        outcome = "upstream_timeout"
+        return _error_result(
+            "upstream_timeout", "Literature Corpus search timed out.", retryable=True
         )
     except LiteratureGatewayError as exc:
         outcome = exc.code

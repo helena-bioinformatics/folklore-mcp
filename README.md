@@ -32,6 +32,9 @@ implemented for this protocol version.
   PubMed-derived genetics corpus.
 - `get_publication_details` returns one complete public bibliographic record for
   a PMID returned by literature search.
+- `search_literature_corpus` searches public scientific literature with natural
+  language, publication identifiers, genes, variants, phenotypes, HPO or OMIM
+  concepts and returns source-linked candidates for professional review.
 - `ui://folklore/variant-evidence/v1.html` is an optional read-only MCP App view.
 
 Literature associations do not alter the ACMG/AMP classification.
@@ -87,7 +90,7 @@ See [SECURITY.md](SECURITY.md) for reporting instructions and supported versions
 ## Registry identity
 
 - Name: `io.github.helena-bioinformatics/folklore`
-- Version: `1.2.2`
+- Version: `1.3.1`
 - Publisher: Helena Bioinformatics
 - Website: <https://folklore.helena.bio>
 - Technical guide: <https://folklore.helena.bio/docs/folklore-connector>
@@ -98,10 +101,10 @@ Machine-readable metadata is under [`registry/`](registry/).
 
 Citation metadata is available in [`CITATION.cff`](CITATION.cff). Versioned
 software releases are archived in Zenodo from this public repository; each
-archived release receives a persistent DOI. Cite version `1.2.2` using
-[`10.5281/zenodo.21922952`](https://doi.org/10.5281/zenodo.21922952). Use the
-concept DOI [`10.5281/zenodo.21922951`](https://doi.org/10.5281/zenodo.21922951)
-to refer to Folklore MCP across all versions.
+archived release receives a persistent DOI. Use the concept DOI
+[`10.5281/zenodo.21922951`](https://doi.org/10.5281/zenodo.21922951) to resolve
+the latest archived Folklore MCP release. The immutable `1.2.2` archive remains
+available as [`10.5281/zenodo.21922952`](https://doi.org/10.5281/zenodo.21922952).
 
 ## License
 

@@ -111,6 +111,93 @@ class PublicationDetailsResponse(StrictModel):
     usage_boundary: dict[str, Any]
 
 
+CorpusMatchType = Literal[
+    "pmid",
+    "doi",
+    "pmcid",
+    "title",
+    "abstract",
+    "gene",
+    "variant",
+    "phenotype",
+    "hpo",
+    "omim",
+    "semantic",
+]
+CorpusArticleEntityType = Literal[
+    "gene",
+    "variant",
+    "phenotype",
+    "pmid",
+    "doi",
+    "pmcid",
+    "omim",
+]
+CorpusEntitySourceField = Literal[
+    "work_identifiers.normalized_value",
+    "gene_mentions.gene_symbol",
+    "variant_mentions.normalized_variant",
+    "phenotype_mentions.hpo_id",
+    "phenotype_mentions.omim_id",
+    "phenotype_mentions.mesh_term",
+    "phenotype_mentions.phenotype_name",
+]
+CorpusNormalizationState = Literal["normalized", "source_indexed"]
+CorpusCursor = Annotated[
+    str,
+    StringConstraints(min_length=8, max_length=128, pattern=r"^[A-Za-z0-9_-]+$"),
+]
+
+
+class SearchCorpusArguments(StrictModel):
+    query: Annotated[
+        str,
+        StringConstraints(strip_whitespace=True, min_length=3, max_length=200),
+    ]
+    limit: Annotated[int, Field(ge=1, le=25)] = 20
+    sort: Literal["relevance", "newest", "oldest"] = "relevance"
+    cursor: CorpusCursor | None = None
+
+
+class PublicCorpusArticleEntity(StrictModel):
+    entity_type: CorpusArticleEntityType
+    identifier: str | None
+    label: str
+    source_field: CorpusEntitySourceField
+    normalization_state: CorpusNormalizationState
+
+
+class PublicCorpusSearchResult(StrictModel):
+    work_id: str
+    pmid: Annotated[str, StringConstraints(pattern=r"^[0-9]{1,12}$")] | None
+    title: str
+    abstract_excerpt: str
+    journal: str | None
+    publication_date: str | None
+    doi: str | None
+    pmc_id: str | None
+    source_url: str
+    pubmed_url: str | None
+    match_types: list[CorpusMatchType]
+    structured_score: float
+    semantic_score: float | None = None
+    rank_score: float = 0.0
+    article_entities: list[PublicCorpusArticleEntity] = Field(default_factory=list)
+
+
+class PublicCorpusSearchResponse(StrictModel):
+    contract_version: Literal["1.0"]
+    query: str
+    returned_count: int
+    results: list[PublicCorpusSearchResult]
+    has_more: bool = False
+    next_cursor: str | None = None
+    searchable_fields: list[str]
+    semantic_index_used: bool = False
+    semantic_degraded_reason: str | None = None
+    usage_boundary: dict[str, Any]
+
+
 def literature_usage_boundary() -> dict[str, Any]:
     return {
         "result_type": "variant_literature_retrieval",

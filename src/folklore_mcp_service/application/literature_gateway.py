@@ -8,6 +8,7 @@ import httpx
 from folklore_mcp_service.config.settings import Settings
 from folklore_mcp_service.domain.literature_contracts import (
     PublicationDetailsResponse,
+    PublicCorpusSearchResponse,
     PublicVariantLiteratureResponse,
     SearchVariantLiteratureArguments,
 )
@@ -132,6 +133,33 @@ class LiteratureGateway:
             response,
             PublicationDetailsResponse,
             message="Folklore publication details returned an invalid response.",
+        )
+
+    async def search_corpus(
+        self, payload: dict[str, Any]
+    ) -> PublicCorpusSearchResponse:
+        try:
+            response = await self._client.post(
+                "/folklore/v1/literature/corpus/search",
+                json=payload,
+                headers={"Accept": "application/json"},
+            )
+        except httpx.TimeoutException as exc:
+            raise LiteratureGatewayError(
+                "literature_timeout",
+                "Literature Corpus search timed out.",
+                retryable=True,
+            ) from exc
+        except httpx.HTTPError as exc:
+            raise LiteratureGatewayError(
+                "literature_unavailable",
+                "Literature Corpus search is temporarily unavailable.",
+                retryable=True,
+            ) from exc
+        return self._validate(
+            response,
+            PublicCorpusSearchResponse,
+            message="Literature Corpus search returned an invalid response.",
         )
 
     def _validate(self, response: httpx.Response, model: Any, *, message: str) -> Any:

@@ -39,11 +39,14 @@ substitute for qualified clinical interpretation.
   GRCh38 germline variant from Folklore's public genetics literature corpus.
 - `get_publication_details`: Retrieve the complete public bibliographic record
   for one PMID returned by Folklore literature search.
+- `search_literature_corpus`: Search the public scientific Literature Corpus by
+  natural-language question, publication identifier, gene, variant, phenotype,
+  HPO or OMIM concept and return source-linked evidence candidates.
 
 ## Reviewer notes
 
 - Remote stateless Streamable HTTP MCP server.
-- Three read-only, non-destructive, idempotent tools.
+- Four read-only, non-destructive, idempotent tools.
 - No authentication secret or user account is requested.
 - No write operations, patient data, private systems or generative model.
 - The tool preserves Folklore's evidence, ambiguity and safety limitations.
@@ -60,15 +63,17 @@ medical guidance to consumers. Clinically significant findings must be reviewed,
 validated and confirmed by a qualified professional before clinical use.
 
 The public variant tools accept only `assembly`, one variant `query`, and
-bounded literature filters. Publication details accepts one PMID. They do not
-ask for or accept a patient name, case identifier, phenotype, family history,
-segregation evidence, clinical record or uploaded file.
+bounded literature filters. Publication details accepts one PMID. Corpus search
+accepts a bounded public scientific question and optional result controls. None
+asks for or accepts a patient name, case identifier, patient phenotype, family
+history, segregation evidence, clinical record or uploaded file.
 
 ## Example prompts
 
 1. `Use Folklore Clinical Variant Interpretation MCP to classify ENST00000226413.5:c.317A>G under ACMG/AMP and summarize the evidence, provenance and limitations.`
 2. `Resolve ENSP00000226413.5:p.Gln106Arg with Folklore and show the normalized GRCh38 variant and supporting evidence.`
 3. `Search rs80357914 in Folklore. If it is ambiguous, show the candidates and ask me to choose rather than selecting one.`
+4. `Search the Folklore Literature Corpus for BRCA1 homologous recombination studies and compare the source-linked evidence.`
 
 ## Anthropic submission disclosures
 

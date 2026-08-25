@@ -2,6 +2,18 @@
 
 All notable changes to the public Folklore MCP adapter are documented here.
 
+## 1.3.1 - 2026-08-25
+
+- Added `search_literature_corpus`, a fourth read-only tool for bounded semantic
+  search across the public Folklore Literature Corpus.
+- Added exact PMID, DOI and PMCID anchors, cursor pagination, deterministic
+  sorting, semantic-degradation reporting and source-linked article entities to
+  the public response contract.
+- Synchronized the public adapter, Official Registry metadata, directory copy,
+  citation metadata and discovery contract with the verified hosted server.
+- Added a pinned, tag-triggered GitHub OIDC workflow for immutable publication
+  to the Official MCP Registry.
+
 ## 1.2.2 - 2026-08-13
 
 - Published the Folklore MCP adapter as a standalone Apache-2.0 project.

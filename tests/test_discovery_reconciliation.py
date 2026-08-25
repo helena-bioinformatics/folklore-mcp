@@ -106,7 +106,7 @@ def canonical_text_fetcher(url, *, timeout):
     del timeout
     if url == expected["surfaces"]["mcpBeat"]:
         return (
-            f'"featureList":"3 tools","name":"{expected["title"]}",'
+            f'"featureList":"4 tools","name":"{expected["title"]}",'
             f'"softwareVersion":"{expected["version"]}" ' + " ".join(expected["tools"])
         )
     return f"{expected['title']} {' '.join(expected['tools'])}"

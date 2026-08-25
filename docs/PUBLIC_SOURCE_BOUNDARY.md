@@ -8,7 +8,7 @@ clinical interpretation backend.
 
 - MCP discovery and JSON-RPC request handling
 - Input validation and bounded public API clients
-- The three documented MCP tools and one MCP resource
+- The four documented MCP tools and one MCP resource
 - Health, readiness, and metrics endpoints
 - Tests, container packaging, CI, and public documentation
 

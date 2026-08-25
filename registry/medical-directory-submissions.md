@@ -1,6 +1,6 @@
 # Medical and bioinformatics directory submissions
 
-Last checked: 2026-08-13
+Last checked: 2026-08-25
 
 Every submission uses the canonical Folklore identity and the same clinical-use
 boundary. A submission is not considered active until a durable public listing
@@ -20,7 +20,7 @@ or merged entry can be independently observed.
 - Endpoint: `https://api.helena.bio/folklore/v1/mcp`
 - Authentication: none
 - Scope: supported GRCh38 germline nuclear SNVs and simple indels
-- Tools: three read-only, non-destructive and idempotent tools
+- Tools: four read-only, non-destructive and idempotent tools
 - Data boundary: no patient, phenotype, family, segregation or case context
 - Clinical boundary: automated variant-level decision support requiring review
   by a qualified genetics professional; no diagnosis or treatment recommendation

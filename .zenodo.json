@@ -8,8 +8,8 @@
       "affiliation": "Helena Bioinformatics"
     }
   ],
-  "version": "1.2.2",
-  "publication_date": "2026-08-13",
+  "version": "1.3.1",
+  "publication_date": "2026-08-25",
   "access_right": "open",
   "license": "apache-2.0",
   "language": "eng",
@@ -19,7 +19,8 @@
     "bioinformatics",
     "ACMG/AMP",
     "Model Context Protocol",
-    "germline variants"
+    "germline variants",
+    "scientific literature search"
   ],
   "related_identifiers": [
     {

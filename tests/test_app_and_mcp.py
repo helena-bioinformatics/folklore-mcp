@@ -1,10 +1,13 @@
 from fastapi.testclient import TestClient
 from prometheus_client import CollectorRegistry
 from test_contracts import resolved_result
-from test_variant_literature import publication_details_payload
+from test_variant_literature import corpus_search_payload, publication_details_payload
 
 from folklore_mcp_service.config.settings import Settings
-from folklore_mcp_service.domain.literature_contracts import PublicationDetailsResponse
+from folklore_mcp_service.domain.literature_contracts import (
+    PublicationDetailsResponse,
+    PublicCorpusSearchResponse,
+)
 from folklore_mcp_service.main import create_app
 
 META = {
@@ -35,6 +38,7 @@ class FakeGateway:
 class FakeLiteratureGateway:
     def __init__(self) -> None:
         self.closed = False
+        self.corpus_payloads = []
 
     async def ready(self) -> bool:
         return True
@@ -45,6 +49,10 @@ class FakeLiteratureGateway:
     async def get_publication(self, pmid: str) -> PublicationDetailsResponse:
         assert pmid == "12345678"
         return PublicationDetailsResponse.model_validate(publication_details_payload())
+
+    async def search_corpus(self, payload) -> PublicCorpusSearchResponse:
+        self.corpus_payloads.append(payload)
+        return PublicCorpusSearchResponse.model_validate(corpus_search_payload())
 
     async def close(self) -> None:
         self.closed = True
@@ -129,7 +137,7 @@ def test_mcp_2026_discovery_is_stateless_and_initialize_is_retired() -> None:
     assert result["_meta"]["io.modelcontextprotocol/serverInfo"] == {
         "name": "folklore",
         "title": "Folklore Clinical Variant Interpretation MCP",
-        "version": "1.2.2",
+        "version": "1.3.1",
         "description": (
             "The official public, read-only Helena Bioinformatics MCP for clinical "
             "variant interpretation, ACMG/AMP evidence and related literature."
@@ -367,8 +375,50 @@ def test_publication_details_are_available_through_mcp() -> None:
         "search_variant_evidence",
         "search_variant_literature",
         "get_publication_details",
+        "search_literature_corpus",
     ]
     assert called.status_code == 200
     structured = called.json()["result"]["structuredContent"]
     assert structured["publication"]["abstract"] == "Full abstract."
     assert structured["usage_boundary"]["patient_context_evaluated"] is False
+
+
+def test_literature_corpus_search_is_available_through_mcp() -> None:
+    literature = FakeLiteratureGateway()
+    app = create_app(
+        literature_enabled_settings(),
+        gateway=FakeGateway(resolved_result()),
+        literature_gateway=literature,
+        metrics_registry=CollectorRegistry(),
+    )
+    with TestClient(app) as client:
+        called = client.post(
+            "/folklore/v1/mcp",
+            json={
+                "jsonrpc": "2.0",
+                "id": 12,
+                "method": "tools/call",
+                "params": {
+                    "name": "search_literature_corpus",
+                    "arguments": {
+                        "query": "BRCA1 homologous recombination",
+                        "limit": 5,
+                        "sort": "relevance",
+                    },
+                    "_meta": META,
+                },
+            },
+            headers=headers("tools/call", "search_literature_corpus"),
+        )
+
+    assert called.status_code == 200
+    payload = called.json()["result"]["structuredContent"]
+    assert payload["semantic_index_used"] is True
+    assert payload["results"][0]["pmid"] == "12345678"
+    assert literature.corpus_payloads == [
+        {
+            "query": "BRCA1 homologous recombination",
+            "limit": 5,
+            "sort": "relevance",
+        }
+    ]
