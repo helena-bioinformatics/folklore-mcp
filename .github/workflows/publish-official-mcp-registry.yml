@@ -51,4 +51,5 @@ jobs:
 
       - name: Publish the immutable version
         shell: bash
-        run: "${RUNNER_TEMP}/mcp-publisher/mcp-publisher" publish
+        run: |
+          "${RUNNER_TEMP}/mcp-publisher/mcp-publisher" publish
