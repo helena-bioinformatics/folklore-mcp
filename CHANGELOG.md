@@ -13,6 +13,8 @@ All notable changes to the public Folklore MCP adapter are documented here.
   citation metadata and discovery contract with the verified hosted server.
 - Added a pinned, tag-triggered GitHub OIDC workflow for immutable publication
   to the Official MCP Registry.
+- Archived the release in Zenodo as
+  [`10.5281/zenodo.22093164`](https://doi.org/10.5281/zenodo.22093164).
 
 ## 1.2.2 - 2026-08-13
 

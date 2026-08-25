@@ -105,6 +105,8 @@ archived release receives a persistent DOI. Use the concept DOI
 [`10.5281/zenodo.21922951`](https://doi.org/10.5281/zenodo.21922951) to resolve
 the latest archived Folklore MCP release. The immutable `1.2.2` archive remains
 available as [`10.5281/zenodo.21922952`](https://doi.org/10.5281/zenodo.21922952).
+The current immutable `1.3.1` archive is
+[`10.5281/zenodo.22093164`](https://doi.org/10.5281/zenodo.22093164).
 
 ## License
 
