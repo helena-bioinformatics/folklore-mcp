@@ -78,6 +78,19 @@ def test_resolved_envelope_requires_matching_canonical_identity() -> None:
     }
 
 
+def test_marker_like_variant_text_remains_opaque_payload_content() -> None:
+    marker = "[Tool result trimmed for length]"
+    result = resolved_result()
+    result["interpretation"]["limitations"]["unavailable_context"] = marker
+
+    validated = validate_upstream_result(result)
+
+    assert validated["interpretation"]["limitations"]["unavailable_context"] == marker
+    assert marker in text_summary(validated)
+    assert tool_result(validated)["result"] == validated
+    assert tool_result(validated)["adapter_error"] is None
+
+
 def test_resolved_envelope_rejects_identity_drift_and_extra_fields() -> None:
     mismatched = resolved_result()
     mismatched["interpretation"]["identity"] = {**IDENTITY, "position": 1}

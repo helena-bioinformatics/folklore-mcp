@@ -59,6 +59,14 @@ class FakeLiteratureGateway:
         self.closed = True
 
 
+class MarkerPublicationLiteratureGateway(FakeLiteratureGateway):
+    async def get_publication(self, pmid: str) -> PublicationDetailsResponse:
+        assert pmid == "12345678"
+        return PublicationDetailsResponse.model_validate(
+            publication_details_payload(abstract="[Tool result trimmed for length]")
+        )
+
+
 class MissingPublicationLiteratureGateway(FakeLiteratureGateway):
     async def get_publication(self, pmid: str) -> PublicationDetailsResponse:
         assert pmid == "12345678"
@@ -151,7 +159,7 @@ def test_mcp_2026_discovery_is_stateless_and_initialize_is_retired() -> None:
     assert result["_meta"]["io.modelcontextprotocol/serverInfo"] == {
         "name": "folklore",
         "title": "Folklore Clinical Variant Interpretation MCP",
-        "version": "1.3.2",
+        "version": "1.3.3",
         "description": (
             "The official public, read-only Helena Bioinformatics MCP for clinical "
             "variant interpretation, ACMG/AMP evidence and related literature."
@@ -458,6 +466,36 @@ def test_publication_details_are_available_through_mcp() -> None:
     structured = called.json()["result"]["structuredContent"]
     assert structured["publication"]["abstract"] == "Full abstract."
     assert structured["usage_boundary"]["patient_context_evaluated"] is False
+
+
+def test_marker_like_publication_text_is_data_in_mcp() -> None:
+    marker = "[Tool result trimmed for length]"
+    app = create_app(
+        literature_enabled_settings(),
+        gateway=FakeGateway(resolved_result()),
+        literature_gateway=MarkerPublicationLiteratureGateway(),
+        metrics_registry=CollectorRegistry(),
+    )
+    with TestClient(app) as client:
+        called = client.post(
+            "/folklore/v1/mcp",
+            json={
+                "jsonrpc": "2.0",
+                "id": 22,
+                "method": "tools/call",
+                "params": {
+                    "name": "get_publication_details",
+                    "arguments": {"pmid": "12345678"},
+                    "_meta": META,
+                },
+            },
+            headers=headers("tools/call", "get_publication_details"),
+        )
+
+    assert called.status_code == 200
+    result = called.json()["result"]
+    assert result["structuredContent"]["publication"]["abstract"] == marker
+    assert result["isError"] is False
 
 
 def test_publication_not_found_is_scoped_in_mcp_error() -> None:

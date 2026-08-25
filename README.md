@@ -6,7 +6,7 @@
 The official public, read-only Model Context Protocol adapter for
 [Folklore](https://folklore.helena.bio) by Helena Bioinformatics.
 
-Folklore MCP gives AI clients structured access to public germline variant
+Folklore Clinical Variant Interpretation MCP gives AI clients structured access to public germline variant
 evidence, automated ACMG/AMP decision support, provenance and related literature.
 It accepts no patient, phenotype, family or case context and must not be used as
 a patient diagnosis or treatment recommendation.
@@ -90,8 +90,8 @@ See [SECURITY.md](SECURITY.md) for reporting instructions and supported versions
 ## Registry identity
 
 - Name: `io.github.helena-bioinformatics/folklore`
-- Release candidate: `1.3.2`
-- Latest published Registry version: `1.3.1`
+- Release candidate: `1.3.3`
+- Latest published Registry version: `1.3.2`
 - Publisher: Helena Bioinformatics
 - Website: <https://folklore.helena.bio>
 - Technical guide: <https://folklore.helena.bio/docs/folklore-connector>
@@ -104,11 +104,11 @@ Citation metadata is available in [`CITATION.cff`](CITATION.cff). Versioned
 software releases are archived in Zenodo from this public repository; each
 archived release receives a persistent DOI. Use the concept DOI
 [`10.5281/zenodo.21922951`](https://doi.org/10.5281/zenodo.21922951) to resolve
-the latest archived Folklore MCP release. The immutable `1.2.2` archive remains
+the latest archived Folklore Clinical Variant Interpretation MCP release. The immutable `1.2.2` archive remains
 available as [`10.5281/zenodo.21922952`](https://doi.org/10.5281/zenodo.21922952).
 The latest published immutable archive is historical version `1.3.1`, available
 as [`10.5281/zenodo.22093164`](https://doi.org/10.5281/zenodo.22093164).
-Release candidate `1.3.2` does not have a version DOI yet; its exact DOI will be
+Release candidate `1.3.3` does not have a version DOI yet; its exact DOI will be
 recorded only after Zenodo creates the immutable archive.
 
 ## License

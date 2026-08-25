@@ -58,13 +58,13 @@ def corpus_search_payload() -> dict:
     }
 
 
-def publication_details_payload() -> dict:
+def publication_details_payload(*, abstract: str = "Full abstract.") -> dict:
     return {
         "contract_version": "1.0",
         "publication": {
             "pmid": "12345678",
             "title": "A complete publication",
-            "abstract": "Full abstract.",
+            "abstract": abstract,
             "authors": ["Smith J", "Doe A"],
             "journal": "Genetics",
             "publication_date": "2025-06-01",
@@ -188,6 +188,28 @@ async def test_literature_gateway_calls_public_publication_contract() -> None:
     assert isinstance(result, PublicationDetailsResponse)
     assert result.publication.authors == ["Smith J", "Doe A"]
     assert result.usage_boundary["patient_context_evaluated"] is False
+    await client.aclose()
+
+
+@pytest.mark.asyncio
+async def test_literature_gateway_preserves_marker_like_publication_text() -> None:
+    marker = "[Tool result trimmed for length]"
+
+    async def handler(request: httpx.Request) -> httpx.Response:
+        assert request.url.path == "/folklore/v1/literature/publications/12345678"
+        return httpx.Response(
+            200,
+            json=publication_details_payload(abstract=marker),
+            headers={"Content-Type": "application/json"},
+        )
+
+    client = httpx.AsyncClient(
+        base_url="http://127.0.0.1:9001", transport=httpx.MockTransport(handler)
+    )
+
+    result = await LiteratureGateway(settings(), client).get_publication("12345678")
+
+    assert result.publication.abstract == marker
     await client.aclose()
 
 

@@ -2,7 +2,16 @@
 
 All notable changes to the public Folklore MCP adapter are documented here.
 
-## 1.3.2 - Unreleased
+## 1.3.3 - 2026-08-25
+
+- Made opaque scientific text an explicit security invariant: marker-like strings
+  remain data and cannot, by themselves, prove transport transformation.
+- Added variant-contract, publication-gateway and MCP regressions for a payload
+  containing a tool-result trimming marker.
+- Preserved all scientific behavior, public inputs, output shapes and clinical
+  safety boundaries.
+
+## 1.3.2 - 2026-08-25
 
 - Added parameter-specific descriptions to the input schemas for all four tools,
   including the GRCh38 boundary, the distinction between variant `query` and

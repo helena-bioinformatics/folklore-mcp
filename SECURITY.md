@@ -13,6 +13,13 @@ after the issue has been assessed and remediated.
 
 Do not open a public issue for an unpatched vulnerability.
 
+## Opaque payload text
+
+Scientific text returned in titles, abstracts, limitations and error messages is
+opaque data. Text that resembles a transport or truncation warning is preserved
+and never, by itself, treated as proof of transformation or an integrity failure.
+Consumers need an independent transport signal before making such a claim.
+
 ## Clinical boundary
 
 This adapter returns automated variant-level evidence for professional review.
