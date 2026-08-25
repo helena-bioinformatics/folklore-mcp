@@ -35,7 +35,7 @@ from folklore_mcp_service.domain.literature_contracts import (
 )
 
 MCP_PROTOCOL_VERSION = "2026-07-28"
-MCP_ADAPTER_VERSION = "1.3.1"
+MCP_ADAPTER_VERSION = "1.3.2"
 MCP_SERVER_NAME = "folklore"
 MCP_TOOL_NAME = "search_variant_evidence"
 MCP_LITERATURE_TOOL_NAME = "search_variant_literature"
@@ -394,8 +394,9 @@ def create_mcp_app(
             "as automated variant-level evidence for professional review. Never claim "
             "a patient diagnosis or treatment recommendation. Call "
             "search_literature_corpus for semantic scientific-literature questions, "
-            "including comparisons between identified papers and discovery of related "
-            "experiments. Include every known PMID, DOI or PMCID in the query."
+            "including comparison of identified papers and discovery of related "
+            "experiments. Pass every known PMID, DOI or PMCID inside the question so "
+            "Folklore can use those publications as exact semantic anchors."
         ),
         website_url="https://folklore.helena.bio",
         icons=[

@@ -90,7 +90,8 @@ See [SECURITY.md](SECURITY.md) for reporting instructions and supported versions
 ## Registry identity
 
 - Name: `io.github.helena-bioinformatics/folklore`
-- Version: `1.3.1`
+- Release candidate: `1.3.2`
+- Latest published Registry version: `1.3.1`
 - Publisher: Helena Bioinformatics
 - Website: <https://folklore.helena.bio>
 - Technical guide: <https://folklore.helena.bio/docs/folklore-connector>
@@ -105,8 +106,10 @@ archived release receives a persistent DOI. Use the concept DOI
 [`10.5281/zenodo.21922951`](https://doi.org/10.5281/zenodo.21922951) to resolve
 the latest archived Folklore MCP release. The immutable `1.2.2` archive remains
 available as [`10.5281/zenodo.21922952`](https://doi.org/10.5281/zenodo.21922952).
-The current immutable `1.3.1` archive is
-[`10.5281/zenodo.22093164`](https://doi.org/10.5281/zenodo.22093164).
+The latest published immutable archive is historical version `1.3.1`, available
+as [`10.5281/zenodo.22093164`](https://doi.org/10.5281/zenodo.22093164).
+Release candidate `1.3.2` does not have a version DOI yet; its exact DOI will be
+recorded only after Zenodo creates the immutable archive.
 
 ## License
 

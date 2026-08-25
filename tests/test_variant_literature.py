@@ -1,7 +1,10 @@
 import httpx
 import pytest
 
-from folklore_mcp_service.application.literature_gateway import LiteratureGateway
+from folklore_mcp_service.application.literature_gateway import (
+    LiteratureGateway,
+    LiteratureGatewayError,
+)
 from folklore_mcp_service.config.settings import Settings
 from folklore_mcp_service.domain.literature_contracts import (
     PublicationDetailsResponse,
@@ -185,6 +188,28 @@ async def test_literature_gateway_calls_public_publication_contract() -> None:
     assert isinstance(result, PublicationDetailsResponse)
     assert result.publication.authors == ["Smith J", "Doe A"]
     assert result.usage_boundary["patient_context_evaluated"] is False
+    await client.aclose()
+
+
+@pytest.mark.asyncio
+async def test_publication_not_found_is_scoped_to_folklore_corpus() -> None:
+    async def handler(request: httpx.Request) -> httpx.Response:
+        assert request.url.path == "/folklore/v1/literature/publications/12345678"
+        return httpx.Response(404)
+
+    client = httpx.AsyncClient(
+        base_url="http://127.0.0.1:9001", transport=httpx.MockTransport(handler)
+    )
+
+    with pytest.raises(LiteratureGatewayError) as captured:
+        await LiteratureGateway(settings(), client).get_publication("12345678")
+
+    assert captured.value.code == "publication_not_found"
+    assert captured.value.retryable is False
+    assert str(captured.value) == (
+        "No record for this PMID exists in Folklore's current PubMed-derived "
+        "genetics corpus."
+    )
     await client.aclose()
 
 

@@ -26,8 +26,25 @@ class StrictModel(BaseModel):
 class SearchVariantArguments(StrictModel):
     """The only public scientific input admitted by the MCP tool."""
 
-    assembly: Literal["GRCh38"] = "GRCh38"
-    query: VariantQuery
+    assembly: Annotated[
+        Literal["GRCh38"],
+        Field(
+            description=(
+                "Reference genome assembly. Folklore currently accepts GRCh38 only."
+            )
+        ),
+    ] = "GRCh38"
+    query: Annotated[
+        VariantQuery,
+        Field(
+            description=(
+                "One germline nuclear SNV or simple indel to resolve and interpret; "
+                "accepted forms include coordinates, genomic/coding/protein HGVS, "
+                "SPDI, rsID, or a returned Folklore canonical_key in "
+                "GRCh38:chrN:position:REF:ALT form."
+            )
+        ),
+    ]
 
 
 class CanonicalIdentity(StrictModel):

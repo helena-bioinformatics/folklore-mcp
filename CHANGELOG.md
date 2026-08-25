@@ -2,6 +2,23 @@
 
 All notable changes to the public Folklore MCP adapter are documented here.
 
+## 1.3.2 - Unreleased
+
+- Added parameter-specific descriptions to the input schemas for all four tools,
+  including the GRCh38 boundary, the distinction between variant `query` and
+  literature `question`, cursor reuse, PMID format, and reusable Folklore
+  `canonical_key` syntax.
+- Scoped publication-detail misses to Folklore's current PubMed-derived genetics
+  corpus while preserving the existing non-retryable `publication_not_found`
+  error contract.
+- Refined semantic literature instructions so agents pass known PMID, DOI, or
+  PMCID identifiers as exact anchors inside the question.
+- Preserved every input constraint, response shape, retrieval/ranking rule,
+  professional-review boundary, and the public/private source boundary.
+- Prepared package, Registry, citation, and Zenodo metadata for release `1.3.2`.
+  No version DOI is claimed before the immutable Zenodo archive exists; the
+  concept DOI continues to identify the release series.
+
 ## 1.3.1 - 2026-08-25
 
 - Added `search_literature_corpus`, a fourth read-only tool for bounded semantic

@@ -3,6 +3,7 @@ from prometheus_client import CollectorRegistry
 from test_contracts import resolved_result
 from test_variant_literature import corpus_search_payload, publication_details_payload
 
+from folklore_mcp_service.application.literature_gateway import LiteratureGatewayError
 from folklore_mcp_service.config.settings import Settings
 from folklore_mcp_service.domain.literature_contracts import (
     PublicationDetailsResponse,
@@ -56,6 +57,19 @@ class FakeLiteratureGateway:
 
     async def close(self) -> None:
         self.closed = True
+
+
+class MissingPublicationLiteratureGateway(FakeLiteratureGateway):
+    async def get_publication(self, pmid: str) -> PublicationDetailsResponse:
+        assert pmid == "12345678"
+        raise LiteratureGatewayError(
+            "publication_not_found",
+            (
+                "No record for this PMID exists in Folklore's current "
+                "PubMed-derived genetics corpus."
+            ),
+            retryable=False,
+        )
 
 
 def enabled_settings() -> Settings:
@@ -137,7 +151,7 @@ def test_mcp_2026_discovery_is_stateless_and_initialize_is_retired() -> None:
     assert result["_meta"]["io.modelcontextprotocol/serverInfo"] == {
         "name": "folklore",
         "title": "Folklore Clinical Variant Interpretation MCP",
-        "version": "1.3.1",
+        "version": "1.3.2",
         "description": (
             "The official public, read-only Helena Bioinformatics MCP for clinical "
             "variant interpretation, ACMG/AMP evidence and related literature."
@@ -234,6 +248,69 @@ def test_mcp_lists_exact_tool_and_returns_structured_ui_equivalent_result() -> N
     assert gateway.calls == 1
     assert 'outcome="resolved"' in metrics
     assert gateway.closed is True
+
+
+def test_mcp_input_schemas_describe_every_parameter() -> None:
+    app = create_app(
+        literature_enabled_settings(),
+        gateway=FakeGateway(resolved_result()),
+        literature_gateway=FakeLiteratureGateway(),
+    )
+    with TestClient(app) as client:
+        listed = client.post(
+            "/folklore/v1/mcp",
+            json={
+                "jsonrpc": "2.0",
+                "id": 20,
+                "method": "tools/list",
+                "params": {"_meta": META},
+            },
+            headers=headers("tools/list"),
+        )
+
+    tools = {tool["name"]: tool for tool in listed.json()["result"]["tools"]}
+    assert set(tools) == {
+        "search_variant_evidence",
+        "search_variant_literature",
+        "get_publication_details",
+        "search_literature_corpus",
+    }
+    for tool in tools.values():
+        for parameter in tool["inputSchema"]["properties"].values():
+            assert parameter["description"].strip()
+
+    evidence = tools["search_variant_evidence"]["inputSchema"]["properties"]
+    assert evidence["assembly"]["const"] == "GRCh38"
+    assert "GRCh38 only" in evidence["assembly"]["description"]
+    assert "HGVS" in evidence["query"]["description"]
+    assert "canonical_key" in evidence["query"]["description"]
+    assert evidence["query"]["minLength"] == 1
+    assert evidence["query"]["maxLength"] == 512
+
+    variant_literature = tools["search_variant_literature"]["inputSchema"]["properties"]
+    assert "variant identifier" in variant_literature["query"]["description"]
+    assert "canonical_key" in variant_literature["query"]["description"]
+    assert (
+        "Optional natural-language focus"
+        in variant_literature["question"]["description"]
+    )
+    assert variant_literature["question"]["anyOf"][0]["minLength"] == 3
+    assert variant_literature["question"]["anyOf"][0]["maxLength"] == 500
+    assert variant_literature["limit"]["minimum"] == 1
+    assert variant_literature["limit"]["maximum"] == 25
+
+    publication = tools["get_publication_details"]["inputSchema"]["properties"]
+    assert "One PubMed identifier to look up" in publication["pmid"]["description"]
+    assert publication["pmid"]["pattern"] == "^[0-9]{1,12}$"
+
+    corpus = tools["search_literature_corpus"]["inputSchema"]["properties"]
+    assert "Natural-language literature question" in corpus["query"]["description"]
+    assert "Opaque continuation cursor" in corpus["cursor"]["description"]
+    assert corpus["query"]["minLength"] == 3
+    assert corpus["query"]["maxLength"] == 200
+    assert corpus["sort"]["enum"] == ["relevance", "newest", "oldest"]
+    assert corpus["cursor"]["anyOf"][0]["minLength"] == 8
+    assert corpus["cursor"]["anyOf"][0]["maxLength"] == 128
 
 
 def test_mcp_lists_and_reads_public_variant_evidence_app() -> None:
@@ -381,6 +458,44 @@ def test_publication_details_are_available_through_mcp() -> None:
     structured = called.json()["result"]["structuredContent"]
     assert structured["publication"]["abstract"] == "Full abstract."
     assert structured["usage_boundary"]["patient_context_evaluated"] is False
+
+
+def test_publication_not_found_is_scoped_in_mcp_error() -> None:
+    message = (
+        "No record for this PMID exists in Folklore's current PubMed-derived "
+        "genetics corpus."
+    )
+    app = create_app(
+        literature_enabled_settings(),
+        gateway=FakeGateway(resolved_result()),
+        literature_gateway=MissingPublicationLiteratureGateway(),
+        metrics_registry=CollectorRegistry(),
+    )
+    with TestClient(app) as client:
+        called = client.post(
+            "/folklore/v1/mcp",
+            json={
+                "jsonrpc": "2.0",
+                "id": 21,
+                "method": "tools/call",
+                "params": {
+                    "name": "get_publication_details",
+                    "arguments": {"pmid": "12345678"},
+                    "_meta": META,
+                },
+            },
+            headers=headers("tools/call", "get_publication_details"),
+        )
+
+    assert called.status_code == 200
+    result = called.json()["result"]
+    assert result["isError"] is True
+    assert result["content"][0]["text"] == message
+    assert result["structuredContent"]["adapter_error"] == {
+        "code": "publication_not_found",
+        "message": message,
+        "retryable": False,
+    }
 
 
 def test_literature_corpus_search_is_available_through_mcp() -> None:

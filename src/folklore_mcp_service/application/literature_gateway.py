@@ -126,7 +126,10 @@ class LiteratureGateway:
         if response.status_code == 404:
             raise LiteratureGatewayError(
                 "publication_not_found",
-                "The publication was not found.",
+                (
+                    "No record for this PMID exists in Folklore's current "
+                    "PubMed-derived genetics corpus."
+                ),
                 retryable=False,
             )
         return self._validate(

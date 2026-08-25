@@ -1,6 +1,8 @@
 import json
+import tomllib
 from pathlib import Path
 
+from folklore_mcp_service import __version__
 from folklore_mcp_service.presentation.mcp import (
     MCP_ADAPTER_VERSION,
     MCP_CORPUS_SEARCH_TOOL_NAME,
@@ -43,6 +45,23 @@ def test_registry_identity_and_remote_are_exact() -> None:
         MCP_CORPUS_SEARCH_TOOL_NAME,
     ]
     assert contract["resources"] == [MCP_UI_RESOURCE_URI]
+
+
+def test_release_candidate_versions_and_dois_are_consistent() -> None:
+    package = tomllib.loads((REPOSITORY / "pyproject.toml").read_text())
+    zenodo = json.loads((REPOSITORY / ".zenodo.json").read_text())
+    citation = (REPOSITORY / "CITATION.cff").read_text()
+    readme = (REPOSITORY / "README.md").read_text()
+
+    assert package["project"]["version"] == MCP_ADAPTER_VERSION == __version__
+    assert zenodo["version"] == MCP_ADAPTER_VERSION
+    assert f"version: {MCP_ADAPTER_VERSION}" in citation
+    assert "doi: 10.5281/zenodo.21922951" in citation
+    assert "Release candidate: `1.3.2`" in readme
+    assert "Latest published Registry version: `1.3.1`" in readme
+    assert "historical version `1.3.1`" in readme
+    assert "10.5281/zenodo.22093164" in readme
+    assert "Release candidate `1.3.2` does not have a version DOI yet" in readme
 
 
 def test_public_tree_has_only_generic_deployment_assets() -> None:

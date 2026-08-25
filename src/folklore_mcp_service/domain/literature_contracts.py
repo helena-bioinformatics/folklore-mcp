@@ -12,13 +12,44 @@ class StrictModel(BaseModel):
 
 
 class SearchVariantLiteratureArguments(StrictModel):
-    assembly: Literal["GRCh38"] = "GRCh38"
-    query: VariantQuery
+    assembly: Annotated[
+        Literal["GRCh38"],
+        Field(
+            description=(
+                "Reference genome assembly. Folklore currently accepts GRCh38 only."
+            )
+        ),
+    ] = "GRCh38"
+    query: Annotated[
+        VariantQuery,
+        Field(
+            description=(
+                "One germline nuclear SNV or simple indel to resolve before "
+                "retrieving its literature; this is a variant identifier, not a "
+                "natural-language question. Accepts a returned Folklore "
+                "canonical_key in GRCh38:chrN:position:REF:ALT form."
+            )
+        ),
+    ]
     question: Annotated[
         str | None,
         StringConstraints(strip_whitespace=True, min_length=3, max_length=500),
+        Field(
+            description=(
+                "Optional natural-language focus applied after the variant is "
+                "resolved, such as a condition or evidence question; do not put "
+                "the variant identifier here."
+            )
+        ),
     ] = None
-    limit: Annotated[int, Field(ge=1, le=25)] = 10
+    limit: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=25,
+            description="Maximum number of publications to return, from 1 to 25.",
+        ),
+    ] = 10
 
 
 class LiteraturePublication(StrictModel):
@@ -67,7 +98,16 @@ class PublicVariantLiteratureResponse(StrictModel):
 
 
 class GetPublicationDetailsArguments(StrictModel):
-    pmid: Annotated[str, StringConstraints(pattern=r"^[0-9]{1,12}$")]
+    pmid: Annotated[
+        str,
+        StringConstraints(pattern=r"^[0-9]{1,12}$"),
+        Field(
+            description=(
+                "One PubMed identifier to look up in Folklore's current corpus, "
+                "as 1 to 12 digits without a PMID prefix."
+            )
+        ),
+    ]
 
 
 class PublicGeneMention(StrictModel):
@@ -153,10 +193,40 @@ class SearchCorpusArguments(StrictModel):
     query: Annotated[
         str,
         StringConstraints(strip_whitespace=True, min_length=3, max_length=200),
+        Field(
+            description=(
+                "Natural-language literature question or exact PMID, DOI, PMCID, "
+                "gene, variant, phenotype, HPO, or OMIM query. Include every known "
+                "publication identifier when comparing or finding related papers."
+            )
+        ),
     ]
-    limit: Annotated[int, Field(ge=1, le=25)] = 20
-    sort: Literal["relevance", "newest", "oldest"] = "relevance"
-    cursor: CorpusCursor | None = None
+    limit: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=25,
+            description="Maximum number of publications to return, from 1 to 25.",
+        ),
+    ] = 20
+    sort: Annotated[
+        Literal["relevance", "newest", "oldest"],
+        Field(
+            description=(
+                "Result ordering: relevance-ranked, newest publication first, or "
+                "oldest publication first."
+            )
+        ),
+    ] = "relevance"
+    cursor: Annotated[
+        CorpusCursor | None,
+        Field(
+            description=(
+                "Opaque continuation cursor from the preceding response for the "
+                "same query and sort order; omit for the first page."
+            )
+        ),
+    ] = None
 
 
 class PublicCorpusArticleEntity(StrictModel):
