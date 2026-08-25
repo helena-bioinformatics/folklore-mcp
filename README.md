@@ -106,10 +106,8 @@ archived release receives a persistent DOI. Use the concept DOI
 [`10.5281/zenodo.21922951`](https://doi.org/10.5281/zenodo.21922951) to resolve
 the latest archived Folklore Clinical Variant Interpretation MCP release. The immutable `1.2.2` archive remains
 available as [`10.5281/zenodo.21922952`](https://doi.org/10.5281/zenodo.21922952).
-The latest published immutable archive is historical version `1.3.1`, available
-as [`10.5281/zenodo.22093164`](https://doi.org/10.5281/zenodo.22093164).
-Release `1.3.3` does not have a version DOI yet; its exact DOI will be
-recorded only after Zenodo creates the immutable archive.
+The latest published immutable archive is version `1.3.3`, available as
+[`10.5281/zenodo.22102783`](https://doi.org/10.5281/zenodo.22102783).
 
 ## License
 

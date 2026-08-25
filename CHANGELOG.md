@@ -10,6 +10,8 @@ All notable changes to the public Folklore MCP adapter are documented here.
   containing a tool-result trimming marker.
 - Preserved all scientific behavior, public inputs, output shapes and clinical
   safety boundaries.
+- Archived the immutable public adapter release in Zenodo as
+  [`10.5281/zenodo.22102783`](https://doi.org/10.5281/zenodo.22102783).
 
 ## 1.3.2 - 2026-08-25
 

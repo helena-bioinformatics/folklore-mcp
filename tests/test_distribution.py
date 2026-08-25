@@ -56,12 +56,11 @@ def test_release_candidate_versions_and_dois_are_consistent() -> None:
     assert package["project"]["version"] == MCP_ADAPTER_VERSION == __version__
     assert zenodo["version"] == MCP_ADAPTER_VERSION
     assert f"version: {MCP_ADAPTER_VERSION}" in citation
-    assert "doi: 10.5281/zenodo.21922951" in citation
+    assert "doi: 10.5281/zenodo.22102783" in citation
     assert "Current release: `1.3.3`" in readme
     assert "Latest published Registry version: `1.3.3`" in readme
-    assert "historical version `1.3.1`" in readme
-    assert "10.5281/zenodo.22093164" in readme
-    assert "Release `1.3.3` does not have a version DOI yet" in readme
+    assert "latest published immutable archive is version `1.3.3`" in readme
+    assert "10.5281/zenodo.22102783" in readme
 
 
 def test_public_tree_has_only_generic_deployment_assets() -> None:
