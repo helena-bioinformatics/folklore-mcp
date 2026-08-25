@@ -31,6 +31,12 @@ Biomni's stdio-only external-server configuration to the hosted Streamable HTTP
 endpoint. Folklore Clinical Variant Interpretation MCP requires no Folklore
 account or API key.
 
+Biorouter users can build and install the
+[Biorouter BRXT extension](integrations/biorouter/README.md). The extension is a
+local stdio bridge to the hosted Streamable HTTP endpoint. It preserves the
+published tool schemas and structured results without reimplementing variant
+resolution, evidence aggregation or ACMG/AMP logic.
+
 ## Public capabilities
 
 - `search_variant_evidence` resolves one supported GRCh38 germline SNV or simple

@@ -1,5 +1,6 @@
 import json
 import tomllib
+import zipfile
 from pathlib import Path
 
 import yaml
@@ -86,6 +87,96 @@ def test_biomni_recipe_uses_the_hardened_pinned_stdio_bridge() -> None:
         "WARNING",
         "https://api.helena.bio/folklore/v1/mcp",
     ]
+
+
+def test_biorouter_recipe_preserves_identity_version_and_safety() -> None:
+    client_configs = json.loads(
+        (REPOSITORY / "registry" / "platforms" / "client-configs.json").read_text()
+    )
+    biorouter = client_configs["clients"]["biorouter"]
+    manifest_path = REPOSITORY / biorouter["manifest"]
+    manifest = json.loads(manifest_path.read_text())
+    project = tomllib.loads(
+        (REPOSITORY / "integrations" / "biorouter" / "pyproject.toml").read_text()
+    )
+    skill = (
+        REPOSITORY
+        / "integrations"
+        / "biorouter"
+        / "skills"
+        / "folklore-clinical-variant-interpretation-mcp"
+        / "SKILL.md"
+    ).read_text()
+    server = (
+        REPOSITORY
+        / "integrations"
+        / "biorouter"
+        / "src"
+        / "folklore_biorouter"
+        / "server.py"
+    ).read_text()
+    cli = (
+        REPOSITORY
+        / "integrations"
+        / "biorouter"
+        / "src"
+        / "folklore_biorouter"
+        / "cli.py"
+    ).read_text()
+
+    assert biorouter == {
+        "title": "Folklore Clinical Variant Interpretation MCP",
+        "publisher": "Helena Bioinformatics",
+        "mode": "BRXT stdio bridge to hosted Streamable HTTP",
+        "authentication": "none",
+        "manifest": "integrations/biorouter/manifest.json",
+    }
+    assert manifest["name"] == "folklore-clinical-variant-interpretation-mcp"
+    assert manifest["display_name"] == "Folklore Clinical Variant Interpretation MCP"
+    assert manifest["version"] == MCP_ADAPTER_VERSION == "1.3.3"
+    assert manifest["tools_count"] == 4
+    assert manifest["env_vars"] == []
+    assert project["project"]["version"] == MCP_ADAPTER_VERSION
+    assert project["project"]["dependencies"] == ["fastmcp==3.4.2"]
+    assert "Ambiguous candidates are never selected automatically" in skill
+    assert "patient, phenotype, family, segregation" in skill
+    assert "qualified professional review" in skill
+    assert 'ENDPOINT = "https://api.helena.bio/folklore/v1/mcp"' in server
+    assert "create_proxy" in server
+    assert 'transport="stdio"' in cli
+
+
+def test_biorouter_brxt_contains_only_the_public_bridge_assets(tmp_path: Path) -> None:
+    source = REPOSITORY / "integrations" / "biorouter"
+    archive = tmp_path / "folklore-clinical-variant-interpretation-mcp.brxt"
+    included = [
+        "manifest.json",
+        "README.md",
+        "pyproject.toml",
+        "LICENSE",
+        "NOTICE",
+    ]
+    with zipfile.ZipFile(archive, "w") as bundle:
+        for name in included:
+            source_path = source / name
+            if name in {"LICENSE", "NOTICE"}:
+                source_path = REPOSITORY / name
+            bundle.write(source_path, name)
+        for directory in ("src", "skills"):
+            for source_path in (source / directory).rglob("*"):
+                if (
+                    source_path.is_file()
+                    and "__pycache__" not in source_path.parts
+                    and source_path.suffix != ".pyc"
+                ):
+                    bundle.write(source_path, source_path.relative_to(source))
+
+    with zipfile.ZipFile(archive) as bundle:
+        names = set(bundle.namelist())
+    assert "manifest.json" in names
+    assert "src/folklore_biorouter/server.py" in names
+    assert "skills/folklore-clinical-variant-interpretation-mcp/SKILL.md" in names
+    assert not any("__pycache__" in name or name.endswith(".pyc") for name in names)
 
 
 def test_release_candidate_versions_and_dois_are_consistent() -> None:

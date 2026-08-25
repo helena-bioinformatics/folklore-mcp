@@ -20,6 +20,13 @@
       "authentication": "none",
       "config": "integrations/biomni/mcp_config.yaml"
     },
+    "biorouter": {
+      "title": "Folklore Clinical Variant Interpretation MCP",
+      "publisher": "Helena Bioinformatics",
+      "mode": "BRXT stdio bridge to hosted Streamable HTTP",
+      "authentication": "none",
+      "manifest": "integrations/biorouter/manifest.json"
+    },
     "codex": {"mcpServers": {"folklore": {"url": "https://api.helena.bio/folklore/v1/mcp"}}},
     "chatgpt": {"mode": "custom MCP app", "url": "https://api.helena.bio/folklore/v1/mcp"},
     "claude": {"mode": "custom connector", "url": "https://api.helena.bio/folklore/v1/mcp"},

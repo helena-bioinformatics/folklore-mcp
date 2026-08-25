@@ -4,6 +4,13 @@ All notable changes to the public Folklore MCP adapter are documented here.
 
 ## Unreleased
 
+- Added a Biorouter BRXT extension that bridges Biorouter's local stdio MCP
+  interface to the hosted Folklore Clinical Variant Interpretation MCP endpoint.
+- Added a Biorouter skill that preserves explicit outcome branching, stops on
+  ambiguous variants, excludes patient and case context, and requires qualified
+  professional review.
+- Added BRXT packaging tests and a live smoke test for the four published tools
+  and fail-closed ambiguity behavior.
 - Added a tested Biomni configuration that connects to Folklore Clinical
   Variant Interpretation MCP through a digest-pinned, restricted stdio bridge.
 - Added a live smoke test for tool discovery, the strict public input contract,
