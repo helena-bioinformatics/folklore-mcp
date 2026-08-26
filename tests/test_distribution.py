@@ -1,4 +1,6 @@
+import hashlib
 import json
+import subprocess
 import tomllib
 import zipfile
 from pathlib import Path
@@ -148,32 +150,29 @@ def test_biorouter_recipe_preserves_identity_version_and_safety() -> None:
 
 def test_biorouter_brxt_contains_only_the_public_bridge_assets(tmp_path: Path) -> None:
     source = REPOSITORY / "integrations" / "biorouter"
-    archive = tmp_path / "folklore-clinical-variant-interpretation-mcp.brxt"
-    included = [
-        "manifest.json",
-        "README.md",
-        "pyproject.toml",
-        "LICENSE",
-        "NOTICE",
-    ]
-    with zipfile.ZipFile(archive, "w") as bundle:
-        for name in included:
-            source_path = source / name
-            if name in {"LICENSE", "NOTICE"}:
-                source_path = REPOSITORY / name
-            bundle.write(source_path, name)
-        for directory in ("src", "skills"):
-            for source_path in (source / directory).rglob("*"):
-                if (
-                    source_path.is_file()
-                    and "__pycache__" not in source_path.parts
-                    and source_path.suffix != ".pyc"
-                ):
-                    bundle.write(source_path, source_path.relative_to(source))
+    first = tmp_path / "first.brxt"
+    second = tmp_path / "second.brxt"
+    builder = source / "scripts" / "build_brxt.py"
+    subprocess.run(
+        ["python3", str(builder), "--output", str(first)],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    subprocess.run(
+        ["python3", str(builder), "--output", str(second)],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
 
-    with zipfile.ZipFile(archive) as bundle:
+    assert first.read_bytes() == second.read_bytes()
+    digest = hashlib.sha256(first.read_bytes()).hexdigest()
+    assert first.with_suffix(".brxt.sha256").read_text() == f"{digest}  first.brxt\n"
+    with zipfile.ZipFile(first) as bundle:
         names = set(bundle.namelist())
     assert "manifest.json" in names
+    assert "uv.lock" in names
     assert "src/folklore_biorouter/server.py" in names
     assert "skills/folklore-clinical-variant-interpretation-mcp/SKILL.md" in names
     assert not any("__pycache__" in name or name.endswith(".pyc") for name in names)

@@ -11,6 +11,8 @@ All notable changes to the public Folklore MCP adapter are documented here.
   professional review.
 - Added BRXT packaging tests and a live smoke test for the four published tools
   and fail-closed ambiguity behavior.
+- Added a reproducible BRXT builder, locked dependencies, a Biorouter-compatible
+  install verification and an immutable release-asset workflow with SHA-256.
 - Added a tested Biomni configuration that connects to Folklore Clinical
   Variant Interpretation MCP through a digest-pinned, restricted stdio bridge.
 - Added a live smoke test for tool discovery, the strict public input contract,

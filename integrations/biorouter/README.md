@@ -33,10 +33,28 @@ The bundle is written to:
 integrations/biorouter/dist/folklore-clinical-variant-interpretation-mcp.brxt
 ```
 
+The build is reproducible and also writes a SHA-256 checksum beside the bundle.
+Dependencies are locked in `uv.lock`, which is included in the archive and used
+by Biorouter's `uv sync` installer.
+
+## Download
+
+The immutable release bundle is available at:
+
+```text
+https://github.com/helena-bioinformatics/folklore-mcp/releases/download/folklore-biorouter-v1.3.3/folklore-clinical-variant-interpretation-mcp.brxt
+```
+
 ## Install in Biorouter
 
 ```bash
 biorouter extension install integrations/biorouter/dist/folklore-clinical-variant-interpretation-mcp.brxt
+```
+
+To verify the same extraction and locked-environment path used by Biorouter:
+
+```bash
+integrations/biorouter/scripts/verify_brxt_install.sh
 ```
 
 The extension requires outbound HTTPS access to:

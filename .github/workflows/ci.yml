@@ -23,3 +23,10 @@ jobs:
       - run: pytest
       - run: ruff check .
       - run: ruff format --check .
+      - name: Verify the reproducible Biorouter BRXT install
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install uv==0.12.6
+          integrations/biorouter/scripts/build_brxt.sh
+          integrations/biorouter/scripts/verify_brxt_install.sh
