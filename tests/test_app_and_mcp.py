@@ -162,8 +162,9 @@ def test_mcp_2026_discovery_is_stateless_and_initialize_is_retired() -> None:
         "title": "Folklore Clinical Variant Interpretation MCP",
         "version": "1.4.0",
         "description": (
-            "The official public, read-only Helena Bioinformatics MCP for clinical "
-            "variant interpretation, ACMG/AMP evidence and related literature."
+            "Classify and interpret supported GRCh38 germline variants under ACMG/AMP "
+            "with structured evidence, provenance and related literature through the "
+            "official public, read-only Helena Bioinformatics MCP."
         ),
         "websiteUrl": "https://folklore.helena.bio",
         "icons": [
@@ -230,7 +231,7 @@ def test_mcp_lists_exact_tool_and_returns_structured_ui_equivalent_result() -> N
         }
     ]
     assert tools[0]["annotations"] == {
-        "title": "Classify a germline variant with Folklore",
+        "title": "Classify or interpret a germline variant under ACMG/AMP",
         "readOnlyHint": True,
         "destructiveHint": False,
         "idempotentHint": True,
@@ -288,6 +289,18 @@ def test_mcp_input_schemas_describe_every_parameter() -> None:
         "search_literature_corpus",
         "support_helena",
     }
+    evidence_tool = tools["search_variant_evidence"]
+    assert evidence_tool["title"] == (
+        "Classify or interpret a germline variant under ACMG/AMP"
+    )
+    for trigger in (
+        "classify or interpret pathogenicity",
+        "review a VUS",
+        "ClinVar assertions",
+        "population-frequency evidence",
+        "resolve a variant notation",
+    ):
+        assert trigger in evidence_tool["description"]
     for tool in tools.values():
         for parameter in tool["inputSchema"]["properties"].values():
             assert parameter["description"].strip()

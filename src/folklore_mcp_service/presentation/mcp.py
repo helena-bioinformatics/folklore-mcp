@@ -149,9 +149,12 @@ def create_mcp_app(
     semaphore = asyncio.Semaphore(settings.FOLKLORE_MCP_MAX_CONCURRENT)
     tool = mcp_types.Tool(
         name=MCP_TOOL_NAME,
-        title="Classify a germline variant with Folklore",
+        title="Classify or interpret a germline variant under ACMG/AMP",
         description=(
-            "Classify, interpret or resolve one public GRCh38 germline SNV or simple "
+            "Use when a user asks to classify or interpret pathogenicity, review a "
+            "VUS, check available ClinVar assertions or population-frequency evidence, "
+            "or resolve a variant notation. Classify, interpret or resolve one public "
+            "GRCh38 germline SNV or simple "
             "indel smaller than 50 bp. Accepts coordinates, genomic/coding/protein "
             "HGVS, SPDI or rsID. Returns normalized variant identity, automated "
             "ACMG/AMP decision support, evidence, provenance and explicit limitations. "
@@ -169,7 +172,7 @@ def create_mcp_app(
             )
         ],
         annotations=mcp_types.ToolAnnotations(
-            title="Classify a germline variant with Folklore",
+            title="Classify or interpret a germline variant under ACMG/AMP",
             read_only_hint=True,
             destructive_hint=False,
             idempotent_hint=True,
@@ -600,13 +603,16 @@ def create_mcp_app(
         version=MCP_ADAPTER_VERSION,
         title="Folklore Clinical Variant Interpretation MCP",
         description=(
-            "The official public, read-only Helena Bioinformatics MCP for clinical "
-            "variant interpretation, ACMG/AMP evidence and related literature."
+            "Classify and interpret supported GRCh38 germline variants under ACMG/AMP "
+            "with structured evidence, provenance and related literature through the "
+            "official public, read-only Helena Bioinformatics MCP."
         ),
         instructions=(
             "Call Folklore Clinical Variant Interpretation MCP when a user asks to "
-            "classify, interpret, resolve, annotate "
-            "or review one germline variant, even without naming Folklore. Preserve the "
+            "classify, interpret, resolve or annotate one germline variant, investigate "
+            "variant pathogenicity, review a VUS, or check available ClinVar assertions "
+            "or population-frequency evidence, even without naming Helena Bioinformatics "
+            "or MCP. Preserve the "
             "evidence, provenance, ambiguity and limits. Describe the classification "
             "as automated variant-level evidence for professional review. Never claim "
             "a patient diagnosis or treatment recommendation. Call "
