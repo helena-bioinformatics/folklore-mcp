@@ -1,0 +1,77 @@
+name: Scientific methods review
+description: Review the public variant-interpretation comparison protocol.
+title: "[Methods review] "
+labels:
+  - scientific-review
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Review the public comparison protocol for Folklore Clinical Variant Interpretation MCP. This route is for methods criticism, not endorsement. Do not include patient, phenotype, family, segregation or private case data.
+  - type: input
+    id: qualification
+    attributes:
+      label: Relevant qualification or project affiliation
+      description: State the expertise that informs this review.
+    validations:
+      required: true
+  - type: textarea
+    id: conflict
+    attributes:
+      label: Conflict of interest
+      description: Disclose relevant financial, organizational or project relationships, or state none.
+    validations:
+      required: true
+  - type: dropdown
+    id: section
+    attributes:
+      label: Protocol section
+      options:
+        - Public-case sampling and stratification
+        - Identity resolution and assembly handling
+        - Classification concordance
+        - Criterion concordance
+        - Provenance completeness
+        - Reproducibility and latency
+        - Ambiguous, invalid, unsupported or unavailable outcomes
+        - Conflict-of-interest or clinical-safety boundary
+        - Other methods concern
+    validations:
+      required: true
+  - type: textarea
+    id: observation
+    attributes:
+      label: Reproducible observation
+      description: Identify the exact public section and explain the methodological issue.
+    validations:
+      required: true
+  - type: textarea
+    id: correction
+    attributes:
+      label: Proposed correction
+      description: Describe a bounded, falsifiable change to the protocol.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criterion
+      description: State how a reviewer could verify that the issue is resolved.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Public evidence
+      description: Link primary literature, standards, guidance or public interface behavior supporting the recommendation.
+    validations:
+      required: true
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Safety confirmation
+      options:
+        - label: I included no patient, phenotype, family, segregation or private case data.
+          required: true
+        - label: I understand that concordance is not clinical accuracy or superiority.
+          required: true

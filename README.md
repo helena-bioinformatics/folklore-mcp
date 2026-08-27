@@ -89,6 +89,12 @@ The [preregistered comparison protocol](benchmarks/variant-interpretation/PREREG
 defines the public evaluation source, sampling and independent-review gates
 before any comparative result is collected.
 
+Qualified clinical genetics, molecular genetics, bioinformatics and
+reproducibility reviewers can use the
+[independent methods-review route](benchmarks/variant-interpretation/INDEPENDENT_REVIEW.md)
+to identify a protocol flaw, propose a falsifiable correction or add an
+acceptance criterion. This is a request for methods criticism, not endorsement.
+
 The [cold-start agent discovery benchmark](benchmarks/agent-discovery/README.md)
 adds 100 brand-blind user prompts, an empirical host-results evaluator and a
 deterministic audit of task selection, tool routing, typed outcomes and the
