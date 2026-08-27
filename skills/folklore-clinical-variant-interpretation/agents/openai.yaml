@@ -1,0 +1,13 @@
+interface:
+  display_name: "Folklore Clinical Variant Interpretation"
+  short_description: "Classify germline variants with evidence and provenance"
+  default_prompt: "Use $folklore-clinical-variant-interpretation to classify this germline variant under ACMG/AMP and summarize the source-linked evidence."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "folklore-clinical-variant-interpretation"
+      description: "Public read-only variant evidence and ACMG/AMP decision support"
+      transport: "streamable_http"
+      url: "https://api.helena.bio/folklore/v1/mcp"
+policy:
+  allow_implicit_invocation: true

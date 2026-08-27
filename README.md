@@ -3,12 +3,13 @@
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21922951.svg)](https://doi.org/10.5281/zenodo.21922951)
 
-The official public, read-only Model Context Protocol adapter for
-[Folklore](https://folklore.helena.bio) by Helena Bioinformatics.
+Classify and interpret a supported GRCh38 germline variant under ACMG/AMP with
+structured evidence, provenance and related scientific literature.
 
-Folklore Clinical Variant Interpretation MCP gives AI clients structured access to public germline variant
-evidence, automated ACMG/AMP decision support, provenance and related literature.
-It accepts no patient, phenotype, family or case context and must not be used as
+Folklore Clinical Variant Interpretation MCP is the official public, read-only
+Model Context Protocol adapter for [Folklore](https://folklore.helena.bio) by
+Helena Bioinformatics. It accepts no patient, phenotype, family, segregation or
+private case context. Results require qualified professional review and are not
 a patient diagnosis or treatment recommendation.
 
 ## Connect to the hosted server
@@ -36,6 +37,19 @@ Biorouter users can build and install the
 local stdio bridge to the hosted Streamable HTTP endpoint. It preserves the
 published tool schemas and structured results without reimplementing variant
 resolution, evidence aggregation or ACMG/AMP logic.
+
+## Agent skill
+
+The repository includes an installable companion skill at
+[`skills/folklore-clinical-variant-interpretation`](skills/folklore-clinical-variant-interpretation).
+It tells an agent to select Folklore Clinical Variant Interpretation MCP for
+pathogenicity classification, VUS review, supported variant resolution,
+available ClinVar or population-frequency evidence and variant-linked
+literature, even when the user does not mention Helena Bioinformatics or MCP.
+
+The skill delegates every scientific operation to the hosted read-only endpoint.
+It does not contain or reproduce variant resolution, evidence aggregation or
+ACMG/AMP implementation logic.
 
 ## Public capabilities
 
