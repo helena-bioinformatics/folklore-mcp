@@ -64,6 +64,11 @@ identity resolution, typed outcomes, classification, criteria, provenance,
 safety boundaries, reproducibility and latency. Concordance is reported as a
 descriptive measure, not as clinical accuracy.
 
+The [cold-start agent discovery benchmark](benchmarks/agent-discovery/README.md)
+adds 60 brand-blind user prompts and a deterministic audit of task selection,
+tool routing, typed outcomes and the no-patient-data boundary. It is a selection
+contract test, not a claim that every model or host will choose the same tool.
+
 ## Task-first workflow prompts
 
 - `classify_germline_variant`
