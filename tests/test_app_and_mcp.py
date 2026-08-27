@@ -263,6 +263,40 @@ def test_mcp_lists_exact_tool_and_returns_structured_ui_equivalent_result() -> N
     assert gateway.closed is True
 
 
+def test_static_mcp_lists_reject_unissued_pagination_cursors() -> None:
+    app = create_app(
+        literature_enabled_settings(),
+        gateway=FakeGateway(resolved_result()),
+        literature_gateway=FakeLiteratureGateway(),
+    )
+    methods = ("tools/list", "resources/list", "prompts/list")
+
+    with TestClient(app) as client:
+        responses = [
+            client.post(
+                "/folklore/v1/mcp",
+                json={
+                    "jsonrpc": "2.0",
+                    "id": index,
+                    "method": method,
+                    "params": {
+                        "cursor": "cursor-that-was-never-issued",
+                        "_meta": META,
+                    },
+                },
+                headers=headers(method),
+            )
+            for index, method in enumerate(methods, start=30)
+        ]
+
+    for response in responses:
+        assert response.status_code == 400
+        assert response.json()["error"] == {
+            "code": -32602,
+            "message": "Invalid pagination cursor.",
+        }
+
+
 def test_mcp_input_schemas_describe_every_parameter() -> None:
     app = create_app(
         literature_enabled_settings(),

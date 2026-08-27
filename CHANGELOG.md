@@ -4,6 +4,9 @@ All notable changes to the public Folklore MCP adapter are documented here.
 
 ## Unreleased
 
+- Reject unissued pagination cursors with JSON-RPC `-32602` on the static
+  `tools/list`, `resources/list` and `prompts/list` methods, with a first-party
+  regression test covering all three public list surfaces.
 - Added a Biorouter BRXT extension that bridges Biorouter's local stdio MCP
   interface to the hosted Folklore Clinical Variant Interpretation MCP endpoint.
 - Added a Biorouter skill that preserves explicit outcome branching, stops on

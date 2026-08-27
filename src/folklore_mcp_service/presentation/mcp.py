@@ -8,6 +8,7 @@ from typing import Any
 
 import mcp.types as mcp_types
 from mcp.server import Server, ServerRequestContext
+from mcp.shared.exceptions import MCPError
 from pydantic import ValidationError
 from starlette.types import ASGIApp
 
@@ -429,8 +430,9 @@ def create_mcp_app(
 
     async def list_prompts(
         _: ServerRequestContext,
-        __: mcp_types.PaginatedRequestParams | None,
+        params: mcp_types.PaginatedRequestParams | None,
     ) -> mcp_types.ListPromptsResult:
+        _reject_unissued_cursor(params)
         available = prompts if settings.FOLKLORE_LITERATURE_ENABLED else prompts[:4]
         return mcp_types.ListPromptsResult(
             prompts=available,
@@ -466,8 +468,9 @@ def create_mcp_app(
 
     async def list_tools(
         _: ServerRequestContext,
-        __: mcp_types.PaginatedRequestParams | None,
+        params: mcp_types.PaginatedRequestParams | None,
     ) -> mcp_types.ListToolsResult:
+        _reject_unissued_cursor(params)
         return mcp_types.ListToolsResult(
             tools=[
                 tool,
@@ -571,8 +574,9 @@ def create_mcp_app(
 
     async def list_resources(
         _: ServerRequestContext,
-        __: mcp_types.PaginatedRequestParams | None,
+        params: mcp_types.PaginatedRequestParams | None,
     ) -> mcp_types.ListResourcesResult:
+        _reject_unissued_cursor(params)
         return mcp_types.ListResourcesResult(
             resources=[resource],
             ttl_ms=0,
@@ -700,6 +704,18 @@ def _prompt_instructions(name: str, variant: str) -> str:
         return common + instructions[name]
     except KeyError as exc:
         raise ValueError("Unknown Folklore prompt.") from exc
+
+
+def _reject_unissued_cursor(
+    params: mcp_types.PaginatedRequestParams | None,
+) -> None:
+    """Reject cursors for static lists that never issue a continuation cursor."""
+
+    if params is not None and params.cursor is not None:
+        raise MCPError(
+            code=mcp_types.INVALID_PARAMS,
+            message="Invalid pagination cursor.",
+        )
 
 
 async def _call_literature_tool(
