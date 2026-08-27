@@ -28,6 +28,8 @@ All notable changes to the public Folklore MCP adapter are documented here.
   call and is never inserted into scientific results.
 - Synchronized runtime, Official MCP Registry, client recipes, Biorouter and
   Biomni tool inventories to the exact five-tool surface.
+- Archived the immutable public adapter release in Zenodo as
+  [`10.5281/zenodo.22119447`](https://doi.org/10.5281/zenodo.22119447).
 
 ## 1.3.3 - 2026-08-25
 
