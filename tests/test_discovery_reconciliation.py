@@ -98,6 +98,13 @@ def canonical_json_fetcher(url, *, timeout, payload=None, headers=None):
             ),
             "state": "open",
         }
+    if url == f"{expected['surfaces']['awesomeMcpServers']}/files":
+        return [
+            {
+                "filename": "README.md",
+                "patch": f"{expected['title']} {expected['version']}",
+            }
+        ]
     raise AssertionError(f"unexpected URL: {url}")
 
 

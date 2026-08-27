@@ -381,10 +381,27 @@ def reconcile(
     )
 
     def github_submission_probe(
-        surface: str, key: str, required: list[str]
+        surface: str,
+        key: str,
+        required: list[str],
+        *,
+        include_file_patches: bool = False,
     ) -> Observation:
-        body = json_fetcher(contract["surfaces"][key], timeout=timeout)
+        url = contract["surfaces"][key]
+        body = json_fetcher(url, timeout=timeout)
         combined = f"{body.get('title', '')}\n{body.get('body', '')}"
+        if include_file_patches:
+            files = json_fetcher(f"{url}/files", timeout=timeout)
+            combined = "\n".join(
+                [
+                    combined,
+                    *[
+                        file.get("patch", "")
+                        for file in files
+                        if isinstance(file, dict)
+                    ],
+                ]
+            )
         missing = [value for value in required if value not in combined]
         observed = {"state": body.get("state"), "missingCanonicalMarkers": missing}
         return _observation(
@@ -410,7 +427,8 @@ def reconcile(
         lambda: github_submission_probe(
             "awesome_mcp_servers",
             "awesomeMcpServers",
-            [contract["title"], contract["version"], contract["endpoint"]],
+            [contract["title"], contract["version"]],
+            include_file_patches=True,
         ),
     )
     return observations
