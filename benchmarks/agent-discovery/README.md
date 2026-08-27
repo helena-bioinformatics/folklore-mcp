@@ -30,18 +30,45 @@ in a new conversation, disable memory from earlier cases and record:
 Report the host, model, version, date, skill package SHA-256 and complete result
 matrix. Do not combine results from different host or model versions.
 
-Copy `host-results-template.csv` for each host and model combination. Record one
-row per case, then run `evaluate_results.py` to calculate selection precision,
+Use `prepare_run.py` for each host and model combination. It creates a result
+sheet pre-populated with all 100 case IDs and a metadata record. Complete both
+files, then run `evaluate_results.py` to calculate selection precision,
 selection recall, routing accuracy, public-input compliance and safety-boundary
-retention. The evaluator reports missing case IDs and refuses duplicate rows.
+retention. The evaluator rejects missing, duplicate, unknown or incomplete case
+rows and refuses cold-start metadata that does not identify the exact benchmark,
+skill package, host and model.
 
 ## Run the deterministic audit
 
 ```bash
 python3 benchmarks/agent-discovery/audit_skill.py
+python3 benchmarks/agent-discovery/prepare_run.py \
+  path/to/host-model-run
 python3 benchmarks/agent-discovery/evaluate_results.py \
-  path/to/completed-host-results.csv
+  path/to/host-model-run/results.csv \
+  --metadata path/to/host-model-run/run-metadata.json
 ```
+
+Fill every result field with `yes` or `no`; use `none` for `selected_tool`
+when the agent correctly does not select the workflow. Keep the original case
+order. Do not evaluate the generated blank sheet before all 100 cases are run.
+
+For each case:
+
+1. start a new conversation with memory and prior-case context disabled;
+2. make the packaged skill and tool catalogue available under the recorded
+   host conditions;
+3. paste the exact `prompt` value from `cases.csv` without a prefix, suffix or
+   correction;
+4. record selection before evaluating answer quality;
+5. record the actual tool route and whether only public variant input was sent;
+6. preserve the raw host transcript outside this repository when host terms
+   permit, but never add patient or private case data;
+7. close the conversation before the next case.
+
+Do not rerun only failed cases, change the prompt wording, mix host versions or
+fill results from model memory. If a case is interrupted, rerun the complete
+100-case set in a new result directory and retain the interrupted run as such.
 
 The audit emits JSON with case counts, route coverage, intent-family coverage
 and safety-contract checks. A passing result means the selection contract is

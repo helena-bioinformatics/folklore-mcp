@@ -4,6 +4,9 @@ All notable changes to the public Folklore MCP adapter are documented here.
 
 ## Unreleased
 
+- Added a cold-start run generator that pre-populates all 100 case IDs and a
+  reproducibility metadata record. The evaluator now rejects incomplete case
+  rows and runs without exact host, model, benchmark, skill and package identity.
 - Reject unissued pagination cursors with JSON-RPC `-32602` on the static
   `tools/list`, `resources/list` and `prompts/list` methods, with a first-party
   regression test covering all three public list surfaces.

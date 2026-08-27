@@ -1,0 +1,15 @@
+{
+  "benchmark_commit": "",
+  "case_order": "AD001-AD100",
+  "host": "",
+  "memory_disabled": null,
+  "model": "",
+  "model_version": "",
+  "notes": "",
+  "region_or_locale": "not_exposed",
+  "schema_version": "1.0",
+  "skill_commit": "",
+  "skill_package_sha256": "",
+  "tool_discovery_enabled": null,
+  "utc_date": ""
+}

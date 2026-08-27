@@ -1,5 +1,6 @@
 import csv
 import importlib.util
+import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -19,6 +20,15 @@ def load_audit_module():
 def load_evaluator_module():
     path = BENCHMARK / "evaluate_results.py"
     spec = importlib.util.spec_from_file_location("evaluate_results", path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader
+    spec.loader.exec_module(module)
+    return module
+
+
+def load_prepare_module():
+    path = BENCHMARK / "prepare_run.py"
+    spec = importlib.util.spec_from_file_location("prepare_run", path)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader
     spec.loader.exec_module(module)
@@ -88,3 +98,81 @@ def test_empirical_evaluator_reports_perfect_complete_fixture(tmp_path: Path) ->
     assert report["public_input_compliance"] == 1
     assert report["expected_behavior_rate"] == 1
     assert report["review_boundary_rate"] == 1
+
+
+def test_prepare_run_creates_all_case_ids_and_refuses_overwrite(
+    tmp_path: Path,
+) -> None:
+    module = load_prepare_module()
+    output_dir = tmp_path / "host-model-run"
+    results_path, metadata_path, count = module.prepare_run(
+        BENCHMARK / "cases.csv",
+        BENCHMARK / "run-metadata-template.json",
+        output_dir,
+    )
+    rows = list(csv.DictReader(results_path.open()))
+    assert count == 100
+    assert [row["case_id"] for row in rows] == [
+        f"AD{index:03d}" for index in range(1, 101)
+    ]
+    assert metadata_path.exists()
+
+    try:
+        module.prepare_run(
+            BENCHMARK / "cases.csv",
+            BENCHMARK / "run-metadata-template.json",
+            output_dir,
+        )
+    except FileExistsError:
+        pass
+    else:
+        raise AssertionError("prepare_run must refuse to overwrite a run")
+
+
+def test_evaluator_rejects_blank_prepared_rows_and_incomplete_metadata(
+    tmp_path: Path,
+) -> None:
+    prepare = load_prepare_module()
+    evaluator = load_evaluator_module()
+    output_dir = tmp_path / "host-model-run"
+    results_path, metadata_path, _ = prepare.prepare_run(
+        BENCHMARK / "cases.csv",
+        BENCHMARK / "run-metadata-template.json",
+        output_dir,
+    )
+
+    try:
+        evaluator.evaluate(BENCHMARK / "cases.csv", results_path)
+    except ValueError as exc:
+        assert "incomplete result row" in str(exc)
+    else:
+        raise AssertionError("blank result rows must not be scored")
+
+    try:
+        evaluator.validate_metadata(metadata_path)
+    except ValueError as exc:
+        assert "missing run metadata" in str(exc)
+    else:
+        raise AssertionError("blank run metadata must not be accepted")
+
+
+def test_evaluator_accepts_complete_cold_start_metadata(tmp_path: Path) -> None:
+    evaluator = load_evaluator_module()
+    metadata_path = tmp_path / "run-metadata.json"
+    metadata = {
+        "benchmark_commit": "a" * 40,
+        "case_order": "AD001-AD100",
+        "host": "test-host",
+        "memory_disabled": True,
+        "model": "test-model",
+        "model_version": "1.0",
+        "notes": "",
+        "region_or_locale": "not_exposed",
+        "schema_version": "1.0",
+        "skill_commit": "b" * 40,
+        "skill_package_sha256": "c" * 64,
+        "tool_discovery_enabled": True,
+        "utc_date": "2026-08-27T00:00:00Z",
+    }
+    metadata_path.write_text(json.dumps(metadata))
+    assert evaluator.validate_metadata(metadata_path) == metadata

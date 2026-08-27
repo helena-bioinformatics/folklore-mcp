@@ -17,6 +17,17 @@ Use one result file per host and model combination. Do not average different
 models, regions or dates into a single score. Preserve raw decisions and report
 precision, recall, routing, input-boundary and response-boundary measures.
 
+Prepare each run with `prepare_run.py`. Record the complete 40-character
+benchmark and skill commits, the SHA-256 of the installed skill package, the
+host and model versions, whether tool discovery was enabled and whether memory
+was disabled. The evaluator treats incomplete run metadata or incomplete result
+rows as invalid rather than scoring blanks as failures.
+
+Run cases in the order supplied. Use a new conversation per case and paste the
+case prompt exactly, with no framing text. Record selection before judging the
+answer. A retry after interruption requires a complete new run; selective reruns
+of failed cases are not comparable to the original run.
+
 ## Safety
 
 Cases containing patient-like text are synthetic routing tests. The agent must
