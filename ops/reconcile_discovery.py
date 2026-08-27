@@ -218,7 +218,7 @@ def reconcile(
             "name": contract["registryName"],
             "title": contract["title"],
             "version": contract["version"],
-            "description": contract["description"],
+            "description": contract["serverCardDescription"],
             "endpoint": contract["endpoint"],
             "tools": contract["tools"],
             "resources": contract["resources"],

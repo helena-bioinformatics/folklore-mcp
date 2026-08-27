@@ -42,6 +42,10 @@ def test_registry_identity_and_remote_are_exact() -> None:
     assert contract["registryName"] == record["name"]
     assert contract["title"] == record["title"]
     assert contract["description"] == record["description"]
+    assert contract["serverCardDescription"] == (
+        "Classify germline variants under ACMG/AMP with structured evidence, "
+        "provenance and literature."
+    )
     assert contract["version"] == record["version"] == MCP_ADAPTER_VERSION
     assert contract["protocolVersion"] == MCP_PROTOCOL_VERSION
     assert contract["tools"] == [

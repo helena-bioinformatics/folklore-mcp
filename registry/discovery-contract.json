@@ -3,6 +3,7 @@
   "registryName": "io.github.helena-bioinformatics/folklore",
   "title": "Folklore Clinical Variant Interpretation MCP",
   "description": "Helena Bioinformatics MCP for clinical variant interpretation, ACMG/AMP evidence and literature.",
+  "serverCardDescription": "Classify germline variants under ACMG/AMP with structured evidence, provenance and literature.",
   "publisher": "Helena Bioinformatics",
   "version": "1.4.0",
   "protocolVersion": "2026-07-28",

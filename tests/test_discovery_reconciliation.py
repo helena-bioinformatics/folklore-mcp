@@ -56,7 +56,7 @@ def canonical_json_fetcher(url, *, timeout, payload=None, headers=None):
                 "title": expected["title"],
                 "version": expected["version"],
             },
-            "description": expected["description"],
+            "description": expected["serverCardDescription"],
             "transport": {"endpoint": expected["endpoint"]},
             "tools": [{"name": name} for name in expected["tools"]],
             "resources": [{"uri": uri} for uri in expected["resources"]],
