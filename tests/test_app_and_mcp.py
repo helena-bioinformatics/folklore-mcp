@@ -159,7 +159,7 @@ def test_mcp_2026_discovery_is_stateless_and_initialize_is_retired() -> None:
     assert result["_meta"]["io.modelcontextprotocol/serverInfo"] == {
         "name": "folklore",
         "title": "Folklore Clinical Variant Interpretation MCP",
-        "version": "1.3.3",
+        "version": "1.4.0",
         "description": (
             "The official public, read-only Helena Bioinformatics MCP for clinical "
             "variant interpretation, ACMG/AMP evidence and related literature."
@@ -218,7 +218,10 @@ def test_mcp_lists_exact_tool_and_returns_structured_ui_equivalent_result() -> N
         metrics = client.get("/metrics").text
     assert listed.status_code == 200
     tools = listed.json()["result"]["tools"]
-    assert [tool["name"] for tool in tools] == ["search_variant_evidence"]
+    assert [tool["name"] for tool in tools] == [
+        "search_variant_evidence",
+        "support_helena",
+    ]
     assert tools[0]["icons"] == [
         {
             "src": "https://folklore.helena.bio/images/logos/folklore.png",
@@ -282,6 +285,7 @@ def test_mcp_input_schemas_describe_every_parameter() -> None:
         "search_variant_literature",
         "get_publication_details",
         "search_literature_corpus",
+        "support_helena",
     }
     for tool in tools.values():
         for parameter in tool["inputSchema"]["properties"].values():
@@ -319,6 +323,34 @@ def test_mcp_input_schemas_describe_every_parameter() -> None:
     assert corpus["sort"]["enum"] == ["relevance", "newest", "oldest"]
     assert corpus["cursor"]["anyOf"][0]["minLength"] == 8
     assert corpus["cursor"]["anyOf"][0]["maxLength"] == 128
+
+
+def test_support_helena_is_explicit_read_only_and_does_not_call_science() -> None:
+    gateway = FakeGateway(resolved_result())
+    app = create_app(enabled_settings(), gateway=gateway)
+    with TestClient(app) as client:
+        called = client.post(
+            "/folklore/v1/mcp",
+            json={
+                "jsonrpc": "2.0",
+                "id": 21,
+                "method": "tools/call",
+                "params": {
+                    "name": "support_helena",
+                    "arguments": {},
+                    "_meta": META,
+                },
+            },
+            headers=headers("tools/call", "support_helena"),
+        )
+    assert called.status_code == 200
+    result = called.json()["result"]["structuredContent"]
+    assert result["service"] == "Helena Good"
+    assert result["source_service"] == "folklore"
+    assert result["relay_channel"] == "folklore"
+    assert result["mcp_url"] == "https://api.helena.bio/good/v1/mcp"
+    assert "never changes Folklore" in result["independence"]
+    assert gateway.calls == 0
 
 
 def test_mcp_lists_and_reads_public_variant_evidence_app() -> None:
@@ -461,6 +493,7 @@ def test_publication_details_are_available_through_mcp() -> None:
         "search_variant_literature",
         "get_publication_details",
         "search_literature_corpus",
+        "support_helena",
     ]
     assert called.status_code == 200
     structured = called.json()["result"]["structuredContent"]

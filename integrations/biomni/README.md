@@ -50,7 +50,7 @@ its MCP configuration support.
 python integrations/biomni/smoke_test.py
 ```
 
-The test uses the same command array as Biomni. It verifies all four tools and
+The test uses the same command array as Biomni. It verifies all five tools and
 the strict variant-evidence input schema, then calls one public ambiguous rsID.
 It confirms that Folklore Clinical Variant Interpretation MCP returns the
 candidates without selecting one automatically.

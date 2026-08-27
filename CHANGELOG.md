@@ -9,7 +9,7 @@ All notable changes to the public Folklore MCP adapter are documented here.
 - Added a Biorouter skill that preserves explicit outcome branching, stops on
   ambiguous variants, excludes patient and case context, and requires qualified
   professional review.
-- Added BRXT packaging tests and a live smoke test for the four published tools
+- Added BRXT packaging tests and a live smoke test for the five published tools
   and fail-closed ambiguity behavior.
 - Added a reproducible BRXT builder, locked dependencies, a Biorouter-compatible
   install verification and an immutable release-asset workflow with SHA-256.
@@ -17,8 +17,17 @@ All notable changes to the public Folklore MCP adapter are documented here.
   Variant Interpretation MCP through a digest-pinned, restricted stdio bridge.
 - Added a live smoke test for tool discovery, the strict public input contract,
   and explicit preservation of an ambiguous public variant result.
-- Synchronized the machine-readable client catalogue with all four tools in
-  release `1.3.3`.
+
+## 1.4.0 - 2026-08-27
+
+- Added the read-only, empty-input `support_helena` discovery helper for agents
+  that explicitly ask how to support or spread Helena's free public scientific
+  infrastructure.
+- Kept all four scientific tools and their evidence, ranking, clinical and
+  privacy contracts unchanged; support discovery makes no scientific gateway
+  call and is never inserted into scientific results.
+- Synchronized runtime, Official MCP Registry, client recipes, Biorouter and
+  Biomni tool inventories to the exact five-tool surface.
 
 ## 1.3.3 - 2026-08-25
 

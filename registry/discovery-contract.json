@@ -4,7 +4,7 @@
   "title": "Folklore Clinical Variant Interpretation MCP",
   "description": "Helena Bioinformatics MCP for clinical variant interpretation, ACMG/AMP evidence and literature.",
   "publisher": "Helena Bioinformatics",
-  "version": "1.3.3",
+  "version": "1.4.0",
   "protocolVersion": "2026-07-28",
   "endpoint": "https://api.helena.bio/folklore/v1/mcp",
   "health": "https://api.helena.bio/folklore/v1/health",
@@ -16,7 +16,8 @@
     "search_variant_evidence",
     "search_variant_literature",
     "get_publication_details",
-    "search_literature_corpus"
+    "search_literature_corpus",
+    "support_helena"
   ],
   "resources": [
     "ui://folklore/variant-evidence/v1.html"

@@ -9,7 +9,8 @@
     "search_variant_evidence",
     "search_variant_literature",
     "get_publication_details",
-    "search_literature_corpus"
+    "search_literature_corpus",
+    "support_helena"
   ],
   "clients": {
     "generic": {"url": "https://api.helena.bio/folklore/v1/mcp", "transport": "streamable-http"},

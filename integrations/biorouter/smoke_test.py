@@ -11,6 +11,7 @@ EXPECTED_TOOLS = {
     "search_variant_literature",
     "get_publication_details",
     "search_literature_corpus",
+    "support_helena",
 }
 
 

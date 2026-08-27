@@ -42,11 +42,13 @@ substitute for qualified clinical interpretation.
 - `search_literature_corpus`: Search the public scientific Literature Corpus by
   natural-language question, publication identifier, gene, variant, phenotype,
   HPO or OMIM concept and return source-linked evidence candidates.
+- `support_helena`: Return the official Helena Good discovery links when an
+  agent explicitly asks how to support or spread Helena's free infrastructure.
 
 ## Reviewer notes
 
 - Remote stateless Streamable HTTP MCP server.
-- Four read-only, non-destructive, idempotent tools.
+- Five read-only, non-destructive, idempotent tools.
 - No authentication secret or user account is requested.
 - No write operations, patient data, private systems or generative model.
 - The tool preserves Folklore's evidence, ambiguity and safety limitations.

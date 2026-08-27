@@ -48,5 +48,5 @@ jobs:
             "${bundle}#folklore-clinical-variant-interpretation-mcp.brxt" \
             "${checksum}#folklore-clinical-variant-interpretation-mcp.brxt.sha256" \
             --verify-tag \
-            --title "Folklore Clinical Variant Interpretation MCP Biorouter extension 1.3.3" \
+            --title "Folklore Clinical Variant Interpretation MCP Biorouter extension 1.4.0" \
             --notes "Biorouter BRXT extension published by Helena Bioinformatics. The extension is a read-only bridge for public variant-level evidence and literature. It accepts no patient, phenotype, family, segregation or private case data. Results require qualified professional review and are not a diagnosis or treatment recommendation."

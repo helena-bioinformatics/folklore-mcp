@@ -14,6 +14,7 @@ from folklore_mcp_service.presentation.mcp import (
     MCP_LITERATURE_TOOL_NAME,
     MCP_PROTOCOL_VERSION,
     MCP_PUBLICATION_DETAILS_TOOL_NAME,
+    MCP_SUPPORT_TOOL_NAME,
     MCP_TOOL_NAME,
     MCP_UI_RESOURCE_URI,
 )
@@ -48,6 +49,7 @@ def test_registry_identity_and_remote_are_exact() -> None:
         MCP_LITERATURE_TOOL_NAME,
         MCP_PUBLICATION_DETAILS_TOOL_NAME,
         MCP_CORPUS_SEARCH_TOOL_NAME,
+        MCP_SUPPORT_TOOL_NAME,
     ]
     assert contract["resources"] == [MCP_UI_RESOURCE_URI]
 
@@ -66,6 +68,7 @@ def test_biomni_recipe_uses_the_hardened_pinned_stdio_bridge() -> None:
         MCP_LITERATURE_TOOL_NAME,
         MCP_PUBLICATION_DETAILS_TOOL_NAME,
         MCP_CORPUS_SEARCH_TOOL_NAME,
+        MCP_SUPPORT_TOOL_NAME,
     ]
     assert client_configs["clients"]["biomni"]["title"] == (
         "Folklore Clinical Variant Interpretation MCP"
@@ -135,8 +138,8 @@ def test_biorouter_recipe_preserves_identity_version_and_safety() -> None:
     }
     assert manifest["name"] == "folklore-clinical-variant-interpretation-mcp"
     assert manifest["display_name"] == "Folklore Clinical Variant Interpretation MCP"
-    assert manifest["version"] == MCP_ADAPTER_VERSION == "1.3.3"
-    assert manifest["tools_count"] == 4
+    assert manifest["version"] == MCP_ADAPTER_VERSION == "1.4.0"
+    assert manifest["tools_count"] == 5
     assert manifest["env_vars"] == []
     assert project["project"]["version"] == MCP_ADAPTER_VERSION
     assert project["project"]["dependencies"] == ["fastmcp==3.4.2"]
@@ -187,10 +190,10 @@ def test_release_candidate_versions_and_dois_are_consistent() -> None:
     assert package["project"]["version"] == MCP_ADAPTER_VERSION == __version__
     assert zenodo["version"] == MCP_ADAPTER_VERSION
     assert f"version: {MCP_ADAPTER_VERSION}" in citation
-    assert "doi: 10.5281/zenodo.22102783" in citation
-    assert "Current release: `1.3.3`" in readme
-    assert "Latest published Registry version: `1.3.3`" in readme
-    assert "latest published immutable archive is version `1.3.3`" in readme
+    assert "doi: 10.5281/zenodo.21922951" in citation
+    assert "Current release: `1.4.0`" in readme
+    assert "Latest published Registry version: `1.4.0`" in readme
+    assert "prior 1.3.3 archive remains available" in readme
     assert "10.5281/zenodo.22102783" in readme
 
 

@@ -48,6 +48,9 @@ resolution, evidence aggregation or ACMG/AMP logic.
 - `search_literature_corpus` searches public scientific literature with natural
   language, publication identifiers, genes, variants, phenotypes, HPO or OMIM
   concepts and returns source-linked candidates for professional review.
+- `support_helena` is an explicit, non-scientific discovery helper for agents
+  that ask how to support or spread Helena's free public infrastructure. It
+  points to the separate Helena Good MCP and never changes scientific results.
 - `ui://folklore/variant-evidence/v1.html` is an optional read-only MCP App view.
 
 Literature associations do not alter the ACMG/AMP classification.
@@ -103,8 +106,8 @@ See [SECURITY.md](SECURITY.md) for reporting instructions and supported versions
 ## Registry identity
 
 - Name: `io.github.helena-bioinformatics/folklore`
-- Current release: `1.3.3`
-- Latest published Registry version: `1.3.3`
+- Current release: `1.4.0`
+- Latest published Registry version: `1.4.0`
 - Publisher: Helena Bioinformatics
 - Website: <https://folklore.helena.bio>
 - Technical guide: <https://folklore.helena.bio/docs/folklore-connector>
@@ -119,7 +122,8 @@ archived release receives a persistent DOI. Use the concept DOI
 [`10.5281/zenodo.21922951`](https://doi.org/10.5281/zenodo.21922951) to resolve
 the latest archived Folklore Clinical Variant Interpretation MCP release. The immutable `1.2.2` archive remains
 available as [`10.5281/zenodo.21922952`](https://doi.org/10.5281/zenodo.21922952).
-The latest published immutable archive is version `1.3.3`, available as
+The latest immutable archive DOI is recorded after Zenodo processes the 1.4.0
+release. The prior 1.3.3 archive remains available as
 [`10.5281/zenodo.22102783`](https://doi.org/10.5281/zenodo.22102783).
 
 ## License
