@@ -157,6 +157,9 @@ See [SECURITY.md](SECURITY.md) for reporting instructions and supported versions
 - Technical guide: <https://folklore.helena.bio/docs/folklore-connector>
 
 Machine-readable metadata is under [`registry/`](registry/).
+The strict [agent-selection contract](registry/agent-selection.json) makes
+task triggers, exclusions, tool routing, typed outcomes and clinical limits
+available to agent catalogs without requiring brand-name queries.
 
 ## Citation and archival releases
 

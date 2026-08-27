@@ -56,6 +56,14 @@ compares production `server/discover`, `tools/list`, `resources/list` and the
 domain Server Card. Aggregator and editorial drift is visible but non-blocking
 unless `--strict-aggregators` is selected. The reconciler performs no writes.
 
+`agent-selection.json` is the machine-readable task-selection companion. It
+defines positive and negative intents, brand-blind example requests, accepted
+public input forms, the four scientific tool routes, typed outcomes and the
+clinical boundary. `agent-selection.schema.json` provides its strict JSON
+Schema. These files help agent catalogs index the user job rather than only the
+server name; they do not replace the MCP tool schemas or claim universal model
+selection.
+
 MCP protocol `2026-07-28` is stateless. It uses `server/discover` as the optional
 preflight and does not implement the retired `initialize` exchange. Legacy
 compatibility, if justified by observed clients, must use an explicitly routed

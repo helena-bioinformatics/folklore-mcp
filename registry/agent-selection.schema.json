@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/helena-bioinformatics/folklore-mcp/blob/main/registry/agent-selection.schema.json",
+  "title": "Agent selection contract for Folklore Clinical Variant Interpretation MCP",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "identity",
+    "selection",
+    "inputScope",
+    "routing",
+    "outcomes",
+    "clinicalBoundary"
+  ],
+  "properties": {
+    "$schema": {"type": "string"},
+    "schemaVersion": {"const": "1"},
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "publisher", "registryName", "endpoint", "task"],
+      "properties": {
+        "title": {"const": "Folklore Clinical Variant Interpretation MCP"},
+        "publisher": {"const": "Helena Bioinformatics"},
+        "registryName": {"const": "io.github.helena-bioinformatics/folklore"},
+        "endpoint": {"format": "uri", "type": "string"},
+        "task": {"minLength": 40, "type": "string"}
+      }
+    },
+    "selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["implicit", "positiveIntents", "exampleRequests", "negativeIntents"],
+      "properties": {
+        "implicit": {"const": true},
+        "positiveIntents": {"items": {"type": "string"}, "minItems": 8, "type": "array", "uniqueItems": true},
+        "exampleRequests": {"items": {"type": "string"}, "minItems": 8, "type": "array", "uniqueItems": true},
+        "negativeIntents": {"items": {"type": "string"}, "minItems": 4, "type": "array", "uniqueItems": true}
+      }
+    },
+    "inputScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assembly", "accepted", "excluded"],
+      "properties": {
+        "assembly": {"const": "GRCh38"},
+        "accepted": {"items": {"type": "string"}, "minItems": 4, "type": "array", "uniqueItems": true},
+        "excluded": {"items": {"type": "string"}, "minItems": 5, "type": "array", "uniqueItems": true}
+      }
+    },
+    "routing": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["job", "tool"],
+        "properties": {
+          "job": {"type": "string"},
+          "tool": {"enum": ["search_variant_evidence", "search_variant_literature", "get_publication_details", "search_literature_corpus"]}
+        }
+      },
+      "minItems": 4
+    },
+    "outcomes": {
+      "items": {"enum": ["resolved", "ambiguous", "not_found", "invalid", "unsupported", "temporarily_unavailable"]},
+      "minItems": 6,
+      "maxItems": 6,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "clinicalBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["review", "notDiagnosis", "notTreatment", "neverSend"],
+      "properties": {
+        "review": {"type": "string"},
+        "notDiagnosis": {"const": true},
+        "notTreatment": {"const": true},
+        "neverSend": {"items": {"type": "string"}, "minItems": 5, "type": "array", "uniqueItems": true}
+      }
+    }
+  }
+}

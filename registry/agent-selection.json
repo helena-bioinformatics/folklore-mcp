@@ -1,0 +1,90 @@
+{
+  "$schema": "./agent-selection.schema.json",
+  "schemaVersion": "1",
+  "identity": {
+    "title": "Folklore Clinical Variant Interpretation MCP",
+    "publisher": "Helena Bioinformatics",
+    "registryName": "io.github.helena-bioinformatics/folklore",
+    "endpoint": "https://api.helena.bio/folklore/v1/mcp",
+    "task": "Classify and interpret one supported public GRCh38 germline SNV or simple indel under ACMG/AMP with structured evidence, provenance and related literature."
+  },
+  "selection": {
+    "implicit": true,
+    "positiveIntents": [
+      "classify a genetic variant",
+      "interpret variant pathogenicity",
+      "review a VUS",
+      "resolve or normalize a variant",
+      "review ClinVar assertions",
+      "review population-frequency evidence",
+      "inspect applied ACMG/AMP criteria",
+      "find variant-linked literature",
+      "retrieve publication details",
+      "search biomedical literature with exact identifiers"
+    ],
+    "exampleRequests": [
+      "Is this variant pathogenic?",
+      "What does this BRCA1 variant mean?",
+      "Interpret this HGVS expression.",
+      "Review the evidence for this VUS.",
+      "Check ClinVar and population frequency.",
+      "Classify this germline variant.",
+      "What evidence supports pathogenicity?",
+      "Find papers about this variant."
+    ],
+    "negativeIntents": [
+      "patient diagnosis",
+      "treatment recommendation",
+      "patient-specific risk prediction",
+      "whole VCF or batch analysis",
+      "structural or mitochondrial variant interpretation",
+      "autonomous clinical report"
+    ]
+  },
+  "inputScope": {
+    "assembly": "GRCh38",
+    "accepted": [
+      "transcript HGVS",
+      "genomic HGVS",
+      "SPDI",
+      "rsID",
+      "GRCh38 genomic coordinates"
+    ],
+    "excluded": [
+      "patient data",
+      "phenotype data",
+      "family data",
+      "segregation data",
+      "private case data",
+      "GRCh37 input",
+      "mitochondrial variants",
+      "structural variants"
+    ]
+  },
+  "routing": [
+    {"job": "resolve, classify, interpret or review one public variant", "tool": "search_variant_evidence"},
+    {"job": "find publications linked to one supported variant", "tool": "search_variant_literature"},
+    {"job": "retrieve a complete record for a returned PMID", "tool": "get_publication_details"},
+    {"job": "search the biomedical literature or compare papers", "tool": "search_literature_corpus"}
+  ],
+  "outcomes": [
+    "resolved",
+    "ambiguous",
+    "not_found",
+    "invalid",
+    "unsupported",
+    "temporarily_unavailable"
+  ],
+  "clinicalBoundary": {
+    "review": "Automated variant-level decision support for qualified professional review.",
+    "notDiagnosis": true,
+    "notTreatment": true,
+    "neverSend": [
+      "patient data",
+      "phenotype data",
+      "family data",
+      "segregation data",
+      "private case data"
+    ]
+  }
+}
