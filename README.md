@@ -23,7 +23,8 @@ https://api.helena.bio/folklore/v1/mcp
 The hosted server uses stateless Streamable HTTP and MCP protocol `2026-07-28`.
 Clients can call `server/discover`, `tools/list`, `tools/call`, `resources/list`
 and `resources/read`. The retired `initialize` exchange is intentionally not
-implemented for this protocol version.
+implemented for this protocol version. They can also call `prompts/list` and
+`prompts/get` for task-first variant workflows.
 
 Biomni users can import Folklore Clinical Variant Interpretation MCP through the
 tested, digest-pinned
@@ -50,6 +51,18 @@ literature, even when the user does not mention Helena Bioinformatics or MCP.
 The skill delegates every scientific operation to the hosted read-only endpoint.
 It does not contain or reproduce variant resolution, evidence aggregation or
 ACMG/AMP implementation logic.
+
+## Task-first workflow prompts
+
+- `classify_germline_variant`
+- `review_vus_evidence`
+- `explain_acmg_classification`
+- `verify_variant_identity`
+- `compare_variant_literature`
+
+Each prompt accepts one public variant expression, excludes patient or private
+case data and routes scientific work through the hosted tools. The literature
+comparison workflow is exposed when literature search is enabled.
 
 ## Public capabilities
 

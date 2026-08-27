@@ -22,6 +22,13 @@
   "resources": [
     "ui://folklore/variant-evidence/v1.html"
   ],
+  "prompts": [
+    "classify_germline_variant",
+    "review_vus_evidence",
+    "explain_acmg_classification",
+    "verify_variant_identity",
+    "compare_variant_literature"
+  ],
   "surfaces": {
     "officialRegistry": "https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.helena-bioinformatics%2Ffolklore&version=latest",
     "glamaConnector": "https://glama.ai/mcp/connectors/io.github.helena-bioinformatics/folklore",

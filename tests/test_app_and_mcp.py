@@ -155,6 +155,7 @@ def test_mcp_2026_discovery_is_stateless_and_initialize_is_retired() -> None:
     assert result["capabilities"] == {
         "resources": {"subscribe": False, "listChanged": False},
         "tools": {"listChanged": False},
+        "prompts": {"listChanged": False},
     }
     assert result["_meta"]["io.modelcontextprotocol/serverInfo"] == {
         "name": "folklore",
@@ -607,4 +608,99 @@ def test_literature_corpus_search_is_available_through_mcp() -> None:
             "limit": 5,
             "sort": "relevance",
         }
+    ]
+
+
+def test_mcp_lists_and_gets_task_first_prompts() -> None:
+    app = create_app(
+        literature_enabled_settings(),
+        gateway=FakeGateway(resolved_result()),
+        literature_gateway=FakeLiteratureGateway(),
+    )
+    prompt_names = [
+        "classify_germline_variant",
+        "review_vus_evidence",
+        "explain_acmg_classification",
+        "verify_variant_identity",
+        "compare_variant_literature",
+    ]
+    with TestClient(app) as client:
+        listed = client.post(
+            "/folklore/v1/mcp",
+            json={
+                "jsonrpc": "2.0",
+                "id": 30,
+                "method": "prompts/list",
+                "params": {"_meta": META},
+            },
+            headers=headers("prompts/list"),
+        )
+        rendered = {
+            name: client.post(
+                "/folklore/v1/mcp",
+                json={
+                    "jsonrpc": "2.0",
+                    "id": 31,
+                    "method": "prompts/get",
+                    "params": {
+                        "name": name,
+                        "arguments": {"variant": "rs80357914"},
+                        "_meta": META,
+                    },
+                },
+                headers=headers("prompts/get", name),
+            )
+            for name in prompt_names
+        }
+
+    assert listed.status_code == 200
+    result = listed.json()["result"]
+    assert result["ttlMs"] == 86_400_000
+    assert result["cacheScope"] == "public"
+    assert [prompt["name"] for prompt in result["prompts"]] == prompt_names
+    for prompt in result["prompts"]:
+        assert prompt["arguments"] == [
+            {
+                "name": "variant",
+                "title": prompt["arguments"][0]["title"],
+                "description": prompt["arguments"][0]["description"],
+                "required": True,
+            }
+        ]
+        assert "patient or case data" in prompt["arguments"][0]["description"]
+    for response in rendered.values():
+        assert response.status_code == 200
+        text = response.json()["result"]["messages"][0]["content"]["text"]
+        assert "Folklore Clinical Variant Interpretation MCP" in text
+        assert "rs80357914" in text
+        assert "Do not send or infer patient" in text
+    literature_text = rendered["compare_variant_literature"].json()["result"][
+        "messages"
+    ][0]["content"]["text"]
+    assert "publication association alone does not establish" in literature_text
+
+
+def test_mcp_hides_literature_prompt_when_literature_is_disabled() -> None:
+    app = create_app(
+        enabled_settings(),
+        gateway=FakeGateway(resolved_result()),
+    )
+    with TestClient(app) as client:
+        listed = client.post(
+            "/folklore/v1/mcp",
+            json={
+                "jsonrpc": "2.0",
+                "id": 32,
+                "method": "prompts/list",
+                "params": {"_meta": META},
+            },
+            headers=headers("prompts/list"),
+        )
+    assert listed.status_code == 200
+    names = [prompt["name"] for prompt in listed.json()["result"]["prompts"]]
+    assert names == [
+        "classify_germline_variant",
+        "review_vus_evidence",
+        "explain_acmg_classification",
+        "verify_variant_identity",
     ]
