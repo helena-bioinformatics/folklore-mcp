@@ -12,6 +12,7 @@ import argparse
 import json
 import re
 import sys
+import time
 from collections.abc import Callable
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -52,11 +53,24 @@ def fetch_json(
     request = Request(
         url, data=body, headers=request_headers, method="POST" if body else "GET"
     )
-    try:
-        with urlopen(request, timeout=timeout) as response:  # noqa: S310 - fixed public URLs
-            return json.load(response)
-    except (HTTPError, URLError, TimeoutError, json.JSONDecodeError) as exc:
-        raise RuntimeError(f"request failed: {type(exc).__name__}") from exc
+    for attempt in range(2):
+        try:
+            with urlopen(  # noqa: S310 - fixed public URLs
+                request, timeout=timeout
+            ) as response:
+                return json.load(response)
+        except HTTPError as exc:
+            if exc.code == 429 and attempt == 0:
+                try:
+                    retry_after = float(exc.headers.get("Retry-After", "1"))
+                except ValueError:
+                    retry_after = 1
+                time.sleep(min(max(retry_after, 1), 5))
+                continue
+            raise RuntimeError(f"request failed: HTTP {exc.code}") from exc
+        except (URLError, TimeoutError, json.JSONDecodeError) as exc:
+            raise RuntimeError(f"request failed: {type(exc).__name__}") from exc
+    raise RuntimeError("request failed after bounded retry")
 
 
 def fetch_text(url: str, *, timeout: float) -> str:
@@ -213,6 +227,7 @@ def reconcile(
             "resources": [
                 resource.get("uri") for resource in body.get("resources", [])
             ],
+            "prompts": [prompt.get("name") for prompt in body.get("prompts", [])],
         }
         matches = observed == {
             "name": contract["registryName"],
@@ -222,6 +237,7 @@ def reconcile(
             "endpoint": contract["endpoint"],
             "tools": contract["tools"],
             "resources": contract["resources"],
+            "prompts": contract["prompts"],
         }
         return _observation(
             "server_card",
@@ -302,6 +318,41 @@ def reconcile(
             "The live resource catalog must match the discovery contract.",
         )
 
+    def prompts_probe() -> Observation:
+        method = "prompts/list"
+        body = json_fetcher(
+            contract["endpoint"],
+            timeout=timeout,
+            payload=_mcp_payload(contract, method),
+            headers=_mcp_headers(contract, method),
+        )
+        observed = {
+            "prompts": [
+                prompt.get("name")
+                for prompt in body.get("result", {}).get("prompts", [])
+            ]
+        }
+        return _observation(
+            "mcp_prompts",
+            "canonical",
+            observed["prompts"] == contract["prompts"],
+            observed,
+            "The live prompt catalog must preserve deterministic canonical order.",
+        )
+
+    def first_party_text_probe(
+        surface: str, key: str, required: list[str]
+    ) -> Observation:
+        body = text_fetcher(contract["surfaces"][key], timeout=timeout)
+        missing = [value for value in required if value not in body]
+        return _observation(
+            surface,
+            "canonical",
+            not missing,
+            {"missingCanonicalMarkers": missing},
+            "The first-party task surface must preserve its exact selection markers.",
+        )
+
     capture("runtime_health", "canonical", health_probe)
     capture("runtime_readiness", "canonical", readiness_probe)
     capture("official_registry_latest", "canonical", registry_probe)
@@ -309,6 +360,39 @@ def reconcile(
     capture("mcp_server_discover", "canonical", discover_probe)
     capture("mcp_tools", "canonical", tools_probe)
     capture("mcp_resources", "canonical", resources_probe)
+    capture("mcp_prompts", "canonical", prompts_probe)
+    capture(
+        "agent_skill_raw",
+        "canonical",
+        lambda: first_party_text_probe(
+            "agent_skill_raw",
+            "agentSkillRaw",
+            [
+                contract["title"],
+                "Trigger even when the user does not mention Folklore",
+                "search_variant_evidence",
+                "qualified professional review",
+            ],
+        ),
+    )
+    capture(
+        "agent_task_hub",
+        "canonical",
+        lambda: first_party_text_probe(
+            "agent_task_hub",
+            "agentHub",
+            [contract["title"], "classify", "ACMG/AMP"],
+        ),
+    )
+    capture(
+        "acmg_intent_page",
+        "canonical",
+        lambda: first_party_text_probe(
+            "acmg_intent_page",
+            "acmgIntent",
+            [contract["title"], "ACMG/AMP", "GRCh38"],
+        ),
+    )
 
     def html_probe(surface: str, key: str, required: list[str]) -> Observation:
         body = text_fetcher(contract["surfaces"][key], timeout=timeout)

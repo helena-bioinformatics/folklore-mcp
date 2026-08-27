@@ -49,6 +49,12 @@ public endpoint, case set, measured fields, metrics and clinical boundary. The
 archive, an automated classifier and an agent-facing API without assuming they
 answer the same question.
 
+The [preregistered protocol](PREREGISTRATION.md) fixes the research question,
+candidate public evaluation source, sampling dimensions, outcomes and
+independent-review gate. Complete
+`dataset-manifest.template.json` with the dated public source checksum and seed
+before collecting comparative results.
+
 Before running another tool, record:
 
 - tool name, public version and access date;

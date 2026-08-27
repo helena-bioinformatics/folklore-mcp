@@ -85,7 +85,7 @@ def main() -> None:
     result = audit(args.cases, args.skill)
     print(json.dumps(result, indent=2, sort_keys=True))
     checks = [
-        result["case_count"] >= 60,
+        result["case_count"] >= 100,
         result["brand_blind"],
         result["tool_routes_complete"],
         all(result["intent_contract"].values()),

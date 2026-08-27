@@ -1,5 +1,6 @@
 import hashlib
 import json
+import py_compile
 import subprocess
 import tomllib
 import zipfile
@@ -221,6 +222,64 @@ def test_public_benchmark_manifest_is_bounded_and_citable() -> None:
         url.endswith("benchmarks/variant-interpretation") for url in reference_urls
     )
     assert any(url.endswith("COMPARISON_METHOD.md") for url in reference_urls)
+
+
+def test_preregistered_protocol_fixes_public_source_and_review_gate() -> None:
+    benchmark = REPOSITORY / "benchmarks" / "variant-interpretation"
+    protocol = (benchmark / "PREREGISTRATION.md").read_text()
+    template = json.loads((benchmark / "dataset-manifest.template.json").read_text())
+    assert "No comparative result or superiority claim" in protocol
+    assert "ClinVar is an archive of submitted assertions" in protocol
+    assert "independent" in protocol
+    assert "reviewer" in protocol
+    assert template["assembly"] == "GRCh38"
+    assert "patient data" in template["exclusion"]
+    assert "review status" in template["strata"]
+
+
+def test_public_dx_and_adoption_docs_preserve_safety_boundaries() -> None:
+    compatibility = (REPOSITORY / "docs" / "COMPATIBILITY.md").read_text()
+    troubleshooting = (REPOSITORY / "docs" / "TROUBLESHOOTING.md").read_text()
+    outcomes = (REPOSITORY / "docs" / "TYPED_OUTCOMES.md").read_text()
+    adoption = (REPOSITORY / "docs" / "ADOPTION_MEASUREMENT.md").read_text()
+    smoke = REPOSITORY / "ops" / "public_smoke.py"
+
+    assert "server/discover" in compatibility
+    assert "patient, phenotype, family, segregation" in compatibility
+    assert "Do not select" in troubleshooting
+    for status in (
+        "resolved",
+        "ambiguous",
+        "not_found",
+        "invalid",
+        "unsupported",
+        "temporarily_unavailable",
+    ):
+        assert f"`{status}`" in outcomes
+    assert "Variant expressions" in adoption
+    assert "IP addresses" in adoption
+    assert "Do not infer individuals" in adoption
+    py_compile.compile(str(smoke), doraise=True)
+
+
+def test_openai_agents_and_direct_http_examples_preserve_boundaries(
+    tmp_path: Path,
+) -> None:
+    integration = REPOSITORY / "integrations" / "openai-agents-python"
+    source = integration / "main.py"
+    guide = (integration / "README.md").read_text()
+    direct = (
+        REPOSITORY / "integrations" / "direct-streamable-http" / "README.md"
+    ).read_text()
+    py_compile.compile(source, cfile=str(tmp_path / "main.pyc"), doraise=True)
+    source_text = source.read_text()
+    assert "https://api.helena.bio/folklore/v1/mcp" in source_text
+    assert "create_static_tool_filter" in source_text
+    assert "patient, phenotype" in source_text
+    assert "qualified professional review" in source_text
+    assert "official OpenAI Agents SDK" in guide
+    assert "never convert invalid" in direct
+    assert "private case data" in direct
 
 
 def test_public_tree_has_only_generic_deployment_assets() -> None:

@@ -39,6 +39,12 @@ local stdio bridge to the hosted Streamable HTTP endpoint. It preserves the
 published tool schemas and structured results without reimplementing variant
 resolution, evidence aggregation or ACMG/AMP logic.
 
+Agent builders can also use the
+[direct Streamable HTTP recipe](integrations/direct-streamable-http/README.md)
+or the [OpenAI Agents SDK example](integrations/openai-agents-python/README.md).
+Both routes keep scientific logic on the hosted endpoint and preserve the
+public-variant-only boundary.
+
 ## Agent Skill for “classify this variant” requests
 
 The repository includes an installable companion skill at
@@ -79,10 +85,15 @@ and [neutral comparison method](benchmarks/variant-interpretation/COMPARISON_MET
 fix the measured fields, limitations and reproducibility requirements. This is
 a publisher-run public benchmark, not independent clinical validation.
 
+The [preregistered comparison protocol](benchmarks/variant-interpretation/PREREGISTRATION.md)
+defines the public evaluation source, sampling and independent-review gates
+before any comparative result is collected.
+
 The [cold-start agent discovery benchmark](benchmarks/agent-discovery/README.md)
-adds 60 brand-blind user prompts and a deterministic audit of task selection,
-tool routing, typed outcomes and the no-patient-data boundary. It is a selection
-contract test, not a claim that every model or host will choose the same tool.
+adds 100 brand-blind user prompts, an empirical host-results evaluator and a
+deterministic audit of task selection, tool routing, typed outcomes and the
+no-patient-data boundary. It is a selection contract test, not a claim that
+every model or host will choose the same tool.
 
 ## Task-first workflow prompts
 
@@ -153,6 +164,12 @@ python3 ops/reconcile_discovery.py
 The reconciliation command is read-only. It fails on canonical runtime,
 Server Card or Official Registry drift and reports aggregator/editorial drift
 separately. Use `--strict-aggregators` to fail on every observed mismatch.
+
+For integration details, see [client compatibility](docs/COMPATIBILITY.md),
+[troubleshooting](docs/TROUBLESHOOTING.md), [typed outcomes](docs/TYPED_OUTCOMES.md)
+and the [privacy-preserving adoption policy](docs/ADOPTION_MEASUREMENT.md).
+`python3 ops/public_smoke.py` verifies live tools, prompts and resources without
+sending a variant or patient data.
 
 ## Security and privacy
 

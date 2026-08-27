@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "dataset_id": "replace-with-fixed-dataset-id",
+  "source": "ClinVar",
+  "source_type": "public archive of submitted assertions",
+  "release_date": "YYYY-MM-DD",
+  "download_url": "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/",
+  "sha256": "replace-with-source-file-sha256",
+  "assembly": "GRCh38",
+  "sampling_seed": 0,
+  "inclusion": [
+    "public sequence variant",
+    "precise GRCh38 location",
+    "single nucleotide variant or simple indel",
+    "recorded review status"
+  ],
+  "exclusion": [
+    "patient data",
+    "phenotype data",
+    "family data",
+    "segregation data",
+    "private case data",
+    "structural variant",
+    "mitochondrial variant"
+  ],
+  "strata": [
+    "aggregate five-class label",
+    "review status",
+    "variant type",
+    "gene"
+  ],
+  "notes": "Complete and publish before collecting comparative results."
+}

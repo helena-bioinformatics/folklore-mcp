@@ -60,6 +60,7 @@ def canonical_json_fetcher(url, *, timeout, payload=None, headers=None):
             "transport": {"endpoint": expected["endpoint"]},
             "tools": [{"name": name} for name in expected["tools"]],
             "resources": [{"uri": uri} for uri in expected["resources"]],
+            "prompts": [{"name": name} for name in expected["prompts"]],
         }
     if url == expected["endpoint"]:
         method = payload["method"]
@@ -80,6 +81,10 @@ def canonical_json_fetcher(url, *, timeout, payload=None, headers=None):
         if method == "resources/list":
             return {
                 "result": {"resources": [{"uri": uri} for uri in expected["resources"]]}
+            }
+        if method == "prompts/list":
+            return {
+                "result": {"prompts": [{"name": name} for name in expected["prompts"]]}
             }
     if url == expected["surfaces"]["glamaRepository"]:
         return {
@@ -116,6 +121,15 @@ def canonical_text_fetcher(url, *, timeout):
             f'"featureList":"4 tools","name":"{expected["title"]}",'
             f'"softwareVersion":"{expected["version"]}" ' + " ".join(expected["tools"])
         )
+    if url == expected["surfaces"]["agentSkillRaw"]:
+        return (
+            f"{expected['title']} Trigger even when the user does not mention "
+            "Folklore search_variant_evidence qualified professional review"
+        )
+    if url == expected["surfaces"]["agentHub"]:
+        return f"{expected['title']} classify ACMG/AMP"
+    if url == expected["surfaces"]["acmgIntent"]:
+        return f"{expected['title']} ACMG/AMP GRCh38"
     return f"{expected['title']} {' '.join(expected['tools'])}"
 
 

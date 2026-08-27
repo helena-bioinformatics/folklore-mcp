@@ -31,6 +31,9 @@
     "compare_variant_literature"
   ],
   "surfaces": {
+    "agentSkillRaw": "https://raw.githubusercontent.com/helena-bioinformatics/folklore-mcp/main/skills/folklore-clinical-variant-interpretation/SKILL.md",
+    "agentHub": "https://folklore.helena.bio/for-ai-agents",
+    "acmgIntent": "https://folklore.helena.bio/acmg-variant-classification",
     "officialRegistry": "https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.helena-bioinformatics%2Ffolklore&version=latest",
     "glamaConnector": "https://glama.ai/mcp/connectors/io.github.helena-bioinformatics/folklore",
     "glamaRepository": "https://glama.ai/api/mcp/v1/servers/helena-bioinformatics/folklore-mcp",

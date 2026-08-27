@@ -5,7 +5,7 @@ call: can an agent recognize a public germline variant interpretation job when
 the user does not name Helena Bioinformatics, Folklore Clinical Variant
 Interpretation MCP, MCP or ACMG/AMP?
 
-The corpus is intentionally brand-blind. It covers pathogenicity questions, VUS
+The 100-case corpus is intentionally brand-blind. It covers pathogenicity questions, VUS
 review, variant identity, evidence, ClinVar, population frequency, literature,
 invalid notation, unsupported scope and requests containing patient context.
 
@@ -30,10 +30,17 @@ in a new conversation, disable memory from earlier cases and record:
 Report the host, model, version, date, skill package SHA-256 and complete result
 matrix. Do not combine results from different host or model versions.
 
+Copy `host-results-template.csv` for each host and model combination. Record one
+row per case, then run `evaluate_results.py` to calculate selection precision,
+selection recall, routing accuracy, public-input compliance and safety-boundary
+retention. The evaluator reports missing case IDs and refuses duplicate rows.
+
 ## Run the deterministic audit
 
 ```bash
 python3 benchmarks/agent-discovery/audit_skill.py
+python3 benchmarks/agent-discovery/evaluate_results.py \
+  path/to/completed-host-results.csv
 ```
 
 The audit emits JSON with case counts, route coverage, intent-family coverage
