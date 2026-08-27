@@ -55,6 +55,10 @@ independent-review gate. Complete
 `dataset-manifest.template.json` with the dated public source checksum and seed
 before collecting comparative results.
 
+The [independent review request](INDEPENDENT_REVIEW.md) defines the reviewer
+scope, public materials, conflict disclosure and safe contribution route. It is
+a methods-review invitation, not a request for endorsement.
+
 Before running another tool, record:
 
 - tool name, public version and access date;
