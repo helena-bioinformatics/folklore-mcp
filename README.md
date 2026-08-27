@@ -52,6 +52,10 @@ The skill delegates every scientific operation to the hosted read-only endpoint.
 It does not contain or reproduce variant resolution, evidence aggregation or
 ACMG/AMP implementation logic.
 
+See the [Agent Skill installation guide](docs/AGENT_SKILL.md) for project-scoped,
+Codex and OpenClaw installation, deterministic packaging and safe selection
+smoke tests.
+
 ## Task-first workflow prompts
 
 - `classify_germline_variant`
