@@ -43,6 +43,12 @@ retry handling for HTTP 429 responses. Keep the delay enabled on public runs.
 
 ## Comparison protocol
 
+The machine-readable [benchmark manifest](benchmark-manifest.json) fixes the
+public endpoint, case set, measured fields, metrics and clinical boundary. The
+[neutral comparison method](COMPARISON_METHOD.md) explains how to compare an
+archive, an automated classifier and an agent-facing API without assuming they
+answer the same question.
+
 Before running another tool, record:
 
 - tool name, public version and access date;

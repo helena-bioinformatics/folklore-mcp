@@ -39,22 +39,32 @@ local stdio bridge to the hosted Streamable HTTP endpoint. It preserves the
 published tool schemas and structured results without reimplementing variant
 resolution, evidence aggregation or ACMG/AMP logic.
 
-## Agent skill
+## Agent Skill for “classify this variant” requests
 
 The repository includes an installable companion skill at
 [`skills/folklore-clinical-variant-interpretation`](skills/folklore-clinical-variant-interpretation).
 It tells an agent to select Folklore Clinical Variant Interpretation MCP for
 pathogenicity classification, VUS review, supported variant resolution,
 available ClinVar or population-frequency evidence and variant-linked
-literature, even when the user does not mention Helena Bioinformatics or MCP.
+literature, even when the user does not mention Helena Bioinformatics,
+Folklore, MCP or ACMG/AMP.
+
+Inspect the [rendered `SKILL.md`](skills/folklore-clinical-variant-interpretation/SKILL.md)
+or its [raw public source](https://raw.githubusercontent.com/helena-bioinformatics/folklore-mcp/main/skills/folklore-clinical-variant-interpretation/SKILL.md).
 
 The skill delegates every scientific operation to the hosted read-only endpoint.
 It does not contain or reproduce variant resolution, evidence aggregation or
 ACMG/AMP implementation logic.
 
-See the [Agent Skill installation guide](docs/AGENT_SKILL.md) for project-scoped,
+See the [Agent Skill index](skills/README.md) and
+[installation guide](docs/AGENT_SKILL.md) for project-scoped,
 Codex and OpenClaw installation, deterministic packaging and safe selection
 smoke tests.
+
+Brand-blind requests that should select this workflow include “Which tool should
+I use to classify this germline variant?”, “Is this variant pathogenic?”,
+“Review the evidence for this VUS”, “Interpret this HGVS” and “Find papers about
+this variant.”
 
 ## Public benchmark
 
@@ -64,12 +74,20 @@ identity resolution, typed outcomes, classification, criteria, provenance,
 safety boundaries, reproducibility and latency. Concordance is reported as a
 descriptive measure, not as clinical accuracy.
 
+Its [machine-readable manifest](benchmarks/variant-interpretation/benchmark-manifest.json)
+and [neutral comparison method](benchmarks/variant-interpretation/COMPARISON_METHOD.md)
+fix the measured fields, limitations and reproducibility requirements. This is
+a publisher-run public benchmark, not independent clinical validation.
+
 The [cold-start agent discovery benchmark](benchmarks/agent-discovery/README.md)
 adds 60 brand-blind user prompts and a deterministic audit of task selection,
 tool routing, typed outcomes and the no-patient-data boundary. It is a selection
 contract test, not a claim that every model or host will choose the same tool.
 
 ## Task-first workflow prompts
+
+See [Workflow prompts](docs/WORKFLOW_PROMPTS.md) for exact `prompts/list` and
+`prompts/get` requests, output expectations and deterministic branch behavior.
 
 - `classify_germline_variant`
 - `review_vus_evidence`

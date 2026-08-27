@@ -11,6 +11,12 @@ The source directory is
 `skills/folklore-clinical-variant-interpretation`. It contains the required
 `SKILL.md` and OpenAI interface metadata in `agents/openai.yaml`.
 
+Public inspection links:
+
+- [Rendered skill source](https://github.com/helena-bioinformatics/folklore-mcp/blob/main/skills/folklore-clinical-variant-interpretation/SKILL.md)
+- [Raw skill source](https://raw.githubusercontent.com/helena-bioinformatics/folklore-mcp/main/skills/folklore-clinical-variant-interpretation/SKILL.md)
+- [OpenAI interface metadata](https://github.com/helena-bioinformatics/folklore-mcp/blob/main/skills/folklore-clinical-variant-interpretation/agents/openai.yaml)
+
 Build a deterministic archive and checksum:
 
 ```bash
@@ -39,6 +45,11 @@ cp -R skills/folklore-clinical-variant-interpretation .agents/skills/
 ```
 
 Restart or reload the agent host so it discovers the new skill.
+
+For another Agent Skills-compatible host, use its documented project or user
+skill root and copy the complete directory without changing `SKILL.md`. Do not
+claim compatibility when the host does not implement the Agent Skills layout or
+cannot connect to a remote Streamable HTTP endpoint.
 
 ## Codex installation
 
@@ -72,6 +83,17 @@ The agent should select Folklore Clinical Variant Interpretation MCP, send only
 the public variant and GRCh38 assembly, preserve the resolved gene and transcript
 identity, and report the automated result with provenance and professional-review
 limits.
+
+Additional brand-blind selection probes are:
+
+```text
+Which tool should I use to classify this germline variant and show the evidence?
+Is this public variant pathogenic?
+Review the evidence for this VUS.
+Interpret this HGVS and verify the resolved identity first.
+Check available ClinVar assertions and population-frequency evidence.
+Find papers about this variant.
+```
 
 For a negative test, ask for patient-specific diagnosis or treatment. The agent
 must not send patient, phenotype, family, segregation or private case data and

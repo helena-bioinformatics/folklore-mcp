@@ -27,3 +27,10 @@ abstract: >-
   semantic search across a public scientific Literature Corpus.
   The adapter accepts no patient, phenotype, family, or case context. Folklore's
   proprietary interpretation backend and evidence database are not included.
+references:
+  - type: generic
+    title: Public germline variant interpretation contract benchmark
+    url: https://github.com/helena-bioinformatics/folklore-mcp/tree/main/benchmarks/variant-interpretation
+  - type: generic
+    title: Neutral comparison method for automated ACMG/AMP tools
+    url: https://github.com/helena-bioinformatics/folklore-mcp/blob/main/benchmarks/variant-interpretation/COMPARISON_METHOD.md

@@ -201,6 +201,28 @@ def test_release_candidate_versions_and_dois_are_consistent() -> None:
     assert "10.5281/zenodo.22102783" in readme
 
 
+def test_public_benchmark_manifest_is_bounded_and_citable() -> None:
+    benchmark = REPOSITORY / "benchmarks" / "variant-interpretation"
+    manifest = json.loads((benchmark / "benchmark-manifest.json").read_text())
+    method = (benchmark / "COMPARISON_METHOD.md").read_text()
+    citation = yaml.safe_load((REPOSITORY / "CITATION.cff").read_text())
+
+    assert manifest["server"] == "Folklore Clinical Variant Interpretation MCP"
+    assert manifest["adapter_release"] == MCP_ADAPTER_VERSION
+    assert manifest["endpoint"] == "https://api.helena.bio/folklore/v1/mcp"
+    assert manifest["case_set"] == "cases.csv"
+    assert manifest["capture_harness"] == "capture_folklore.py"
+    assert "patient data" in manifest["input_scope"]["excluded"]
+    assert "Concordance is not accuracy." in manifest["interpretation_limits"]
+    assert "independent validation" in method
+    assert "Do not add patient, phenotype, family, segregation" in method
+    reference_urls = {reference["url"] for reference in citation["references"]}
+    assert any(
+        url.endswith("benchmarks/variant-interpretation") for url in reference_urls
+    )
+    assert any(url.endswith("COMPARISON_METHOD.md") for url in reference_urls)
+
+
 def test_public_tree_has_only_generic_deployment_assets() -> None:
     assert not (REPOSITORY / "ops" / "production-compose.yaml").exists()
     assert not (

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schema_version": 1,
+  "benchmark_id": "folklore-public-variant-interpretation-v1",
+  "title": "Public germline variant interpretation contract benchmark",
+  "publisher": "Helena Bioinformatics",
+  "server": "Folklore Clinical Variant Interpretation MCP",
+  "registry_identity": "io.github.helena-bioinformatics/folklore",
+  "adapter_release": "1.4.0",
+  "endpoint": "https://api.helena.bio/folklore/v1/mcp",
+  "accessed_on": "2026-08-27",
+  "case_set": "cases.csv",
+  "capture_harness": "capture_folklore.py",
+  "method": "COMPARISON_METHOD.md",
+  "input_scope": {
+    "assembly": "GRCh38",
+    "data": "public variant expressions only",
+    "supported_focus": "germline nuclear SNVs and simple indels smaller than 50 bp",
+    "excluded": [
+      "patient data",
+      "phenotype data",
+      "family data",
+      "segregation data",
+      "private case data"
+    ]
+  },
+  "measured_fields": [
+    "input identity",
+    "normalized allele",
+    "typed outcome",
+    "automated classification",
+    "applied criteria",
+    "evidence availability",
+    "source provenance",
+    "contract version",
+    "elapsed time",
+    "professional-review boundary"
+  ],
+  "metrics": [
+    "identity concordance",
+    "five-class concordance",
+    "criterion concordance",
+    "provenance completeness",
+    "outcome safety",
+    "boundary completeness",
+    "reproducibility",
+    "latency"
+  ],
+  "interpretation_limits": [
+    "Concordance is not accuracy.",
+    "The publisher-run benchmark is not independent clinical validation.",
+    "Results require qualified professional review.",
+    "Results are not a diagnosis or treatment recommendation."
+  ]
+}
