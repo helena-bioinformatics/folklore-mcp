@@ -1,0 +1,21 @@
+case_id,input,assembly,input_class
+rsid-resolved-apoe-1,rs429358,GRCh38,rsid
+rsid-resolved-apoe-2,rs7412,GRCh38,rsid
+rsid-multiallelic-brca1,rs80357914,GRCh38,multiallelic-rsid
+rsid-multiallelic-hbb,rs334,GRCh38,multiallelic-rsid
+rsid-multiallelic-cftr,rs113993960,GRCh38,multiallelic-rsid
+rsid-multiallelic-f5,rs6025,GRCh38,multiallelic-rsid
+rsid-multiallelic-mthfr,rs1801133,GRCh38,multiallelic-rsid
+transcript-hgvs-gnrhr,ENST00000226413.5:c.317A>G,GRCh38,transcript-hgvs
+transcript-hgvs-brca2,NM_000059.4:c.5946del,GRCh38,transcript-hgvs
+transcript-hgvs-brca1,NM_007294.4:c.5266dup,GRCh38,transcript-hgvs
+coordinate-apoe,chr19:44908684 T>C,GRCh38,coordinate
+spdi-apoe,NC_000019.10:44908683:T:C,GRCh38,spdi
+invalid-free-text,BRCA1 variant,GRCh38,invalid
+invalid-empty-symbol,rs,GRCh38,invalid
+not-found-rsid,rs999999999999,GRCh38,not-found
+unsupported-grch37,GRCh37:chr19:45411941:T:C,GRCh38,unsupported-assembly
+unsupported-mitochondrial,NC_012920.1:m.3243A>G,GRCh38,unsupported-variant-type
+unsupported-structural,GRCh38:chr17:43044295-43170245:DEL,GRCh38,unsupported-variant-type
+ambiguous-unversioned,ENST00000226413:c.317A>G,GRCh38,unversioned-transcript
+invalid-allele,chr19:44908684 T>Z,GRCh38,invalid

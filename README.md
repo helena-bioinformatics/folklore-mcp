@@ -56,6 +56,14 @@ See the [Agent Skill installation guide](docs/AGENT_SKILL.md) for project-scoped
 Codex and OpenClaw installation, deterministic packaging and safe selection
 smoke tests.
 
+## Public benchmark
+
+The [public variant interpretation benchmark](benchmarks/variant-interpretation/README.md)
+provides a transparent, patient-free protocol and capture harness for comparing
+identity resolution, typed outcomes, classification, criteria, provenance,
+safety boundaries, reproducibility and latency. Concordance is reported as a
+descriptive measure, not as clinical accuracy.
+
 ## Task-first workflow prompts
 
 - `classify_germline_variant`
