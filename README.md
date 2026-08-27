@@ -177,6 +177,11 @@ and the [privacy-preserving adoption policy](docs/ADOPTION_MEASUREMENT.md).
 `python3 ops/public_smoke.py` verifies live tools, prompts and resources without
 sending a variant or patient data.
 
+Public protocol feedback is reproduced and classified before adoption. See the
+[2026-08-27 protocol conformance review](docs/PROTOCOL_CONFORMANCE_REVIEW_2026-08-27.md)
+for the current issue classification, evidence, acceptance criteria and
+deployment state.
+
 ## Security and privacy
 
 - Read-only, stateless transport.
