@@ -10,6 +10,14 @@ All notable changes to the public Folklore MCP adapter are documented here.
 - Reject unissued pagination cursors with JSON-RPC `-32602` on the static
   `tools/list`, `resources/list` and `prompts/list` methods, with a first-party
   regression test covering all three public list surfaces.
+- Added a separate 60-query brand-blind search-discovery benchmark, raw result
+  ledger contract, JSON Schema and deterministic summarizer for provider,
+  product, locale and cohort-specific visibility metrics.
+- Kept search visibility, citation, recommendation, official-page reach and
+  runtime agent selection as independent claims rather than one score.
+- Added a five-target external authority ledger with explicit acceptance
+  evidence, next actions and anti-duplication rules; open publisher-authored
+  submissions remain clearly distinct from independent adoption.
 - Added a Biorouter BRXT extension that bridges Biorouter's local stdio MCP
   interface to the hosted Folklore Clinical Variant Interpretation MCP endpoint.
 - Added a Biorouter skill that preserves explicit outcome branching, stops on

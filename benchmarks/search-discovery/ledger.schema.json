@@ -1,0 +1,59 @@
+{
+  "$id": "https://github.com/helena-bioinformatics/folklore-mcp/benchmarks/search-discovery/ledger.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "cited": { "type": "boolean" },
+    "country": { "minLength": 2, "type": "string" },
+    "evidence_path": { "type": "string" },
+    "independent_source": { "type": "boolean" },
+    "language": { "minLength": 2, "type": "string" },
+    "mentioned": { "type": "boolean" },
+    "model": { "type": "string" },
+    "notes": { "type": "string" },
+    "official_page_reached": { "type": "boolean" },
+    "product": { "minLength": 1, "type": "string" },
+    "provider": { "minLength": 1, "type": "string" },
+    "query_id": { "pattern": "^SD[1-6][0-9]{2}$", "type": "string" },
+    "rank": {
+      "oneOf": [
+        { "minimum": 1, "type": "integer" },
+        { "type": "null" }
+      ]
+    },
+    "recommended": { "type": "boolean" },
+    "run_id": { "minLength": 1, "type": "string" },
+    "search_mode": { "minLength": 1, "type": "string" },
+    "selected": { "type": "boolean" },
+    "source_urls": {
+      "items": { "format": "uri", "type": "string" },
+      "type": "array"
+    },
+    "started_at_utc": { "format": "date-time", "type": "string" },
+    "visible": { "type": "boolean" }
+  },
+  "required": [
+    "run_id",
+    "query_id",
+    "provider",
+    "product",
+    "model",
+    "search_mode",
+    "country",
+    "language",
+    "started_at_utc",
+    "rank",
+    "visible",
+    "mentioned",
+    "cited",
+    "recommended",
+    "selected",
+    "official_page_reached",
+    "independent_source",
+    "source_urls",
+    "evidence_path",
+    "notes"
+  ],
+  "title": "Folklore brand-blind search discovery ledger row",
+  "type": "object"
+}

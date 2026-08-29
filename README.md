@@ -101,6 +101,14 @@ deterministic audit of task selection, tool routing, typed outcomes and the
 no-patient-data boundary. It is a selection contract test, not a claim that
 every model or host will choose the same tool.
 
+The [brand-blind search discovery benchmark](benchmarks/search-discovery/README.md)
+adds a separate 60-query corpus and raw ledger contract for provider, locale,
+visibility, citation, recommendation and official-page reach measurements. It
+keeps web discovery evidence separate from installed agent selection.
+
+The [external authority ledger](registry/external-authority.md) records the
+bounded, non-duplicative follow-up state for five relevant external surfaces.
+
 ## Task-first workflow prompts
 
 See [Workflow prompts](docs/WORKFLOW_PROMPTS.md) for exact `prompts/list` and

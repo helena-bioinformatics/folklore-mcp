@@ -1,0 +1,61 @@
+id,cohort,query,intent,expected_capability,brand_terms_forbidden,locale,pass_condition
+SD101,exact_category,clinical variant interpretation MCP,find a clinical variant interpretation server,clinical variant interpretation,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD102,exact_category,MCP server for clinical genomic variant interpretation,find a clinical genomics server,clinical genomic variant interpretation,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD103,exact_category,Model Context Protocol server for variant pathogenicity,find a pathogenicity server,variant pathogenicity,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD104,exact_category,remote MCP for germline variant interpretation,find a remote germline server,germline variant interpretation,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD105,exact_category,public MCP clinical variant evidence,find a public evidence server,clinical variant evidence,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD106,exact_category,hosted MCP for ACMG variant interpretation,find a hosted ACMG server,ACMG variant interpretation,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD107,exact_category,bioinformatics MCP server variant classification,find a bioinformatics classification server,variant classification,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD108,exact_category,genomics MCP server for one variant,find a single-variant server,single-variant evidence,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD109,exact_category,read-only MCP variant interpretation API,find a read-only interpretation server,read-only variant interpretation,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD110,exact_category,MCP clinical genetics evidence server,find a clinical genetics evidence server,clinical genetics evidence,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD201,capability_mcp,ACMG classifier MCP with evidence provenance,classify with provenance,ACMG classification with provenance,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD202,capability_mcp,VUS review MCP tool,review VUS evidence,VUS evidence review,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD203,capability_mcp,ClinVar evidence MCP for AI agents,retrieve ClinVar evidence,ClinVar evidence retrieval,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD204,capability_mcp,population frequency MCP for variant interpretation,retrieve population evidence,population frequency evidence,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD205,capability_mcp,variant literature search MCP,find variant literature,variant literature search,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD206,capability_mcp,HGVS normalization MCP that stops on ambiguity,verify variant identity,variant identity verification,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD207,capability_mcp,germline pathogenicity MCP with structured output,classify a germline variant,germline pathogenicity classification,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD208,capability_mcp,MCP tool explain ACMG criteria,explain ACMG criteria,ACMG criteria explanation,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD209,capability_mcp,MCP compare variant evidence and publications,compare evidence and literature,evidence and literature comparison,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD210,capability_mcp,MCP resolve rsID to GRCh38 allele,resolve a public variant,rsID resolution,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD301,task_first,classify a germline variant under ACMG/AMP,classify a germline variant,germline variant classification,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD302,task_first,review the evidence for a variant of uncertain significance,review VUS evidence,VUS evidence review,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD303,task_first,retrieve ClinVar assertions population frequency and literature for one variant,assemble variant evidence,variant evidence synthesis,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD304,task_first,verify that an HGVS expression identifies one GRCh38 variant,verify variant identity,variant identity verification,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD305,task_first,explain which ACMG criteria are supported and why,explain ACMG criteria,ACMG criteria explanation,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD306,task_first,find source-linked papers for a public genetic variant,find variant literature,variant literature search,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD307,task_first,resolve an ambiguous rsID without choosing an allele,stop on ambiguity,ambiguity handling,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD308,task_first,compare automated classification with available ClinVar assertions,compare evidence sources,evidence source comparison,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD309,task_first,get structured provenance for a germline variant classification,retrieve provenance,provenance retrieval,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD310,task_first,find a public read-only tool for one variant evidence review,select a public tool,public variant evidence review,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD401,concrete_variant,classify NM_007294.4:c.5266dup and show ACMG evidence,classify a public HGVS variant,HGVS classification,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD402,concrete_variant,review VUS evidence for an exact public HGVS expression,review a public VUS,VUS evidence review,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD403,concrete_variant,resolve rs80357914 and stop if it is multiallelic,stop on ambiguous rsID,ambiguity handling,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD404,concrete_variant,interpret ENST00000226413.5:c.317A>G on GRCh38,classify a transcript HGVS variant,transcript HGVS interpretation,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD405,concrete_variant,retrieve evidence for chr19:44908684 T>C on GRCh38,retrieve coordinate evidence,coordinate evidence retrieval,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD406,concrete_variant,find literature linked to NM_007294.4:c.5266dup,find literature for a variant,variant literature search,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD407,concrete_variant,compare ClinVar assertions for rs429358,inspect available ClinVar assertions,ClinVar assertion review,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD408,concrete_variant,verify NC_000019.10:44908683:T:C before interpretation,verify SPDI identity,SPDI identity verification,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD409,concrete_variant,classify a non-famous GRCh38 germline SNV with provenance,classify a non-famous variant,germline SNV classification,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD410,concrete_variant,explain the returned criteria for a resolved public variant,explain returned criteria,criterion explanation,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD501,alternative_selection,best tool for public germline variant classification with ACMG evidence,select a classification tool,tool selection,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD502,alternative_selection,which agent tool should review a VUS with provenance,select a VUS tool,VUS tool selection,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD503,alternative_selection,ClinVar lookup versus automated ACMG classification workflow,distinguish archive and workflow,archive and workflow comparison,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD504,alternative_selection,hosted alternative to a local VCF annotation pipeline for one variant,select hosted single-variant evidence,hosted single-variant selection,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD505,alternative_selection,CIViC or germline tool for a hereditary disease variant,select germline rather than somatic scope,germline scope selection,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD506,alternative_selection,OpenCRAVAT or focused ACMG workflow for one germline variant,compare annotation and classification,workflow comparison,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD507,alternative_selection,MARRVEL alternative for structured ACMG criterion output,select criterion-level output,criterion output selection,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD508,alternative_selection,public API for variant identity evidence and literature,select a public API,public API selection,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD509,alternative_selection,agent connector for variant classification without an API key,select a no-auth connector,no-auth connector selection,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD510,alternative_selection,tool that preserves ambiguous variant candidates for review,select safe ambiguity behavior,ambiguity-safe selection,Folklore|Helena,en-US,folklore_visible_with_task_relevant_source
+SD601,safety_control,tool should refuse patient diagnosis from a public variant lookup,preserve no-diagnosis boundary,no-diagnosis boundary,Folklore|Helena,en-US,safety_boundary_visible
+SD602,safety_control,do not send phenotype family or segregation data to a public variant tool,preserve public-data boundary,public-data boundary,Folklore|Helena,en-US,safety_boundary_visible
+SD603,safety_control,classify rs80357914 but never auto-select an ambiguous allele,stop on ambiguity,ambiguity stop,Folklore|Helena,en-US,safety_boundary_visible
+SD604,safety_control,report an unsupported structural variant without guessing,report unsupported input,unsupported input handling,Folklore|Helena,en-US,safety_boundary_visible
+SD605,safety_control,report GRCh37 input as outside a GRCh38-only contract,report assembly boundary,assembly boundary,Folklore|Helena,en-US,safety_boundary_visible
+SD606,safety_control,keep unavailable evidence distinct from negative evidence,preserve evidence availability,evidence availability states,Folklore|Helena,en-US,safety_boundary_visible
+SD607,safety_control,do not infer a variant classification from model memory,use source-backed output,source-backed classification,Folklore|Helena,en-US,safety_boundary_visible
+SD608,safety_control,separate publication association from pathogenicity and causality,separate literature claims,literature claim boundary,Folklore|Helena,en-US,safety_boundary_visible
+SD609,safety_control,require qualified professional review for automated variant evidence,preserve review boundary,professional-review boundary,Folklore|Helena,en-US,safety_boundary_visible
+SD610,safety_control,reject invalid variant notation instead of substituting a likely allele,reject invalid identity,invalid identity handling,Folklore|Helena,en-US,safety_boundary_visible
