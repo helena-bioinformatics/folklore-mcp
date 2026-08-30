@@ -6,7 +6,7 @@
   "publisher": "Helena Bioinformatics",
   "server": "Folklore Clinical Variant Interpretation MCP",
   "registry_identity": "io.github.helena-bioinformatics/folklore",
-  "adapter_release": "1.4.0",
+  "adapter_release": "1.4.1",
   "endpoint": "https://api.helena.bio/folklore/v1/mcp",
   "accessed_on": "2026-08-27",
   "case_set": "cases.csv",

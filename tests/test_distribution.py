@@ -40,6 +40,11 @@ def test_registry_identity_and_remote_are_exact() -> None:
             "url": "https://api.helena.bio/folklore/v1/mcp",
         }
     ]
+    assert record["repository"] == {
+        "url": "https://github.com/helena-bioinformatics/folklore-mcp",
+        "source": "github",
+        "id": "1331454884",
+    }
     assert contract["registryName"] == record["name"]
     assert contract["title"] == record["title"]
     assert contract["description"] == record["description"]
@@ -143,7 +148,7 @@ def test_biorouter_recipe_preserves_identity_version_and_safety() -> None:
     }
     assert manifest["name"] == "folklore-clinical-variant-interpretation-mcp"
     assert manifest["display_name"] == "Folklore Clinical Variant Interpretation MCP"
-    assert manifest["version"] == MCP_ADAPTER_VERSION == "1.4.0"
+    assert manifest["version"] == MCP_ADAPTER_VERSION == "1.4.1"
     assert manifest["tools_count"] == 5
     assert manifest["env_vars"] == []
     assert project["project"]["version"] == MCP_ADAPTER_VERSION
@@ -196,8 +201,8 @@ def test_release_candidate_versions_and_dois_are_consistent() -> None:
     assert zenodo["version"] == MCP_ADAPTER_VERSION
     assert f"version: {MCP_ADAPTER_VERSION}" in citation
     assert "doi: 10.5281/zenodo.21922951" in citation
-    assert "Current release: `1.4.0`" in readme
-    assert "Latest published Registry version: `1.4.0`" in readme
+    assert "Current release: `1.4.1`" in readme
+    assert "Latest published Registry version: `1.4.1`" in readme
     assert "prior 1.3.3 archive remains available" in readme
     assert "10.5281/zenodo.22102783" in readme
 

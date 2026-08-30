@@ -18,7 +18,7 @@ only when a maintainer-controlled public surface says so.
 
 Any integration contribution must preserve all of the following:
 
-- exact endpoint and five-tool inventory for release 1.4.0;
+- exact endpoint and five-tool inventory for release 1.4.1;
 - public variant-level inputs only;
 - no patient, phenotype, family, segregation or private case data;
 - pinned or otherwise reproducible setup;

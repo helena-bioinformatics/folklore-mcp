@@ -160,7 +160,7 @@ def test_mcp_2026_discovery_is_stateless_and_initialize_is_retired() -> None:
     assert result["_meta"]["io.modelcontextprotocol/serverInfo"] == {
         "name": "folklore",
         "title": "Folklore Clinical Variant Interpretation MCP",
-        "version": "1.4.0",
+        "version": "1.4.1",
         "description": (
             "Classify and interpret supported GRCh38 germline variants under ACMG/AMP "
             "with structured evidence, provenance and related literature through the "

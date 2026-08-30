@@ -36,7 +36,7 @@ from folklore_mcp_service.domain.literature_contracts import (
 )
 
 MCP_PROTOCOL_VERSION = "2026-07-28"
-MCP_ADAPTER_VERSION = "1.4.0"
+MCP_ADAPTER_VERSION = "1.4.1"
 MCP_SERVER_NAME = "folklore"
 MCP_TOOL_NAME = "search_variant_evidence"
 MCP_LITERATURE_TOOL_NAME = "search_variant_literature"

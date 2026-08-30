@@ -5,7 +5,7 @@
   "description": "Helena Bioinformatics MCP for clinical variant interpretation, ACMG/AMP evidence and literature.",
   "serverCardDescription": "Classify germline variants under ACMG/AMP with structured evidence, provenance and literature.",
   "publisher": "Helena Bioinformatics",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "protocolVersion": "2026-07-28",
   "endpoint": "https://api.helena.bio/folklore/v1/mcp",
   "health": "https://api.helena.bio/folklore/v1/health",

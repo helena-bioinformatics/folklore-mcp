@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "folklore-clinical-variant-interpretation-mcp-biorouter"
-version = "1.4.0"
+version = "1.4.1"
 description = "Biorouter stdio bridge for Folklore Clinical Variant Interpretation MCP by Helena Bioinformatics"
 readme = "README.md"
 license = {text = "Apache-2.0"}

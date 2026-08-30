@@ -43,7 +43,7 @@ by Biorouter's `uv sync` installer.
 The immutable release bundle is available at:
 
 ```text
-https://github.com/helena-bioinformatics/folklore-mcp/releases/download/folklore-biorouter-v1.4.0/folklore-clinical-variant-interpretation-mcp.brxt
+https://github.com/helena-bioinformatics/folklore-mcp/releases/download/folklore-biorouter-v1.4.1/folklore-clinical-variant-interpretation-mcp.brxt
 ```
 
 ## Install in Biorouter

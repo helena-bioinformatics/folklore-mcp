@@ -4,6 +4,8 @@ All notable changes to the public Folklore MCP adapter are documented here.
 
 ## Unreleased
 
+## 1.4.1 - 2026-08-30
+
 - Added a cold-start run generator that pre-populates all 100 case IDs and a
   reproducibility metadata record. The evaluator now rejects incomplete case
   rows and runs without exact host, model, benchmark, skill and package identity.

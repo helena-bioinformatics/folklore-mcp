@@ -2,7 +2,7 @@
   "name": "folklore-clinical-variant-interpretation-mcp",
   "display_name": "Folklore Clinical Variant Interpretation MCP",
   "description": "Helena Bioinformatics read-only access to public clinical variant evidence, ACMG/AMP decision support and source-linked literature.",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "entry_point": "folklore-clinical-variant-interpretation-mcp",
   "repository": "https://github.com/helena-bioinformatics/folklore-mcp/tree/main/integrations/biorouter",
   "license": "Apache-2.0",
