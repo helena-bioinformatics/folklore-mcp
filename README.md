@@ -3,6 +3,7 @@
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21922951.svg)](https://doi.org/10.5281/zenodo.21922951)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/helena-bioinformatics/folklore-mcp/badge)](https://scorecard.dev/viewer/?uri=github.com/helena-bioinformatics/folklore-mcp)
+[![AllMCPs Verified](https://allmcps.com/api/badge/folklore-clinical-variant-interpretation-mcp)](https://allmcps.com/mcp/folklore-clinical-variant-interpretation-mcp?verify=930d811d-1fd8-4117-8280-1c6eac1a2ca3)
 
 Classify and interpret a supported GRCh38 germline variant under ACMG/AMP with
 structured evidence, provenance and related scientific literature.
