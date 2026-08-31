@@ -54,6 +54,8 @@ n8n workflow uses Folklore's exact stateless MCP JSON-RPC contract, and the
 Galaxy wrapper passes Planemo linting. A cross-service
 [Galaxy Training Network tutorial](https://github.com/helena-bioinformatics/noodle-mcp/tree/main/integrations/galaxy-training-network)
 connects Folklore variant evidence to Noodle literature-graph exploration.
+The same safe cross-service path is available as a
+[Colab/Kaggle notebook](integrations/notebooks/folklore_variant_to_noodle_graph.ipynb).
 
 ## Agent Skill for “classify this variant” requests
 
