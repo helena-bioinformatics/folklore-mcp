@@ -1,0 +1,24 @@
+identity:
+  name: search_literature_corpus
+  author: helena-bioinformatics
+  label: {en_US: Search biomedical literature corpus}
+description:
+  human: {en_US: Semantic search over Folklore's public PubMed-derived corpus.}
+  llm: Search public biomedical literature by natural-language question or exact identifier. Results are discovery signals for professional review.
+parameters:
+  - name: query
+    type: string
+    required: true
+    label: {en_US: Query}
+    human_description: {en_US: Biomedical question or identifier.}
+    llm_description: Biomedical research question or PMID, DOI, PMCID, gene, variant, or phenotype identifier.
+    form: llm
+  - name: limit
+    type: number
+    required: false
+    default: 10
+    label: {en_US: Limit}
+    human_description: {en_US: Maximum results.}
+    llm_description: Maximum results to return.
+    form: llm
+extra: {python: {source: tools/search_literature_corpus.py}}

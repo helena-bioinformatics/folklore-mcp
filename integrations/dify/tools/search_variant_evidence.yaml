@@ -1,0 +1,16 @@
+identity:
+  name: search_variant_evidence
+  author: helena-bioinformatics
+  label: {en_US: Interpret germline variant}
+description:
+  human: {en_US: Retrieve public evidence for one supported GRCh38 germline SNV or simple indel.}
+  llm: Retrieve bounded public variant evidence and ACMG/AMP-oriented interpretation for professional review. Never use as a diagnosis or autonomous clinical decision.
+parameters:
+  - name: query
+    type: string
+    required: true
+    label: {en_US: Variant}
+    human_description: {en_US: HGVS, rsID, or supported genomic variant notation.}
+    llm_description: One supported GRCh38 germline nuclear SNV or simple indel.
+    form: llm
+extra: {python: {source: tools/search_variant_evidence.py}}

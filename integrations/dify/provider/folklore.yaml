@@ -1,0 +1,18 @@
+identity:
+  author: helena-bioinformatics
+  name: folklore_clinical_variant_interpretation
+  label:
+    en_US: Folklore Clinical Variant Interpretation
+  description:
+    en_US: Public, read-only germline variant evidence and biomedical literature.
+  icon: icon.svg
+  tags: [search]
+credentials_for_provider: {}
+tools:
+  - tools/search_variant_evidence.yaml
+  - tools/search_variant_literature.yaml
+  - tools/get_publication_details.yaml
+  - tools/search_literature_corpus.yaml
+extra:
+  python:
+    source: provider/folklore.py

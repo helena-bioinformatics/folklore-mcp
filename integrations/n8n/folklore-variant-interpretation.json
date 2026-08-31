@@ -1,0 +1,29 @@
+{
+  "name": "Interpret a germline variant with Folklore MCP",
+  "nodes": [
+    {"parameters": {}, "id": "b1111111-1111-4111-8111-111111111111", "name": "Run workflow", "type": "n8n-nodes-base.manualTrigger", "typeVersion": 1, "position": [0, 0]},
+    {
+      "parameters": {"assignments": {"assignments": [{"id": "v1", "name": "variant", "value": "chr17:43124028 CTC>C", "type": "string"}]}, "options": {}},
+      "id": "b2222222-2222-4222-8222-222222222222", "name": "Variant query", "type": "n8n-nodes-base.set", "typeVersion": 3.4, "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST", "url": "https://api.helena.bio/folklore/v1/mcp", "sendHeaders": true,
+        "headerParameters": {"parameters": [
+          {"name": "Accept", "value": "application/json"}, {"name": "Content-Type", "value": "application/json"},
+          {"name": "MCP-Protocol-Version", "value": "2026-07-28"}, {"name": "Mcp-Method", "value": "tools/call"},
+          {"name": "Mcp-Name", "value": "search_variant_evidence"}
+        ]},
+        "sendBody": true, "contentType": "raw", "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({jsonrpc: '2.0', id: 1, method: 'tools/call', params: {name: 'search_variant_evidence', arguments: {assembly: 'GRCh38', query: $json.variant}, _meta: {'io.modelcontextprotocol/protocolVersion': '2026-07-28', 'io.modelcontextprotocol/clientCapabilities': {}}}}) }}",
+        "options": {"timeout": 60000}
+      },
+      "id": "b3333333-3333-4333-8333-333333333333", "name": "Folklore MCP interpretation", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [500, 0]
+    }
+  ],
+  "connections": {
+    "Run workflow": {"main": [[{"node": "Variant query", "type": "main", "index": 0}]]},
+    "Variant query": {"main": [[{"node": "Folklore MCP interpretation", "type": "main", "index": 0}]]}
+  },
+  "pinData": {}, "settings": {"executionOrder": "v1"}, "meta": {"templateCredsSetupCompleted": true}, "tags": []
+}

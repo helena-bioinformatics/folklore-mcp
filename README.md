@@ -2,6 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21922951.svg)](https://doi.org/10.5281/zenodo.21922951)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/helena-bioinformatics/folklore-mcp/badge)](https://scorecard.dev/viewer/?uri=github.com/helena-bioinformatics/folklore-mcp)
 
 Classify and interpret a supported GRCh38 germline variant under ACMG/AMP with
 structured evidence, provenance and related scientific literature.
@@ -44,6 +45,14 @@ Agent builders can also use the
 or the [OpenAI Agents SDK example](integrations/openai-agents-python/README.md).
 Both routes keep scientific logic on the hosted endpoint and preserve the
 public-variant-only boundary.
+
+Additional ready-to-use ecosystem packages are included for
+[Dify](integrations/dify/README.md), [n8n](integrations/n8n/README.md), and
+[Galaxy](integrations/galaxy/README.md). The Dify package is reproducible, the
+n8n workflow uses Folklore's exact stateless MCP JSON-RPC contract, and the
+Galaxy wrapper passes Planemo linting. A cross-service
+[Galaxy Training Network tutorial](https://github.com/helena-bioinformatics/noodle-mcp/tree/main/integrations/galaxy-training-network)
+connects Folklore variant evidence to Noodle literature-graph exploration.
 
 ## Agent Skill for “classify this variant” requests
 

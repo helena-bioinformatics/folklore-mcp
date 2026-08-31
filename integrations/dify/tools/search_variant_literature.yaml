@@ -1,0 +1,24 @@
+identity:
+  name: search_variant_literature
+  author: helena-bioinformatics
+  label: {en_US: Search variant literature}
+description:
+  human: {en_US: Find publications connected to one germline variant.}
+  llm: Search public literature for one supported GRCh38 germline variant and return bounded discovery results.
+parameters:
+  - name: query
+    type: string
+    required: true
+    label: {en_US: Variant}
+    human_description: {en_US: HGVS, rsID, or supported genomic variant notation.}
+    llm_description: One supported GRCh38 germline variant.
+    form: llm
+  - name: limit
+    type: number
+    required: false
+    default: 10
+    label: {en_US: Limit}
+    human_description: {en_US: Maximum publications.}
+    llm_description: Maximum publications to return.
+    form: llm
+extra: {python: {source: tools/search_variant_literature.py}}

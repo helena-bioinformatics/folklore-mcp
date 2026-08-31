@@ -1,0 +1,27 @@
+version: 0.1.0
+type: plugin
+tags:
+  - search
+author: helena-bioinformatics
+name: folklore_clinical_variant_interpretation
+label:
+  en_US: Folklore Clinical Variant Interpretation
+created_at: "2026-08-31T00:00:00Z"
+description:
+  en_US: Read-only clinical variant interpretation, ACMG/AMP evidence, and variant literature from Helena Bioinformatics.
+icon: icon.svg
+resource:
+  memory: 67108864
+  permission:
+    tool:
+      enabled: true
+plugins:
+  tools:
+    - provider/folklore.yaml
+meta:
+  version: 0.0.2
+  arch: [amd64, arm64]
+  runner:
+    language: python
+    version: "3.12"
+    entrypoint: main
