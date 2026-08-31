@@ -56,6 +56,8 @@ for variant in variants:
     if variant is None or not str(variant).strip():
         continue
     value = str(variant).strip()
-    rows.append({"variant": value, "folklore_result_json": json.dumps(call_folklore(value))})
+    rows.append(
+        {"variant": value, "folklore_result_json": json.dumps(call_folklore(value))}
+    )
 
 knio.output_tables[0] = knio.Table.from_pyarrow(pa.Table.from_pylist(rows))
