@@ -237,7 +237,7 @@ See [SECURITY.md](SECURITY.md) for reporting instructions and supported versions
 
 - Name: `io.github.helena-bioinformatics/folklore`
 - Current release: `1.4.2`
-- Latest published Registry version: `1.4.1`
+- Latest published Registry version: `1.4.2`
 - Publisher: Helena Bioinformatics
 - Website: <https://folklore.helena.bio>
 - Technical guide: <https://folklore.helena.bio/docs/folklore-connector>

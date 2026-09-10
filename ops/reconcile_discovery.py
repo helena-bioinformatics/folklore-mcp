@@ -272,7 +272,7 @@ def reconcile(
             "canonical",
             matches,
             observed,
-            "MCP 2026-07-28 uses server/discover; initialize is retired.",
+            "MCP 2026-07-28 uses server/discover as its discovery preflight.",
         )
 
     def tools_probe() -> Observation:
@@ -369,7 +369,7 @@ def reconcile(
             "agentSkillRaw",
             [
                 contract["title"],
-                "Trigger even when the user does not mention Folklore",
+                "user does not mention Folklore",
                 "search_variant_evidence",
                 "qualified professional review",
             ],
