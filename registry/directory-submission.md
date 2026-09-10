@@ -14,9 +14,7 @@
 
 ## Short description
 
-Clinical variant interpretation for one supported GRCh38 germline variant,
-including public Folklore annotation, evidence, provenance, automated ACMG/AMP
-decision support and related literature.
+Interpret GRCh38 germline variants from HGVS or rsID; review VUS and ACMG/AMP evidence.
 
 ## Full description
 
@@ -24,8 +22,8 @@ Folklore Clinical Variant Interpretation MCP is the official public, read-only
 MCP server from Helena Bioinformatics. It gives machines structured, read-only
 access to the same public single-variant search shown by Folklore. It accepts coordinates,
 supported genomic, coding and protein HGVS, SPDI or rsID. It returns explicit
-resolved, ambiguous, not-found, invalid, unsupported and temporarily
-unavailable outcomes. Ambiguous candidates are never selected automatically.
+`resolved`, `ambiguous`, `not_found`, `invalid_request`, `unsupported` and
+`resolution_unavailable` outcomes. Ambiguous candidates are never selected automatically.
 
 The service accepts no patient, phenotype, family or case record. Its automated
 ACMG/AMP result is variant-level decision support and is not a diagnosis or a
