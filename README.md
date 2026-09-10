@@ -247,8 +247,8 @@ Apache License 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
 
 ### Portable Agent Skill 1.1.0
 
-Download the versioned [ZIP](https://folklore.helena.bio/downloads/folklore-clinical-variant-interpretation-1.1.0.zip)
-and [SHA-256](https://folklore.helena.bio/downloads/folklore-clinical-variant-interpretation-1.1.0.zip.sha256).
+Download the versioned [ZIP](https://raw.githubusercontent.com/helena-bioinformatics/folklore-mcp/main/skills/releases/1.1.0/folklore-clinical-variant-interpretation-1.1.0.zip)
+and [SHA-256](https://raw.githubusercontent.com/helena-bioinformatics/folklore-mcp/main/skills/releases/1.1.0/folklore-clinical-variant-interpretation-1.1.0.zip.sha256).
 Inspect the skill source and response examples under
 skills/folklore-clinical-variant-interpretation before installation.
 Extract that folder into your host's skills directory and configure the
