@@ -2,6 +2,12 @@
 
 All notable changes to the public Folklore MCP adapter are documented here.
 
+## 1.4.2 - 2026-09-10
+
+- Lead discovery descriptions with variant interpretation inputs and evidence outputs.
+- Add eight dated request-to-tool-to-result examples and portable Agent Skill 1.2.0.
+- Preserve tool names, schemas, scientific logic and frozen benchmark cases.
+
 ## Unreleased
 
 ## 1.4.1 - 2026-08-30

@@ -24,7 +24,7 @@ def test_agent_skill_has_task_selection_metadata() -> None:
         "compatibility",
         "metadata",
     } == metadata.keys()
-    assert metadata["metadata"]["version"] == "1.1.0"
+    assert metadata["metadata"]["version"] == "1.2.0"
     assert metadata["name"] == "folklore-clinical-variant-interpretation"
     description = metadata["description"]
     for trigger in (

@@ -36,7 +36,7 @@ from folklore_mcp_service.domain.literature_contracts import (
 )
 
 MCP_PROTOCOL_VERSION = "2026-07-28"
-MCP_ADAPTER_VERSION = "1.4.1"
+MCP_ADAPTER_VERSION = "1.4.2"
 MCP_SERVER_NAME = "folklore"
 MCP_TOOL_NAME = "search_variant_evidence"
 MCP_LITERATURE_TOOL_NAME = "search_variant_literature"
@@ -152,6 +152,7 @@ def create_mcp_app(
         name=MCP_TOOL_NAME,
         title="Classify or interpret a germline variant under ACMG/AMP",
         description=(
+            "Interpret this variant, explain what this HGVS means, or review this VUS. "
             "Use when a user asks to classify or interpret pathogenicity, review a "
             "VUS, check available ClinVar assertions or population-frequency evidence, "
             "or resolve a variant notation. Classify, interpret or resolve one public "
@@ -607,9 +608,8 @@ def create_mcp_app(
         version=MCP_ADAPTER_VERSION,
         title="Folklore Clinical Variant Interpretation MCP",
         description=(
-            "Classify and interpret supported GRCh38 germline variants under ACMG/AMP "
-            "with structured evidence, provenance and related literature through the "
-            "official public, read-only Helena Bioinformatics MCP."
+            "Interpret GRCh38 germline variants from HGVS or rsID; "
+            "review VUS and ACMG/AMP evidence."
         ),
         instructions=(
             "Call Folklore Clinical Variant Interpretation MCP when a user asks to "

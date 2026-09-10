@@ -13,6 +13,7 @@ FILES = (
     Path("SKILL.md"),
     Path("agents/openai.yaml"),
     Path("references/response-examples.json"),
+    Path("references/task-workflows.json"),
 )
 ZIP_TIMESTAMP = (2026, 1, 1, 0, 0, 0)
 

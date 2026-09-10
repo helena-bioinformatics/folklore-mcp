@@ -2,8 +2,8 @@
 
 Canonical public server title: `Folklore Clinical Variant Interpretation MCP`
 
-Canonical Registry description: `Helena Bioinformatics MCP for clinical variant
-interpretation, ACMG/AMP evidence and literature.`
+Canonical Registry description: `Interpret GRCh38 germline variants from HGVS or rsID;
+review VUS and ACMG/AMP evidence.`
 
 Canonical identity: `io.github.helena-bioinformatics/folklore`
 
@@ -65,9 +65,8 @@ server name; they do not replace the MCP tool schemas or claim universal model
 selection.
 
 MCP protocol `2026-07-28` is stateless. It uses `server/discover` as the optional
-preflight and does not implement the retired `initialize` exchange. Legacy
-compatibility, if justified by observed clients, must use an explicitly routed
-older protocol contract rather than changing the current endpoint semantics.
+preflight. The hosted SDK also accepts legacy `initialize` with protocol
+`2025-03-26`; see the observed matrix in ../docs/COMPATIBILITY.md.
 
 Registry publication must happen only after production activation, live
 `tools/list`/`tools/call` verification and Vladimir's final submission approval.

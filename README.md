@@ -5,8 +5,26 @@
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/helena-bioinformatics/folklore-mcp/badge)](https://scorecard.dev/viewer/?uri=github.com/helena-bioinformatics/folklore-mcp)
 [![AllMCPs Verified](https://allmcps.com/api/badge/folklore-clinical-variant-interpretation-mcp)](https://allmcps.com/mcp/folklore-clinical-variant-interpretation-mcp?verify=930d811d-1fd8-4117-8280-1c6eac1a2ca3)
 
-Classify and interpret a supported GRCh38 germline variant under ACMG/AMP with
-structured evidence, provenance and related scientific literature.
+Interpret GRCh38 germline variants from HGVS or rsID; review VUS and ACMG/AMP evidence.
+
+"What does NM_007294.4:c.68_69del mean?" and "Review this VUS" are direct
+entry points. Call `search_variant_evidence` with one public variant:
+
+```json
+{"name":"search_variant_evidence","arguments":{"assembly":"GRCh38","query":"NM_007294.4:c.68_69del"}}
+```
+
+Connect the endpoint below in your MCP client before calling the tool.
+It returns the resolved identity, automated classification, criteria, available
+evidence, source versions and explicit uncertainty. See [eight observed task
+workflows](skills/folklore-clinical-variant-interpretation/references/task-workflows.json)
+and the [worked examples](https://folklore.helena.bio/examples/acmg-variant-classification).
+
+Already have a ClinVar or Ensembl record? Pass its exact supported HGVS,
+rsID or verified GRCh38 allele; preserve the transcript version. Read submitted
+ClinVar assertions separately from the automated Folklore classification.
+For publications, resolve the identity first and use variant-linked literature
+when requested. A literature association does not establish pathogenicity.
 
 Folklore Clinical Variant Interpretation MCP is the official public, read-only
 Model Context Protocol adapter for [Folklore](https://folklore.helena.bio) by
@@ -218,7 +236,7 @@ See [SECURITY.md](SECURITY.md) for reporting instructions and supported versions
 ## Registry identity
 
 - Name: `io.github.helena-bioinformatics/folklore`
-- Current release: `1.4.1`
+- Current release: `1.4.2`
 - Latest published Registry version: `1.4.1`
 - Publisher: Helena Bioinformatics
 - Website: <https://folklore.helena.bio>
@@ -245,10 +263,10 @@ release. The prior 1.3.3 archive remains available as
 
 Apache License 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
 
-### Portable Agent Skill 1.1.0
+### Portable Agent Skill 1.2.0
 
-Download the versioned [ZIP](https://raw.githubusercontent.com/helena-bioinformatics/folklore-mcp/main/skills/releases/1.1.0/folklore-clinical-variant-interpretation-1.1.0.zip)
-and [SHA-256](https://raw.githubusercontent.com/helena-bioinformatics/folklore-mcp/main/skills/releases/1.1.0/folklore-clinical-variant-interpretation-1.1.0.zip.sha256).
+Download the versioned [ZIP](https://raw.githubusercontent.com/helena-bioinformatics/folklore-mcp/main/skills/releases/1.2.0/folklore-clinical-variant-interpretation-1.2.0.zip)
+and [SHA-256](https://raw.githubusercontent.com/helena-bioinformatics/folklore-mcp/main/skills/releases/1.2.0/folklore-clinical-variant-interpretation-1.2.0.zip.sha256).
 Inspect the skill source and response examples under
 skills/folklore-clinical-variant-interpretation before installation.
 Extract that folder into your host's skills directory and configure the

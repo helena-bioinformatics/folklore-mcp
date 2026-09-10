@@ -31,8 +31,8 @@ def test_registry_identity_and_remote_are_exact() -> None:
     assert record["name"] == "io.github.helena-bioinformatics/folklore"
     assert record["title"] == "Folklore Clinical Variant Interpretation MCP"
     assert record["description"] == (
-        "Helena Bioinformatics MCP for clinical variant interpretation, "
-        "ACMG/AMP evidence and literature."
+        "Interpret GRCh38 germline variants from HGVS or rsID; "
+        "review VUS and ACMG/AMP evidence."
     )
     assert record["remotes"] == [
         {
@@ -49,8 +49,8 @@ def test_registry_identity_and_remote_are_exact() -> None:
     assert contract["title"] == record["title"]
     assert contract["description"] == record["description"]
     assert contract["serverCardDescription"] == (
-        "Classify germline variants under ACMG/AMP with structured evidence, "
-        "provenance and literature."
+        "Interpret GRCh38 germline variants from HGVS or rsID; "
+        "review VUS and ACMG/AMP evidence."
     )
     assert contract["version"] == record["version"] == MCP_ADAPTER_VERSION
     assert contract["protocolVersion"] == MCP_PROTOCOL_VERSION
@@ -148,7 +148,7 @@ def test_biorouter_recipe_preserves_identity_version_and_safety() -> None:
     }
     assert manifest["name"] == "folklore-clinical-variant-interpretation-mcp"
     assert manifest["display_name"] == "Folklore Clinical Variant Interpretation MCP"
-    assert manifest["version"] == MCP_ADAPTER_VERSION == "1.4.1"
+    assert manifest["version"] == MCP_ADAPTER_VERSION == "1.4.2"
     assert manifest["tools_count"] == 5
     assert manifest["env_vars"] == []
     assert project["project"]["version"] == MCP_ADAPTER_VERSION
@@ -201,7 +201,7 @@ def test_release_candidate_versions_and_dois_are_consistent() -> None:
     assert zenodo["version"] == MCP_ADAPTER_VERSION
     assert f"version: {MCP_ADAPTER_VERSION}" in citation
     assert "doi: 10.5281/zenodo.21922951" in citation
-    assert "Current release: `1.4.1`" in readme
+    assert "Current release: `1.4.2`" in readme
     assert "Latest published Registry version: `1.4.1`" in readme
     assert "prior 1.3.3 archive remains available" in readme
     assert "10.5281/zenodo.22102783" in readme
@@ -214,7 +214,8 @@ def test_public_benchmark_manifest_is_bounded_and_citable() -> None:
     citation = yaml.safe_load((REPOSITORY / "CITATION.cff").read_text())
 
     assert manifest["server"] == "Folklore Clinical Variant Interpretation MCP"
-    assert manifest["adapter_release"] == MCP_ADAPTER_VERSION
+    # The preregistered benchmark retains its original release pin.
+    assert manifest["adapter_release"] == "1.4.1"
     assert manifest["endpoint"] == "https://api.helena.bio/folklore/v1/mcp"
     assert manifest["case_set"] == "cases.csv"
     assert manifest["capture_harness"] == "capture_folklore.py"

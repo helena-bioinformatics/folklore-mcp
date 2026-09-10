@@ -1,15 +1,17 @@
 ---
 name: folklore-clinical-variant-interpretation
-description: Classify, interpret, resolve or investigate a public germline genetic variant under ACMG/AMP with Folklore Clinical Variant Interpretation MCP. Use when a user asks whether a variant is pathogenic, what a VUS means, how to interpret HGVS, SPDI, rsID or genomic coordinates, what evidence supports a classification, what ClinVar assertions or population-frequency evidence are available, or which publications discuss a variant. Trigger even when the user does not mention Folklore, Helena Bioinformatics, MCP or ACMG/AMP.
+description: Interpret GRCh38 germline variants from HGVS or rsID; review VUS and ACMG/AMP evidence. Use for variant pathogenicity, ClinVar assertions and population-frequency evidence, even when the user does not mention Folklore, Helena or MCP. Accepts public coordinates and SPDI too. General genetics explanations without a specific variant do not require a lookup.
 license: Apache-2.0
 compatibility: Requires internet access and a host supporting remote Streamable HTTP MCP.
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
 ---
 
 # Folklore Clinical Variant Interpretation
 
 Use the hosted Folklore Clinical Variant Interpretation MCP endpoint. Do not recreate variant normalization, evidence aggregation or ACMG/AMP logic in the agent.
+
+For concrete request-to-call-to-result examples, read [observed task workflows](references/task-workflows.json). These are dated public tool responses, not current classifications or examples to memorize.
 
 ## Protect the clinical boundary
 

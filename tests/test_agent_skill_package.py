@@ -1,4 +1,5 @@
 import hashlib
+import json
 import subprocess
 import zipfile
 from pathlib import Path
@@ -28,6 +29,7 @@ def test_agent_skill_bundle_is_deterministic_and_bounded(tmp_path: Path) -> None
             f"{SKILL_NAME}/SKILL.md",
             f"{SKILL_NAME}/agents/openai.yaml",
             f"{SKILL_NAME}/references/response-examples.json",
+            f"{SKILL_NAME}/references/task-workflows.json",
         ]
         skill = archive.read(f"{SKILL_NAME}/SKILL.md").decode()
         metadata = archive.read(f"{SKILL_NAME}/agents/openai.yaml").decode()
@@ -64,3 +66,37 @@ def test_agent_skill_is_exposed_through_task_first_public_docs() -> None:
     assert '"method":"prompts/list"' in workflow_prompts
     assert '"method":"prompts/get"' in workflow_prompts
     assert "MCP-Protocol-Version: 2026-07-28" in workflow_prompts
+
+
+def test_worked_examples_preserve_observed_response_and_identity() -> None:
+    data = json.loads(
+        (ROOT / "skills" / SKILL_NAME / "references/task-workflows.json").read_text()
+    )
+    examples = data["examples"]
+    assert len(examples) == 8
+    for item in examples:
+        call = item["tool_call"]
+        assert call["name"] == "search_variant_evidence"
+        assert call["arguments"] == {"assembly": "GRCh38", "query": item["input"]}
+        response = item["raw_response"]
+        assert "error" not in response
+        structured = response["result"]["structuredContent"]
+        assert structured["adapter_error"] is None
+        observed = structured["result"]
+        assert item["status"] == observed["status"]
+        assert item["identity"] == observed.get("identity")
+        classification = (observed.get("interpretation") or {}).get(
+            "classification"
+        ) or {}
+        assert item["automated_class"] == classification.get("automated_class")
+        assert item["criteria"] == classification.get("criteria")
+        if item["status"] != "resolved":
+            assert item["automated_class"] is None
+            assert item["identity"] is None
+    by_id = {item["case_id"]: item for item in examples}
+    assert (
+        by_id["refseq-brca1-deletion"]["identity"]
+        == by_id["canonical-brca1-deletion"]["identity"]
+    )
+    assert by_id["rsid-multiallelic-brca1"]["status"] == "ambiguous"
+    assert by_id["wrong-refseq-version"]["status"] == "not_found"

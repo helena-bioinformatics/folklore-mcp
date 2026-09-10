@@ -1,0 +1,3214 @@
+{
+  "schema_version": "1.0",
+  "purpose": "Publisher-authored task examples with observed public tool responses; not an independent evaluation or a frozen benchmark. Query again for current evidence.",
+  "examples": [
+    {
+      "case_id": "refseq-brca1-deletion",
+      "input": "NM_007294.4:c.68_69del",
+      "status": "resolved",
+      "identity": {
+        "alternate": "A",
+        "assembly": "GRCh38",
+        "canonical_key": "GRCh38:chr17:43124027:ACT:A",
+        "chromosome": "chr17",
+        "position": 43124027,
+        "reference": "ACT",
+        "variant_type": "DEL"
+      },
+      "automated_class": "P",
+      "criteria": "PVS1,PS1,BS1_Strong[VCEP][af_grpmax] [VCEP:ENIGMA BRCA1/2 v1.2.0] [ERepo:ENIGMA BRCA1 and BRCA2 VCEP,BRCA1-related cancer predisposition]",
+      "classifier_version": "3.39.1",
+      "evidence_availability": {
+        "clinvar": "available",
+        "conservation": "no_record",
+        "dosage": "available",
+        "expert": "available",
+        "gene_constraints": "available",
+        "population": "available",
+        "predictors": "no_record",
+        "spliceai": "no_record"
+      },
+      "observed_at_utc": "2026-09-10T16:37:12Z",
+      "reference_versions": [
+        {
+          "name": "clingen_dosage",
+          "version": "2026-01"
+        },
+        {
+          "name": "clingen_gdv",
+          "version": "2026-01"
+        },
+        {
+          "name": "clinvar",
+          "version": "2026-01"
+        },
+        {
+          "name": "dbnsfp",
+          "version": "4.9c"
+        },
+        {
+          "name": "ensembl_vep",
+          "version": "Release 113"
+        },
+        {
+          "name": "erepo_classifications",
+          "version": "erepo-2026-06-04"
+        },
+        {
+          "name": "exon_pext",
+          "version": "2.1.1"
+        },
+        {
+          "name": "g2p",
+          "version": "2026-01"
+        },
+        {
+          "name": "gnomad",
+          "version": "4.1"
+        },
+        {
+          "name": "gnomad_constraint",
+          "version": "4.1"
+        },
+        {
+          "name": "gof_genes",
+          "version": "2026-01"
+        },
+        {
+          "name": "hpo",
+          "version": "2026-01"
+        },
+        {
+          "name": "interpro_pfam",
+          "version": "2026-03"
+        },
+        {
+          "name": "mane_select",
+          "version": "2.0"
+        },
+        {
+          "name": "mt_apogee2_scores",
+          "version": "APOGEE2 v2.0"
+        },
+        {
+          "name": "mt_clinvar_variants",
+          "version": "ClinVar 2026-01 (mtDNA subset)"
+        },
+        {
+          "name": "mt_gene_coordinates",
+          "version": "rCRS NC_012920.1"
+        },
+        {
+          "name": "mt_haplogroups",
+          "version": "PhyloTree Build 17 (FU1a)"
+        },
+        {
+          "name": "mt_helix_curated",
+          "version": "(empty -- clinician-populated via PR-6 UI)"
+        },
+        {
+          "name": "mt_population_frequencies",
+          "version": "MITOMAP 2026-01 + HelixMTdb 20200327"
+        },
+        {
+          "name": "nuclear_numt_known_regions",
+          "version": "Calabrese 2017 + Dayama 2014"
+        },
+        {
+          "name": "orphanet",
+          "version": "2025-12"
+        },
+        {
+          "name": "pubmed",
+          "version": "(real-time)"
+        },
+        {
+          "name": "spliceai",
+          "version": "1.3"
+        },
+        {
+          "name": "vcep_specs",
+          "version": "2026-03"
+        }
+      ],
+      "interpretation_status": "success",
+      "user_request": "What does NM_007294.4:c.68_69del mean? Show the evidence.",
+      "tool_call": {
+        "name": "search_variant_evidence",
+        "arguments": {
+          "assembly": "GRCh38",
+          "query": "NM_007294.4:c.68_69del"
+        }
+      },
+      "response_guidance": "Report the verified BRCA1 deletion and the returned automated P classification with its criteria and source versions. Require professional review.",
+      "raw_response": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": {
+          "_meta": {
+            "io.modelcontextprotocol/serverInfo": {
+              "description": "Classify and interpret supported GRCh38 germline variants under ACMG/AMP with structured evidence, provenance and related literature through the official public, read-only Helena Bioinformatics MCP.",
+              "icons": [
+                {
+                  "mimeType": "image/png",
+                  "src": "https://folklore.helena.bio/images/logos/folklore.png"
+                }
+              ],
+              "name": "folklore",
+              "title": "Folklore Clinical Variant Interpretation MCP",
+              "version": "1.4.1",
+              "websiteUrl": "https://folklore.helena.bio"
+            }
+          },
+          "content": [
+            {
+              "text": "Folklore resolved chr17:43124027 ACT>A in BRCA1. Automated ACMG/AMP class: P; criteria: PVS1,PS1,BS1_Strong[VCEP][af_grpmax] [VCEP:ENIGMA BRCA1/2 v1.2.0] [ERepo:ENIGMA BRCA1 and BRCA2 VCEP,BRCA1-related cancer predisposition]. This result is not a patient diagnosis and must not be used as a substitute for qualified clinical interpretation. Patient phenotype, genotype, family, segregation, de novo, case-specific, and private override evidence were not evaluated. Record: https://folklore.helena.bio/variant?assembly=GRCh38&chromosome=chr17&position=43124027&reference=ACT&alternate=A",
+              "type": "text"
+            }
+          ],
+          "isError": false,
+          "resultType": "complete",
+          "structuredContent": {
+            "adapter_error": null,
+            "contract_version": "1",
+            "record_url": "https://folklore.helena.bio/variant?assembly=GRCh38&chromosome=chr17&position=43124027&reference=ACT&alternate=A",
+            "result": {
+              "identity": {
+                "alternate": "A",
+                "assembly": "GRCh38",
+                "canonical_key": "GRCh38:chr17:43124027:ACT:A",
+                "chromosome": "chr17",
+                "position": 43124027,
+                "reference": "ACT",
+                "variant_type": "DEL"
+              },
+              "interpretation": {
+                "annotation": {
+                  "biotype": "protein_coding",
+                  "consequence": "frameshift_variant",
+                  "domains": [
+                    "CDD:cd16498",
+                    "ENSP_mappings:1jm7",
+                    "ENSP_mappings:7jzv",
+                    "ENSP_mappings:7lyb",
+                    "ENSP_mappings:8grq",
+                    "ENSP_mappings:AF",
+                    "Gene3D:3",
+                    "PANTHER:PTHR13763",
+                    "PIRSF:PIRSF001734",
+                    "Superfamily:SSF57850"
+                  ],
+                  "exon_number": "2/23",
+                  "gene_id": "ENSG00000012048",
+                  "gene_symbol": "BRCA1",
+                  "impact": "HIGH",
+                  "transcript_id": "ENST00000357654"
+                },
+                "classification": {
+                  "automated_class": "P",
+                  "confidence_score": 0.8500000238418579,
+                  "criteria": "PVS1,PS1,BS1_Strong[VCEP][af_grpmax] [VCEP:ENIGMA BRCA1/2 v1.2.0] [ERepo:ENIGMA BRCA1 and BRCA2 VCEP,BRCA1-related cancer predisposition]",
+                  "framework": "acmg_2015",
+                  "pm1_evidence_availability": "not_applicable",
+                  "pm1_evidence_source": null
+                },
+                "contract_version": "1.0",
+                "display": {
+                  "hgvs_cdna": "ENST00000357654.9:c.68_69del",
+                  "hgvs_genomic": "chr17:g.43124030_43124031del",
+                  "hgvs_protein": "ENSP00000350283.3:p.Glu23ValfsTer17",
+                  "label": "chr17:43124027 ACT>A"
+                },
+                "evidence": {
+                  "clinvar": {
+                    "availability": "available",
+                    "canonical_url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/17662/",
+                    "clinical_significance": "Pathogenic",
+                    "disease_names": [
+                      "BRCA1-related_cancer_predisposition",
+                      "BRCA1-related_disorder",
+                      "Breast-ovarian_cancer,_familial,_susceptibility_to,_1",
+                      "Breast_and/or_ovarian_cancer",
+                      "Endometrial_carcinoma",
+                      "Familial_cancer_of_breast",
+                      "Fanconi_anemia,_complementation_group_S",
+                      "Hereditary_breast_ovarian_cancer_syndrome",
+                      "Hereditary_cancer-predisposing_syndrome",
+                      "Inherited_breast_cancer_and_ovarian_cancer",
+                      "Inherited_ovarian_cancer_(without_breast_cancer)",
+                      "Invasive_medullary_breast_carcinoma",
+                      "Malignant_tumor_of_breast",
+                      "Ovarian_neoplasm",
+                      "Pancreatic_cancer,_susceptibility_to,_4",
+                      "Triple-negative_breast_cancer",
+                      "not_provided"
+                    ],
+                    "protein_representation": null,
+                    "review_stars": 3,
+                    "review_status": "reviewed_by_expert_panel",
+                    "rsid": "80357914",
+                    "variation_id": "17662"
+                  },
+                  "clinvar_review_stars": 3,
+                  "clinvar_significance": "Pathogenic",
+                  "conservation": {
+                    "availability": "no_record",
+                    "gerp_rs": null,
+                    "phylop100way_vertebrate": null
+                  },
+                  "dosage": {
+                    "availability": "available",
+                    "haploinsufficiency_score": 3,
+                    "triplosensitivity_score": 0
+                  },
+                  "erepo_assertion": "Pathogenic",
+                  "erepo_disease": "BRCA1-related cancer predisposition",
+                  "erepo_panel": "ENIGMA BRCA1 and BRCA2 VCEP",
+                  "expert": {
+                    "availability": "available",
+                    "erepo_assertion": "Pathogenic",
+                    "erepo_disease": "BRCA1-related cancer predisposition",
+                    "erepo_panel": "ENIGMA BRCA1 and BRCA2 VCEP",
+                    "erepo_summary": "The c.68_69del variant in BRCA1 is a deletion of two nucleotides, predicted to encode a frameshift with consequent premature termination of the protein at codon 17 of the frameshift, or amino acid 39 (p.Glu23ValfsTer17). This variant is present in gnomAD v2.1 (exomes only, non-cancer subset) or gnomAD v3.1 (non-cancer subset) but is below the ENIGMA BRCA1/2 VCEP threshold >0.00002 for BS1_Supporting (PM2_Supporting, BS1, and BA1 are not met). Frameshift variant predicted to cause a premature stop codon in biologically-relevant-exon 3 leading to nonsense mediated decay (PVS1 met). The ENIGMA BRCA1/2 VCEP considered multiple lines of functional and clinical evidence to define exon-specific weights for PTC in BRCA1, and results indicate that strong evidence towards pathogenicity may be applied for a PTC variant in BRCA1 exon 3 (PM5_Strong (PTC)). Reported by one calibrated study to exhibit protein function similar to pathogenic control variants (PMID: 32546644) (PS3 met).In summary, this variant meets the criteria to be classified as a Pathogenic variant  variant for BRCA1-related cancer predisposition based on the ACMG/AMP criteria applied as specified by the ENIGMA BRCA1/2 VCEP (PVS1, PM5_Strong (PTC), PS3).",
+                    "erepo_url": null,
+                    "vcep_applied": true,
+                    "vcep_panel": "ENIGMA BRCA1/2"
+                  },
+                  "external_links": {
+                    "clingen_erepo": null,
+                    "clinvar": "https://www.ncbi.nlm.nih.gov/clinvar/variation/17662/",
+                    "ensembl_gene": "https://www.ensembl.org/Homo_sapiens/Gene/Summary?g=ENSG00000012048",
+                    "ensembl_transcript": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000357654",
+                    "gnomad": "https://gnomad.broadinstitute.org/variant/chr17-43124027-ACT-A?dataset=gnomad_r4"
+                  },
+                  "gene_constraints": {
+                    "availability": "available",
+                    "loeuf": 0.927590012550354,
+                    "missense_z": 1.7336000204086304,
+                    "oe_lof": 0.8061800003051758,
+                    "pli": 5.517099828041024e-38
+                  },
+                  "population": {
+                    "availability": "available",
+                    "canonical_url": "https://gnomad.broadinstitute.org/variant/chr17-43124027-ACT-A?dataset=gnomad_r4",
+                    "global_allele_count": 191,
+                    "global_allele_frequency": 0.0001184799984912388,
+                    "global_allele_number": 1612084,
+                    "group_max_allele_frequency": 0.0001645279990043491,
+                    "homozygote_count": 0,
+                    "popmax_population": "nfe",
+                    "rsid": "80357914"
+                  },
+                  "predictors": {
+                    "alphamissense": {
+                      "prediction": null,
+                      "score": null
+                    },
+                    "availability": "no_record",
+                    "bayesdel_addaf": {
+                      "prediction": null,
+                      "score": null
+                    },
+                    "bayesdel_noaf": {
+                      "prediction": null,
+                      "score": null
+                    },
+                    "dann_score": null,
+                    "metasvm": {
+                      "prediction": null,
+                      "score": null
+                    },
+                    "sift": {
+                      "prediction": null,
+                      "score": null
+                    }
+                  },
+                  "spliceai": {
+                    "availability": "no_record",
+                    "ds_ag": null,
+                    "ds_al": null,
+                    "ds_dg": null,
+                    "ds_dl": null,
+                    "gene": null,
+                    "max_delta_score": null,
+                    "prediction": null
+                  },
+                  "vcep_applied": true,
+                  "vcep_panel": "ENIGMA BRCA1/2"
+                },
+                "identity": {
+                  "alternate": "A",
+                  "assembly": "GRCh38",
+                  "canonical_key": "GRCh38:chr17:43124027:ACT:A",
+                  "chromosome": "chr17",
+                  "position": 43124027,
+                  "reference": "ACT",
+                  "variant_type": "DEL"
+                },
+                "limitations": {
+                  "diagnostic_use": "This result is not a patient diagnosis and must not be used as a substitute for qualified clinical interpretation.",
+                  "scope": "Automated variant-level ACMG/AMP decision support for one GRCh38 nuclear SNV, simple indel, or delins smaller than 50 bp.",
+                  "unavailable_context": "Patient phenotype, genotype, family, segregation, de novo, case-specific, and private override evidence were not evaluated."
+                },
+                "provenance": {
+                  "annotation_resolved": true,
+                  "annotation_source": "vep_cache",
+                  "classification_completed": true,
+                  "classifier_version": "3.39.1",
+                  "classifier_version_label": "v3.39.1",
+                  "reference_assembly": "GRCh38",
+                  "reference_versions": [
+                    {
+                      "name": "clingen_dosage",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "clingen_gdv",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "clinvar",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "dbnsfp",
+                      "version": "4.9c"
+                    },
+                    {
+                      "name": "ensembl_vep",
+                      "version": "Release 113"
+                    },
+                    {
+                      "name": "erepo_classifications",
+                      "version": "erepo-2026-06-04"
+                    },
+                    {
+                      "name": "exon_pext",
+                      "version": "2.1.1"
+                    },
+                    {
+                      "name": "g2p",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "gnomad",
+                      "version": "4.1"
+                    },
+                    {
+                      "name": "gnomad_constraint",
+                      "version": "4.1"
+                    },
+                    {
+                      "name": "gof_genes",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "hpo",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "interpro_pfam",
+                      "version": "2026-03"
+                    },
+                    {
+                      "name": "mane_select",
+                      "version": "2.0"
+                    },
+                    {
+                      "name": "mt_apogee2_scores",
+                      "version": "APOGEE2 v2.0"
+                    },
+                    {
+                      "name": "mt_clinvar_variants",
+                      "version": "ClinVar 2026-01 (mtDNA subset)"
+                    },
+                    {
+                      "name": "mt_gene_coordinates",
+                      "version": "rCRS NC_012920.1"
+                    },
+                    {
+                      "name": "mt_haplogroups",
+                      "version": "PhyloTree Build 17 (FU1a)"
+                    },
+                    {
+                      "name": "mt_helix_curated",
+                      "version": "(empty -- clinician-populated via PR-6 UI)"
+                    },
+                    {
+                      "name": "mt_population_frequencies",
+                      "version": "MITOMAP 2026-01 + HelixMTdb 20200327"
+                    },
+                    {
+                      "name": "nuclear_numt_known_regions",
+                      "version": "Calabrese 2017 + Dayama 2014"
+                    },
+                    {
+                      "name": "orphanet",
+                      "version": "2025-12"
+                    },
+                    {
+                      "name": "pubmed",
+                      "version": "(real-time)"
+                    },
+                    {
+                      "name": "spliceai",
+                      "version": "1.3"
+                    },
+                    {
+                      "name": "vcep_specs",
+                      "version": "2026-03"
+                    }
+                  ],
+                  "vep_cache_version": "ensembl-vep-113-mane-v2",
+                  "vep_version": "113"
+                },
+                "status": "success",
+                "warnings": [
+                  "external_link_unavailable"
+                ]
+              },
+              "resolution": {
+                "input_accession": "NM_007294.4",
+                "input_version": "4",
+                "mapping_sources": [
+                  {
+                    "name": "managed_vep_cache",
+                    "version": "113"
+                  },
+                  {
+                    "name": "mane",
+                    "version": "v1.5"
+                  }
+                ],
+                "normalized_query": "NM_007294.4:c.68_69del",
+                "notation_family": "transcript_hgvs",
+                "resolver_asset_version": "pvr-sha256-02400e1bac7f3ed7db3de7027c6e86e6a7fb6d49d1dcf61fb5d8379d1feab137",
+                "resolver_schema_version": "public-variant-resolver-3",
+                "warnings": []
+              },
+              "search_contract_version": "1.0",
+              "status": "resolved"
+            },
+            "usage_boundary": {
+              "intended_use": "professional_variant_review",
+              "not_for": [
+                "patient_diagnosis",
+                "treatment_decision",
+                "standalone_clinical_reporting"
+              ],
+              "patient_context_evaluated": false,
+              "result_type": "automated_variant_level_classification",
+              "review_required": true
+            }
+          }
+        }
+      },
+      "endpoint": "https://api.helena.bio/folklore/v1/mcp"
+    },
+    {
+      "case_id": "transcript-hgvs-gnrhr",
+      "input": "ENST00000226413.5:c.317A>G",
+      "status": "resolved",
+      "identity": {
+        "alternate": "C",
+        "assembly": "GRCh38",
+        "canonical_key": "GRCh38:chr4:67754019:T:C",
+        "chromosome": "chr4",
+        "position": 67754019,
+        "reference": "T",
+        "variant_type": "SNV"
+      },
+      "automated_class": "P",
+      "criteria": "ClinVar,PP3_Supporting",
+      "classifier_version": "3.39.1",
+      "evidence_availability": {
+        "clinvar": "available",
+        "conservation": "available",
+        "dosage": "no_record",
+        "expert": "no_record",
+        "gene_constraints": "available",
+        "population": "available",
+        "predictors": "available",
+        "spliceai": "available"
+      },
+      "observed_at_utc": "2026-09-10T16:37:23Z",
+      "reference_versions": [
+        {
+          "name": "clingen_dosage",
+          "version": "2026-01"
+        },
+        {
+          "name": "clingen_gdv",
+          "version": "2026-01"
+        },
+        {
+          "name": "clinvar",
+          "version": "2026-01"
+        },
+        {
+          "name": "dbnsfp",
+          "version": "4.9c"
+        },
+        {
+          "name": "ensembl_vep",
+          "version": "Release 113"
+        },
+        {
+          "name": "erepo_classifications",
+          "version": "erepo-2026-06-04"
+        },
+        {
+          "name": "exon_pext",
+          "version": "2.1.1"
+        },
+        {
+          "name": "g2p",
+          "version": "2026-01"
+        },
+        {
+          "name": "gnomad",
+          "version": "4.1"
+        },
+        {
+          "name": "gnomad_constraint",
+          "version": "4.1"
+        },
+        {
+          "name": "gof_genes",
+          "version": "2026-01"
+        },
+        {
+          "name": "hpo",
+          "version": "2026-01"
+        },
+        {
+          "name": "interpro_pfam",
+          "version": "2026-03"
+        },
+        {
+          "name": "mane_select",
+          "version": "2.0"
+        },
+        {
+          "name": "mt_apogee2_scores",
+          "version": "APOGEE2 v2.0"
+        },
+        {
+          "name": "mt_clinvar_variants",
+          "version": "ClinVar 2026-01 (mtDNA subset)"
+        },
+        {
+          "name": "mt_gene_coordinates",
+          "version": "rCRS NC_012920.1"
+        },
+        {
+          "name": "mt_haplogroups",
+          "version": "PhyloTree Build 17 (FU1a)"
+        },
+        {
+          "name": "mt_helix_curated",
+          "version": "(empty -- clinician-populated via PR-6 UI)"
+        },
+        {
+          "name": "mt_population_frequencies",
+          "version": "MITOMAP 2026-01 + HelixMTdb 20200327"
+        },
+        {
+          "name": "nuclear_numt_known_regions",
+          "version": "Calabrese 2017 + Dayama 2014"
+        },
+        {
+          "name": "orphanet",
+          "version": "2025-12"
+        },
+        {
+          "name": "pubmed",
+          "version": "(real-time)"
+        },
+        {
+          "name": "spliceai",
+          "version": "1.3"
+        },
+        {
+          "name": "vcep_specs",
+          "version": "2026-03"
+        }
+      ],
+      "interpretation_status": "success",
+      "user_request": "Interpret ENST00000226413.5:c.317A>G and explain the returned criteria.",
+      "tool_call": {
+        "name": "search_variant_evidence",
+        "arguments": {
+          "assembly": "GRCh38",
+          "query": "ENST00000226413.5:c.317A>G"
+        }
+      },
+      "response_guidance": "Report the verified GNRHR allele and the returned automated P classification. Explain only the returned criteria and cite the source evidence.",
+      "raw_response": {
+        "id": 2,
+        "jsonrpc": "2.0",
+        "result": {
+          "_meta": {
+            "io.modelcontextprotocol/serverInfo": {
+              "description": "Classify and interpret supported GRCh38 germline variants under ACMG/AMP with structured evidence, provenance and related literature through the official public, read-only Helena Bioinformatics MCP.",
+              "icons": [
+                {
+                  "mimeType": "image/png",
+                  "src": "https://folklore.helena.bio/images/logos/folklore.png"
+                }
+              ],
+              "name": "folklore",
+              "title": "Folklore Clinical Variant Interpretation MCP",
+              "version": "1.4.1",
+              "websiteUrl": "https://folklore.helena.bio"
+            }
+          },
+          "content": [
+            {
+              "text": "Folklore resolved chr4:67754019 T>C in GNRHR. Automated ACMG/AMP class: P; criteria: ClinVar,PP3_Supporting. This result is not a patient diagnosis and must not be used as a substitute for qualified clinical interpretation. Patient phenotype, genotype, family, segregation, de novo, case-specific, and private override evidence were not evaluated. Record: https://folklore.helena.bio/variant?assembly=GRCh38&chromosome=chr4&position=67754019&reference=T&alternate=C",
+              "type": "text"
+            }
+          ],
+          "isError": false,
+          "resultType": "complete",
+          "structuredContent": {
+            "adapter_error": null,
+            "contract_version": "1",
+            "record_url": "https://folklore.helena.bio/variant?assembly=GRCh38&chromosome=chr4&position=67754019&reference=T&alternate=C",
+            "result": {
+              "identity": {
+                "alternate": "C",
+                "assembly": "GRCh38",
+                "canonical_key": "GRCh38:chr4:67754019:T:C",
+                "chromosome": "chr4",
+                "position": 67754019,
+                "reference": "T",
+                "variant_type": "SNV"
+              },
+              "interpretation": {
+                "annotation": {
+                  "biotype": "protein_coding",
+                  "consequence": "missense_variant",
+                  "domains": [
+                    "ENSP_mappings:7br3",
+                    "ENSP_mappings:AF",
+                    "Gene3D:1",
+                    "PANTHER:PTHR24241",
+                    "PROSITE_profiles:PS50262",
+                    "Pfam:PF00001",
+                    "Prints:PR00529",
+                    "Superfamily:SSF81321"
+                  ],
+                  "exon_number": "1/3",
+                  "gene_id": "ENSG00000109163",
+                  "gene_symbol": "GNRHR",
+                  "impact": "MODERATE",
+                  "transcript_id": "ENST00000226413"
+                },
+                "classification": {
+                  "automated_class": "P",
+                  "confidence_score": 0.8500000238418579,
+                  "criteria": "ClinVar,PP3_Supporting",
+                  "framework": "acmg_2015",
+                  "pm1_evidence_availability": "not_applicable",
+                  "pm1_evidence_source": null
+                },
+                "contract_version": "1.0",
+                "display": {
+                  "hgvs_cdna": "ENST00000226413.5:c.317A>G",
+                  "hgvs_genomic": "chr4:g.67754019T>C",
+                  "hgvs_protein": "ENSP00000226413.5:p.Gln106Arg",
+                  "label": "chr4:67754019 T>C"
+                },
+                "evidence": {
+                  "clinvar": {
+                    "availability": "available",
+                    "canonical_url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/16023/",
+                    "clinical_significance": "Pathogenic/Likely_pathogenic",
+                    "disease_names": [
+                      "GNRHR-related_disorder",
+                      "Gonadotropin_deficiency",
+                      "Hypogonadotropic_hypogonadism",
+                      "Hypogonadotropic_hypogonadism_7_with_or_without_anosmia",
+                      "Inborn_genetic_diseases",
+                      "Infertility_disorder",
+                      "Isolated_congenital_hypogonadotropic_hypogonadism",
+                      "Pituitary_hormone_deficiency",
+                      "not_provided"
+                    ],
+                    "protein_representation": null,
+                    "review_stars": 2,
+                    "review_status": "criteria_provided,_multiple_submitters,_no_conflicts",
+                    "rsid": "104893836",
+                    "variation_id": "16023"
+                  },
+                  "clinvar_review_stars": 2,
+                  "clinvar_significance": "Pathogenic/Likely_pathogenic",
+                  "conservation": {
+                    "availability": "available",
+                    "gerp_rs": 6.170000076293945,
+                    "phylop100way_vertebrate": 7.946000099182129
+                  },
+                  "dosage": {
+                    "availability": "no_record",
+                    "haploinsufficiency_score": null,
+                    "triplosensitivity_score": null
+                  },
+                  "erepo_assertion": null,
+                  "erepo_disease": null,
+                  "erepo_panel": null,
+                  "expert": {
+                    "availability": "no_record",
+                    "erepo_assertion": null,
+                    "erepo_disease": null,
+                    "erepo_panel": null,
+                    "erepo_summary": null,
+                    "erepo_url": null,
+                    "vcep_applied": false,
+                    "vcep_panel": null
+                  },
+                  "external_links": {
+                    "clingen_erepo": null,
+                    "clinvar": "https://www.ncbi.nlm.nih.gov/clinvar/variation/16023/",
+                    "ensembl_gene": "https://www.ensembl.org/Homo_sapiens/Gene/Summary?g=ENSG00000109163",
+                    "ensembl_transcript": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000226413",
+                    "gnomad": "https://gnomad.broadinstitute.org/variant/chr4-67754019-T-C?dataset=gnomad_r4"
+                  },
+                  "gene_constraints": {
+                    "availability": "available",
+                    "loeuf": 0.7791299819946289,
+                    "missense_z": 0.35155999660491943,
+                    "oe_lof": 0.49838000535964966,
+                    "pli": 0.021412000060081482
+                  },
+                  "population": {
+                    "availability": "available",
+                    "canonical_url": "https://gnomad.broadinstitute.org/variant/chr4-67754019-T-C?dataset=gnomad_r4",
+                    "global_allele_count": 5708,
+                    "global_allele_frequency": 0.003536839969456196,
+                    "global_allele_number": 1613870,
+                    "group_max_allele_frequency": 0.005278789903968573,
+                    "homozygote_count": 10,
+                    "popmax_population": "nfe",
+                    "rsid": "104893836"
+                  },
+                  "predictors": {
+                    "alphamissense": {
+                      "prediction": "A;B",
+                      "score": null
+                    },
+                    "availability": "available",
+                    "bayesdel_addaf": {
+                      "prediction": "T",
+                      "score": 0.009643539786338806
+                    },
+                    "bayesdel_noaf": {
+                      "prediction": "D",
+                      "score": 0.2462030053138733
+                    },
+                    "dann_score": 0.9957625865936279,
+                    "metasvm": {
+                      "prediction": "T",
+                      "score": -0.3199000060558319
+                    },
+                    "sift": {
+                      "prediction": "D;T",
+                      "score": null
+                    }
+                  },
+                  "spliceai": {
+                    "availability": "available",
+                    "ds_ag": 0.0,
+                    "ds_al": 0.0,
+                    "ds_dg": 0.0,
+                    "ds_dl": 0.0,
+                    "gene": "GNRHR",
+                    "max_delta_score": 0.0,
+                    "prediction": "GNRHR|0.0|0.0|0.0|0.0"
+                  },
+                  "vcep_applied": false,
+                  "vcep_panel": null
+                },
+                "identity": {
+                  "alternate": "C",
+                  "assembly": "GRCh38",
+                  "canonical_key": "GRCh38:chr4:67754019:T:C",
+                  "chromosome": "chr4",
+                  "position": 67754019,
+                  "reference": "T",
+                  "variant_type": "SNV"
+                },
+                "limitations": {
+                  "diagnostic_use": "This result is not a patient diagnosis and must not be used as a substitute for qualified clinical interpretation.",
+                  "scope": "Automated variant-level ACMG/AMP decision support for one GRCh38 nuclear SNV, simple indel, or delins smaller than 50 bp.",
+                  "unavailable_context": "Patient phenotype, genotype, family, segregation, de novo, case-specific, and private override evidence were not evaluated."
+                },
+                "provenance": {
+                  "annotation_resolved": true,
+                  "annotation_source": "vep_cache",
+                  "classification_completed": true,
+                  "classifier_version": "3.39.1",
+                  "classifier_version_label": "v3.39.1",
+                  "reference_assembly": "GRCh38",
+                  "reference_versions": [
+                    {
+                      "name": "clingen_dosage",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "clingen_gdv",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "clinvar",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "dbnsfp",
+                      "version": "4.9c"
+                    },
+                    {
+                      "name": "ensembl_vep",
+                      "version": "Release 113"
+                    },
+                    {
+                      "name": "erepo_classifications",
+                      "version": "erepo-2026-06-04"
+                    },
+                    {
+                      "name": "exon_pext",
+                      "version": "2.1.1"
+                    },
+                    {
+                      "name": "g2p",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "gnomad",
+                      "version": "4.1"
+                    },
+                    {
+                      "name": "gnomad_constraint",
+                      "version": "4.1"
+                    },
+                    {
+                      "name": "gof_genes",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "hpo",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "interpro_pfam",
+                      "version": "2026-03"
+                    },
+                    {
+                      "name": "mane_select",
+                      "version": "2.0"
+                    },
+                    {
+                      "name": "mt_apogee2_scores",
+                      "version": "APOGEE2 v2.0"
+                    },
+                    {
+                      "name": "mt_clinvar_variants",
+                      "version": "ClinVar 2026-01 (mtDNA subset)"
+                    },
+                    {
+                      "name": "mt_gene_coordinates",
+                      "version": "rCRS NC_012920.1"
+                    },
+                    {
+                      "name": "mt_haplogroups",
+                      "version": "PhyloTree Build 17 (FU1a)"
+                    },
+                    {
+                      "name": "mt_helix_curated",
+                      "version": "(empty -- clinician-populated via PR-6 UI)"
+                    },
+                    {
+                      "name": "mt_population_frequencies",
+                      "version": "MITOMAP 2026-01 + HelixMTdb 20200327"
+                    },
+                    {
+                      "name": "nuclear_numt_known_regions",
+                      "version": "Calabrese 2017 + Dayama 2014"
+                    },
+                    {
+                      "name": "orphanet",
+                      "version": "2025-12"
+                    },
+                    {
+                      "name": "pubmed",
+                      "version": "(real-time)"
+                    },
+                    {
+                      "name": "spliceai",
+                      "version": "1.3"
+                    },
+                    {
+                      "name": "vcep_specs",
+                      "version": "2026-03"
+                    }
+                  ],
+                  "vep_cache_version": "ensembl-vep-113-mane-v2",
+                  "vep_version": "113"
+                },
+                "status": "success",
+                "warnings": [
+                  "expert_evidence_not_available"
+                ]
+              },
+              "resolution": {
+                "input_accession": "ENST00000226413.5",
+                "input_version": "5",
+                "mapping_sources": [
+                  {
+                    "name": "managed_vep_cache",
+                    "version": "113"
+                  }
+                ],
+                "normalized_query": "ENST00000226413.5:c.317A>G",
+                "notation_family": "transcript_hgvs",
+                "resolver_asset_version": "pvr-sha256-02400e1bac7f3ed7db3de7027c6e86e6a7fb6d49d1dcf61fb5d8379d1feab137",
+                "resolver_schema_version": "public-variant-resolver-3",
+                "warnings": []
+              },
+              "search_contract_version": "1.0",
+              "status": "resolved"
+            },
+            "usage_boundary": {
+              "intended_use": "professional_variant_review",
+              "not_for": [
+                "patient_diagnosis",
+                "treatment_decision",
+                "standalone_clinical_reporting"
+              ],
+              "patient_context_evaluated": false,
+              "result_type": "automated_variant_level_classification",
+              "review_required": true
+            }
+          }
+        }
+      },
+      "endpoint": "https://api.helena.bio/folklore/v1/mcp"
+    },
+    {
+      "case_id": "canonical-brca1-deletion",
+      "input": "GRCh38:chr17:43124027:ACT:A",
+      "status": "resolved",
+      "identity": {
+        "alternate": "A",
+        "assembly": "GRCh38",
+        "canonical_key": "GRCh38:chr17:43124027:ACT:A",
+        "chromosome": "chr17",
+        "position": 43124027,
+        "reference": "ACT",
+        "variant_type": "DEL"
+      },
+      "automated_class": "P",
+      "criteria": "PVS1,PS1,BS1_Strong[VCEP][af_grpmax] [VCEP:ENIGMA BRCA1/2 v1.2.0] [ERepo:ENIGMA BRCA1 and BRCA2 VCEP,BRCA1-related cancer predisposition]",
+      "classifier_version": "3.39.1",
+      "evidence_availability": {
+        "clinvar": "available",
+        "conservation": "no_record",
+        "dosage": "available",
+        "expert": "available",
+        "gene_constraints": "available",
+        "population": "available",
+        "predictors": "no_record",
+        "spliceai": "no_record"
+      },
+      "observed_at_utc": "2026-09-10T16:37:33Z",
+      "reference_versions": [
+        {
+          "name": "clingen_dosage",
+          "version": "2026-01"
+        },
+        {
+          "name": "clingen_gdv",
+          "version": "2026-01"
+        },
+        {
+          "name": "clinvar",
+          "version": "2026-01"
+        },
+        {
+          "name": "dbnsfp",
+          "version": "4.9c"
+        },
+        {
+          "name": "ensembl_vep",
+          "version": "Release 113"
+        },
+        {
+          "name": "erepo_classifications",
+          "version": "erepo-2026-06-04"
+        },
+        {
+          "name": "exon_pext",
+          "version": "2.1.1"
+        },
+        {
+          "name": "g2p",
+          "version": "2026-01"
+        },
+        {
+          "name": "gnomad",
+          "version": "4.1"
+        },
+        {
+          "name": "gnomad_constraint",
+          "version": "4.1"
+        },
+        {
+          "name": "gof_genes",
+          "version": "2026-01"
+        },
+        {
+          "name": "hpo",
+          "version": "2026-01"
+        },
+        {
+          "name": "interpro_pfam",
+          "version": "2026-03"
+        },
+        {
+          "name": "mane_select",
+          "version": "2.0"
+        },
+        {
+          "name": "mt_apogee2_scores",
+          "version": "APOGEE2 v2.0"
+        },
+        {
+          "name": "mt_clinvar_variants",
+          "version": "ClinVar 2026-01 (mtDNA subset)"
+        },
+        {
+          "name": "mt_gene_coordinates",
+          "version": "rCRS NC_012920.1"
+        },
+        {
+          "name": "mt_haplogroups",
+          "version": "PhyloTree Build 17 (FU1a)"
+        },
+        {
+          "name": "mt_helix_curated",
+          "version": "(empty -- clinician-populated via PR-6 UI)"
+        },
+        {
+          "name": "mt_population_frequencies",
+          "version": "MITOMAP 2026-01 + HelixMTdb 20200327"
+        },
+        {
+          "name": "nuclear_numt_known_regions",
+          "version": "Calabrese 2017 + Dayama 2014"
+        },
+        {
+          "name": "orphanet",
+          "version": "2025-12"
+        },
+        {
+          "name": "pubmed",
+          "version": "(real-time)"
+        },
+        {
+          "name": "spliceai",
+          "version": "1.3"
+        },
+        {
+          "name": "vcep_specs",
+          "version": "2026-03"
+        }
+      ],
+      "interpretation_status": "success",
+      "user_request": "Check the identity and evidence for GRCh38:chr17:43124027:ACT:A.",
+      "tool_call": {
+        "name": "search_variant_evidence",
+        "arguments": {
+          "assembly": "GRCh38",
+          "query": "GRCh38:chr17:43124027:ACT:A"
+        }
+      },
+      "response_guidance": "Report the exact normalized GRCh38 allele. Keep ClinVar assertions separate from the automated classification.",
+      "raw_response": {
+        "id": 3,
+        "jsonrpc": "2.0",
+        "result": {
+          "_meta": {
+            "io.modelcontextprotocol/serverInfo": {
+              "description": "Classify and interpret supported GRCh38 germline variants under ACMG/AMP with structured evidence, provenance and related literature through the official public, read-only Helena Bioinformatics MCP.",
+              "icons": [
+                {
+                  "mimeType": "image/png",
+                  "src": "https://folklore.helena.bio/images/logos/folklore.png"
+                }
+              ],
+              "name": "folklore",
+              "title": "Folklore Clinical Variant Interpretation MCP",
+              "version": "1.4.1",
+              "websiteUrl": "https://folklore.helena.bio"
+            }
+          },
+          "content": [
+            {
+              "text": "Folklore resolved chr17:43124027 ACT>A in BRCA1. Automated ACMG/AMP class: P; criteria: PVS1,PS1,BS1_Strong[VCEP][af_grpmax] [VCEP:ENIGMA BRCA1/2 v1.2.0] [ERepo:ENIGMA BRCA1 and BRCA2 VCEP,BRCA1-related cancer predisposition]. This result is not a patient diagnosis and must not be used as a substitute for qualified clinical interpretation. Patient phenotype, genotype, family, segregation, de novo, case-specific, and private override evidence were not evaluated. Record: https://folklore.helena.bio/variant?assembly=GRCh38&chromosome=chr17&position=43124027&reference=ACT&alternate=A",
+              "type": "text"
+            }
+          ],
+          "isError": false,
+          "resultType": "complete",
+          "structuredContent": {
+            "adapter_error": null,
+            "contract_version": "1",
+            "record_url": "https://folklore.helena.bio/variant?assembly=GRCh38&chromosome=chr17&position=43124027&reference=ACT&alternate=A",
+            "result": {
+              "identity": {
+                "alternate": "A",
+                "assembly": "GRCh38",
+                "canonical_key": "GRCh38:chr17:43124027:ACT:A",
+                "chromosome": "chr17",
+                "position": 43124027,
+                "reference": "ACT",
+                "variant_type": "DEL"
+              },
+              "interpretation": {
+                "annotation": {
+                  "biotype": "protein_coding",
+                  "consequence": "frameshift_variant",
+                  "domains": [
+                    "CDD:cd16498",
+                    "ENSP_mappings:1jm7",
+                    "ENSP_mappings:7jzv",
+                    "ENSP_mappings:7lyb",
+                    "ENSP_mappings:8grq",
+                    "ENSP_mappings:AF",
+                    "Gene3D:3",
+                    "PANTHER:PTHR13763",
+                    "PIRSF:PIRSF001734",
+                    "Superfamily:SSF57850"
+                  ],
+                  "exon_number": "2/23",
+                  "gene_id": "ENSG00000012048",
+                  "gene_symbol": "BRCA1",
+                  "impact": "HIGH",
+                  "transcript_id": "ENST00000357654"
+                },
+                "classification": {
+                  "automated_class": "P",
+                  "confidence_score": 0.8500000238418579,
+                  "criteria": "PVS1,PS1,BS1_Strong[VCEP][af_grpmax] [VCEP:ENIGMA BRCA1/2 v1.2.0] [ERepo:ENIGMA BRCA1 and BRCA2 VCEP,BRCA1-related cancer predisposition]",
+                  "framework": "acmg_2015",
+                  "pm1_evidence_availability": "not_applicable",
+                  "pm1_evidence_source": null
+                },
+                "contract_version": "1.0",
+                "display": {
+                  "hgvs_cdna": "ENST00000357654.9:c.68_69del",
+                  "hgvs_genomic": "chr17:g.43124030_43124031del",
+                  "hgvs_protein": "ENSP00000350283.3:p.Glu23ValfsTer17",
+                  "label": "chr17:43124027 ACT>A"
+                },
+                "evidence": {
+                  "clinvar": {
+                    "availability": "available",
+                    "canonical_url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/17662/",
+                    "clinical_significance": "Pathogenic",
+                    "disease_names": [
+                      "BRCA1-related_cancer_predisposition",
+                      "BRCA1-related_disorder",
+                      "Breast-ovarian_cancer,_familial,_susceptibility_to,_1",
+                      "Breast_and/or_ovarian_cancer",
+                      "Endometrial_carcinoma",
+                      "Familial_cancer_of_breast",
+                      "Fanconi_anemia,_complementation_group_S",
+                      "Hereditary_breast_ovarian_cancer_syndrome",
+                      "Hereditary_cancer-predisposing_syndrome",
+                      "Inherited_breast_cancer_and_ovarian_cancer",
+                      "Inherited_ovarian_cancer_(without_breast_cancer)",
+                      "Invasive_medullary_breast_carcinoma",
+                      "Malignant_tumor_of_breast",
+                      "Ovarian_neoplasm",
+                      "Pancreatic_cancer,_susceptibility_to,_4",
+                      "Triple-negative_breast_cancer",
+                      "not_provided"
+                    ],
+                    "protein_representation": null,
+                    "review_stars": 3,
+                    "review_status": "reviewed_by_expert_panel",
+                    "rsid": "80357914",
+                    "variation_id": "17662"
+                  },
+                  "clinvar_review_stars": 3,
+                  "clinvar_significance": "Pathogenic",
+                  "conservation": {
+                    "availability": "no_record",
+                    "gerp_rs": null,
+                    "phylop100way_vertebrate": null
+                  },
+                  "dosage": {
+                    "availability": "available",
+                    "haploinsufficiency_score": 3,
+                    "triplosensitivity_score": 0
+                  },
+                  "erepo_assertion": "Pathogenic",
+                  "erepo_disease": "BRCA1-related cancer predisposition",
+                  "erepo_panel": "ENIGMA BRCA1 and BRCA2 VCEP",
+                  "expert": {
+                    "availability": "available",
+                    "erepo_assertion": "Pathogenic",
+                    "erepo_disease": "BRCA1-related cancer predisposition",
+                    "erepo_panel": "ENIGMA BRCA1 and BRCA2 VCEP",
+                    "erepo_summary": "The c.68_69del variant in BRCA1 is a deletion of two nucleotides, predicted to encode a frameshift with consequent premature termination of the protein at codon 17 of the frameshift, or amino acid 39 (p.Glu23ValfsTer17). This variant is present in gnomAD v2.1 (exomes only, non-cancer subset) or gnomAD v3.1 (non-cancer subset) but is below the ENIGMA BRCA1/2 VCEP threshold >0.00002 for BS1_Supporting (PM2_Supporting, BS1, and BA1 are not met). Frameshift variant predicted to cause a premature stop codon in biologically-relevant-exon 3 leading to nonsense mediated decay (PVS1 met). The ENIGMA BRCA1/2 VCEP considered multiple lines of functional and clinical evidence to define exon-specific weights for PTC in BRCA1, and results indicate that strong evidence towards pathogenicity may be applied for a PTC variant in BRCA1 exon 3 (PM5_Strong (PTC)). Reported by one calibrated study to exhibit protein function similar to pathogenic control variants (PMID: 32546644) (PS3 met).In summary, this variant meets the criteria to be classified as a Pathogenic variant  variant for BRCA1-related cancer predisposition based on the ACMG/AMP criteria applied as specified by the ENIGMA BRCA1/2 VCEP (PVS1, PM5_Strong (PTC), PS3).",
+                    "erepo_url": null,
+                    "vcep_applied": true,
+                    "vcep_panel": "ENIGMA BRCA1/2"
+                  },
+                  "external_links": {
+                    "clingen_erepo": null,
+                    "clinvar": "https://www.ncbi.nlm.nih.gov/clinvar/variation/17662/",
+                    "ensembl_gene": "https://www.ensembl.org/Homo_sapiens/Gene/Summary?g=ENSG00000012048",
+                    "ensembl_transcript": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000357654",
+                    "gnomad": "https://gnomad.broadinstitute.org/variant/chr17-43124027-ACT-A?dataset=gnomad_r4"
+                  },
+                  "gene_constraints": {
+                    "availability": "available",
+                    "loeuf": 0.927590012550354,
+                    "missense_z": 1.7336000204086304,
+                    "oe_lof": 0.8061800003051758,
+                    "pli": 5.517099828041024e-38
+                  },
+                  "population": {
+                    "availability": "available",
+                    "canonical_url": "https://gnomad.broadinstitute.org/variant/chr17-43124027-ACT-A?dataset=gnomad_r4",
+                    "global_allele_count": 191,
+                    "global_allele_frequency": 0.0001184799984912388,
+                    "global_allele_number": 1612084,
+                    "group_max_allele_frequency": 0.0001645279990043491,
+                    "homozygote_count": 0,
+                    "popmax_population": "nfe",
+                    "rsid": "80357914"
+                  },
+                  "predictors": {
+                    "alphamissense": {
+                      "prediction": null,
+                      "score": null
+                    },
+                    "availability": "no_record",
+                    "bayesdel_addaf": {
+                      "prediction": null,
+                      "score": null
+                    },
+                    "bayesdel_noaf": {
+                      "prediction": null,
+                      "score": null
+                    },
+                    "dann_score": null,
+                    "metasvm": {
+                      "prediction": null,
+                      "score": null
+                    },
+                    "sift": {
+                      "prediction": null,
+                      "score": null
+                    }
+                  },
+                  "spliceai": {
+                    "availability": "no_record",
+                    "ds_ag": null,
+                    "ds_al": null,
+                    "ds_dg": null,
+                    "ds_dl": null,
+                    "gene": null,
+                    "max_delta_score": null,
+                    "prediction": null
+                  },
+                  "vcep_applied": true,
+                  "vcep_panel": "ENIGMA BRCA1/2"
+                },
+                "identity": {
+                  "alternate": "A",
+                  "assembly": "GRCh38",
+                  "canonical_key": "GRCh38:chr17:43124027:ACT:A",
+                  "chromosome": "chr17",
+                  "position": 43124027,
+                  "reference": "ACT",
+                  "variant_type": "DEL"
+                },
+                "limitations": {
+                  "diagnostic_use": "This result is not a patient diagnosis and must not be used as a substitute for qualified clinical interpretation.",
+                  "scope": "Automated variant-level ACMG/AMP decision support for one GRCh38 nuclear SNV, simple indel, or delins smaller than 50 bp.",
+                  "unavailable_context": "Patient phenotype, genotype, family, segregation, de novo, case-specific, and private override evidence were not evaluated."
+                },
+                "provenance": {
+                  "annotation_resolved": true,
+                  "annotation_source": "vep_cache",
+                  "classification_completed": true,
+                  "classifier_version": "3.39.1",
+                  "classifier_version_label": "v3.39.1",
+                  "reference_assembly": "GRCh38",
+                  "reference_versions": [
+                    {
+                      "name": "clingen_dosage",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "clingen_gdv",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "clinvar",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "dbnsfp",
+                      "version": "4.9c"
+                    },
+                    {
+                      "name": "ensembl_vep",
+                      "version": "Release 113"
+                    },
+                    {
+                      "name": "erepo_classifications",
+                      "version": "erepo-2026-06-04"
+                    },
+                    {
+                      "name": "exon_pext",
+                      "version": "2.1.1"
+                    },
+                    {
+                      "name": "g2p",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "gnomad",
+                      "version": "4.1"
+                    },
+                    {
+                      "name": "gnomad_constraint",
+                      "version": "4.1"
+                    },
+                    {
+                      "name": "gof_genes",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "hpo",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "interpro_pfam",
+                      "version": "2026-03"
+                    },
+                    {
+                      "name": "mane_select",
+                      "version": "2.0"
+                    },
+                    {
+                      "name": "mt_apogee2_scores",
+                      "version": "APOGEE2 v2.0"
+                    },
+                    {
+                      "name": "mt_clinvar_variants",
+                      "version": "ClinVar 2026-01 (mtDNA subset)"
+                    },
+                    {
+                      "name": "mt_gene_coordinates",
+                      "version": "rCRS NC_012920.1"
+                    },
+                    {
+                      "name": "mt_haplogroups",
+                      "version": "PhyloTree Build 17 (FU1a)"
+                    },
+                    {
+                      "name": "mt_helix_curated",
+                      "version": "(empty -- clinician-populated via PR-6 UI)"
+                    },
+                    {
+                      "name": "mt_population_frequencies",
+                      "version": "MITOMAP 2026-01 + HelixMTdb 20200327"
+                    },
+                    {
+                      "name": "nuclear_numt_known_regions",
+                      "version": "Calabrese 2017 + Dayama 2014"
+                    },
+                    {
+                      "name": "orphanet",
+                      "version": "2025-12"
+                    },
+                    {
+                      "name": "pubmed",
+                      "version": "(real-time)"
+                    },
+                    {
+                      "name": "spliceai",
+                      "version": "1.3"
+                    },
+                    {
+                      "name": "vcep_specs",
+                      "version": "2026-03"
+                    }
+                  ],
+                  "vep_cache_version": "ensembl-vep-113-mane-v2",
+                  "vep_version": "113"
+                },
+                "status": "success",
+                "warnings": [
+                  "external_link_unavailable"
+                ]
+              },
+              "resolution": {
+                "input_accession": null,
+                "input_version": null,
+                "mapping_sources": [],
+                "normalized_query": "chr17:43124027 ACT>A",
+                "notation_family": "coordinate",
+                "resolver_asset_version": "pvr-sha256-02400e1bac7f3ed7db3de7027c6e86e6a7fb6d49d1dcf61fb5d8379d1feab137",
+                "resolver_schema_version": "public-variant-resolver-3",
+                "warnings": []
+              },
+              "search_contract_version": "1.0",
+              "status": "resolved"
+            },
+            "usage_boundary": {
+              "intended_use": "professional_variant_review",
+              "not_for": [
+                "patient_diagnosis",
+                "treatment_decision",
+                "standalone_clinical_reporting"
+              ],
+              "patient_context_evaluated": false,
+              "result_type": "automated_variant_level_classification",
+              "review_required": true
+            }
+          }
+        }
+      },
+      "endpoint": "https://api.helena.bio/folklore/v1/mcp"
+    },
+    {
+      "case_id": "vus-brca1",
+      "input": "chr17:43115777 A>G",
+      "status": "resolved",
+      "identity": {
+        "alternate": "G",
+        "assembly": "GRCh38",
+        "canonical_key": "GRCh38:chr17:43115777:A:G",
+        "chromosome": "chr17",
+        "position": 43115777,
+        "reference": "A",
+        "variant_type": "SNV"
+      },
+      "automated_class": "VUS",
+      "criteria": "PM1,PM2_Supporting [VCEP:ENIGMA BRCA1/2 v1.2.0] [ERepo:ENIGMA BRCA1 and BRCA2 VCEP,BRCA1-related cancer predisposition]",
+      "classifier_version": "3.39.1",
+      "evidence_availability": {
+        "clinvar": "available",
+        "conservation": "available",
+        "dosage": "available",
+        "expert": "available",
+        "gene_constraints": "available",
+        "population": "no_record",
+        "predictors": "available",
+        "spliceai": "available"
+      },
+      "observed_at_utc": "2026-09-10T16:37:43Z",
+      "reference_versions": [
+        {
+          "name": "clingen_dosage",
+          "version": "2026-01"
+        },
+        {
+          "name": "clingen_gdv",
+          "version": "2026-01"
+        },
+        {
+          "name": "clinvar",
+          "version": "2026-01"
+        },
+        {
+          "name": "dbnsfp",
+          "version": "4.9c"
+        },
+        {
+          "name": "ensembl_vep",
+          "version": "Release 113"
+        },
+        {
+          "name": "erepo_classifications",
+          "version": "erepo-2026-06-04"
+        },
+        {
+          "name": "exon_pext",
+          "version": "2.1.1"
+        },
+        {
+          "name": "g2p",
+          "version": "2026-01"
+        },
+        {
+          "name": "gnomad",
+          "version": "4.1"
+        },
+        {
+          "name": "gnomad_constraint",
+          "version": "4.1"
+        },
+        {
+          "name": "gof_genes",
+          "version": "2026-01"
+        },
+        {
+          "name": "hpo",
+          "version": "2026-01"
+        },
+        {
+          "name": "interpro_pfam",
+          "version": "2026-03"
+        },
+        {
+          "name": "mane_select",
+          "version": "2.0"
+        },
+        {
+          "name": "mt_apogee2_scores",
+          "version": "APOGEE2 v2.0"
+        },
+        {
+          "name": "mt_clinvar_variants",
+          "version": "ClinVar 2026-01 (mtDNA subset)"
+        },
+        {
+          "name": "mt_gene_coordinates",
+          "version": "rCRS NC_012920.1"
+        },
+        {
+          "name": "mt_haplogroups",
+          "version": "PhyloTree Build 17 (FU1a)"
+        },
+        {
+          "name": "mt_helix_curated",
+          "version": "(empty -- clinician-populated via PR-6 UI)"
+        },
+        {
+          "name": "mt_population_frequencies",
+          "version": "MITOMAP 2026-01 + HelixMTdb 20200327"
+        },
+        {
+          "name": "nuclear_numt_known_regions",
+          "version": "Calabrese 2017 + Dayama 2014"
+        },
+        {
+          "name": "orphanet",
+          "version": "2025-12"
+        },
+        {
+          "name": "pubmed",
+          "version": "(real-time)"
+        },
+        {
+          "name": "spliceai",
+          "version": "1.3"
+        },
+        {
+          "name": "vcep_specs",
+          "version": "2026-03"
+        }
+      ],
+      "interpretation_status": "success",
+      "user_request": "Review this VUS: chr17:43115777 A>G on GRCh38.",
+      "tool_call": {
+        "name": "search_variant_evidence",
+        "arguments": {
+          "assembly": "GRCh38",
+          "query": "chr17:43115777 A>G"
+        }
+      },
+      "response_guidance": "Report VUS with the returned criteria and evidence availability. Do not relabel uncertainty as pathogenic or benign.",
+      "raw_response": {
+        "id": 4,
+        "jsonrpc": "2.0",
+        "result": {
+          "_meta": {
+            "io.modelcontextprotocol/serverInfo": {
+              "description": "Classify and interpret supported GRCh38 germline variants under ACMG/AMP with structured evidence, provenance and related literature through the official public, read-only Helena Bioinformatics MCP.",
+              "icons": [
+                {
+                  "mimeType": "image/png",
+                  "src": "https://folklore.helena.bio/images/logos/folklore.png"
+                }
+              ],
+              "name": "folklore",
+              "title": "Folklore Clinical Variant Interpretation MCP",
+              "version": "1.4.1",
+              "websiteUrl": "https://folklore.helena.bio"
+            }
+          },
+          "content": [
+            {
+              "text": "Folklore resolved chr17:43115777 A>G in BRCA1. Automated ACMG/AMP class: VUS; criteria: PM1,PM2_Supporting [VCEP:ENIGMA BRCA1/2 v1.2.0] [ERepo:ENIGMA BRCA1 and BRCA2 VCEP,BRCA1-related cancer predisposition]. This result is not a patient diagnosis and must not be used as a substitute for qualified clinical interpretation. Patient phenotype, genotype, family, segregation, de novo, case-specific, and private override evidence were not evaluated. Record: https://folklore.helena.bio/variant?assembly=GRCh38&chromosome=chr17&position=43115777&reference=A&alternate=G",
+              "type": "text"
+            }
+          ],
+          "isError": false,
+          "resultType": "complete",
+          "structuredContent": {
+            "adapter_error": null,
+            "contract_version": "1",
+            "record_url": "https://folklore.helena.bio/variant?assembly=GRCh38&chromosome=chr17&position=43115777&reference=A&alternate=G",
+            "result": {
+              "identity": {
+                "alternate": "G",
+                "assembly": "GRCh38",
+                "canonical_key": "GRCh38:chr17:43115777:A:G",
+                "chromosome": "chr17",
+                "position": 43115777,
+                "reference": "A",
+                "variant_type": "SNV"
+              },
+              "interpretation": {
+                "annotation": {
+                  "biotype": "protein_coding",
+                  "consequence": "missense_variant,splice_region_variant",
+                  "domains": [
+                    "CDD:cd16498",
+                    "ENSP_mappings:1jm7",
+                    "ENSP_mappings:7jzv",
+                    "ENSP_mappings:7lyb",
+                    "ENSP_mappings:8grq",
+                    "ENSP_mappings:AF",
+                    "Gene3D:3",
+                    "PANTHER:PTHR13763",
+                    "PIRSF:PIRSF001734",
+                    "PROSITE_profiles:PS50089",
+                    "Pfam:PF00097",
+                    "SMART:SM00184",
+                    "Superfamily:SSF57850"
+                  ],
+                  "exon_number": "3/23",
+                  "gene_id": "ENSG00000012048",
+                  "gene_symbol": "BRCA1",
+                  "impact": "MODERATE",
+                  "transcript_id": "ENST00000357654"
+                },
+                "classification": {
+                  "automated_class": "VUS",
+                  "confidence_score": 0.5,
+                  "criteria": "PM1,PM2_Supporting [VCEP:ENIGMA BRCA1/2 v1.2.0] [ERepo:ENIGMA BRCA1 and BRCA2 VCEP,BRCA1-related cancer predisposition]",
+                  "framework": "acmg_2015",
+                  "pm1_evidence_availability": "available",
+                  "pm1_evidence_source": "pfam"
+                },
+                "contract_version": "1.0",
+                "display": {
+                  "hgvs_cdna": "ENST00000357654.9:c.83T>C",
+                  "hgvs_genomic": "chr17:g.43115777A>G",
+                  "hgvs_protein": "ENSP00000350283.3:p.Leu28Pro",
+                  "label": "chr17:43115777 A>G"
+                },
+                "evidence": {
+                  "clinvar": {
+                    "availability": "available",
+                    "canonical_url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/55732/",
+                    "clinical_significance": "Uncertain_significance",
+                    "disease_names": [
+                      "BRCA1-related_cancer_predisposition",
+                      "Breast-ovarian_cancer,_familial,_susceptibility_to,_1",
+                      "Hereditary_breast_ovarian_cancer_syndrome",
+                      "Hereditary_cancer-predisposing_syndrome",
+                      "not_provided",
+                      "not_specified"
+                    ],
+                    "protein_representation": null,
+                    "review_stars": 3,
+                    "review_status": "reviewed_by_expert_panel",
+                    "rsid": "80357266",
+                    "variation_id": "55732"
+                  },
+                  "clinvar_review_stars": 3,
+                  "clinvar_significance": "Uncertain_significance",
+                  "conservation": {
+                    "availability": "available",
+                    "gerp_rs": 5.96999979019165,
+                    "phylop100way_vertebrate": 4.109000205993652
+                  },
+                  "dosage": {
+                    "availability": "available",
+                    "haploinsufficiency_score": 3,
+                    "triplosensitivity_score": 0
+                  },
+                  "erepo_assertion": "Uncertain Significance",
+                  "erepo_disease": "BRCA1-related cancer predisposition",
+                  "erepo_panel": "ENIGMA BRCA1 and BRCA2 VCEP",
+                  "expert": {
+                    "availability": "available",
+                    "erepo_assertion": "Uncertain Significance",
+                    "erepo_disease": "BRCA1-related cancer predisposition",
+                    "erepo_panel": "ENIGMA BRCA1 and BRCA2 VCEP",
+                    "erepo_summary": "The c.83T>C variant in BRCA1 is a missense variant predicted to cause substitution of Leucine by Proline at amino acid 28 (p.(Leu28Pro)). This variant is absent from gnomAD v2.1 (exomes only, non-cancer subset, read depth \u226525) and gnomAD v3.1 (non-cancer subset, read depth \u226525) (PM2_Supporting met). Reported by two calibrated studies to exhibit protein function similar to pathogenic control variants (PMID:30209399, 35659930) (PS3 met). This BRCA1 missense variant is within a key functional domain and the computational predictor BayesDel (noAF) gives a score of 0.45, above the recommended threshold of 0.28 for prediction of impact on BRCA1 function via protein change. A SpliceAI score of 0 predicts no impact on splicing (score threshold <0.10) (PP3 met). Multifactorial likelihood ratio analysis using clinically calibrated data produced a combined LR for this variant of 0.41 (based on Co-occurrence LR=1.07; Family History LR=0.38), within the thresholds for supporting benign evidence (LR 0.23-0.48) (BP5 met; Internal lab contributor). In summary, this variant meets the criteria to be classified as a Variant of uncertain significance for BRCA1-related cancer predisposition based on the ACMG/AMP criteria applied as specified by the ENIGMA BRCA1/2 VCEP (PM2_Supporting, PS3, PP3, BP5).",
+                    "erepo_url": null,
+                    "vcep_applied": true,
+                    "vcep_panel": "ENIGMA BRCA1/2"
+                  },
+                  "external_links": {
+                    "clingen_erepo": null,
+                    "clinvar": "https://www.ncbi.nlm.nih.gov/clinvar/variation/55732/",
+                    "ensembl_gene": "https://www.ensembl.org/Homo_sapiens/Gene/Summary?g=ENSG00000012048",
+                    "ensembl_transcript": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000357654",
+                    "gnomad": null
+                  },
+                  "gene_constraints": {
+                    "availability": "available",
+                    "loeuf": 0.927590012550354,
+                    "missense_z": 1.7336000204086304,
+                    "oe_lof": 0.8061800003051758,
+                    "pli": 5.517099828041024e-38
+                  },
+                  "population": {
+                    "availability": "no_record",
+                    "canonical_url": null,
+                    "global_allele_count": null,
+                    "global_allele_frequency": null,
+                    "global_allele_number": null,
+                    "group_max_allele_frequency": null,
+                    "homozygote_count": null,
+                    "popmax_population": null,
+                    "rsid": "80357266"
+                  },
+                  "predictors": {
+                    "alphamissense": {
+                      "prediction": "P;P;P;P;P;P;P;P;P;P;P;P;P",
+                      "score": null
+                    },
+                    "availability": "available",
+                    "bayesdel_addaf": {
+                      "prediction": "D",
+                      "score": 0.4798929989337921
+                    },
+                    "bayesdel_noaf": {
+                      "prediction": "D",
+                      "score": 0.451555997133255
+                    },
+                    "dann_score": 0.9990541338920593,
+                    "metasvm": {
+                      "prediction": "D",
+                      "score": 0.9334999918937683
+                    },
+                    "sift": {
+                      "prediction": "D;D;D;D;D;D;D;.;D;D;D;D;D",
+                      "score": null
+                    }
+                  },
+                  "spliceai": {
+                    "availability": "available",
+                    "ds_ag": 0.0,
+                    "ds_al": 0.0,
+                    "ds_dg": 0.0,
+                    "ds_dl": 0.0,
+                    "gene": "BRCA1",
+                    "max_delta_score": 0.0,
+                    "prediction": "BRCA1|0.0|0.0|0.0|0.0"
+                  },
+                  "vcep_applied": true,
+                  "vcep_panel": "ENIGMA BRCA1/2"
+                },
+                "identity": {
+                  "alternate": "G",
+                  "assembly": "GRCh38",
+                  "canonical_key": "GRCh38:chr17:43115777:A:G",
+                  "chromosome": "chr17",
+                  "position": 43115777,
+                  "reference": "A",
+                  "variant_type": "SNV"
+                },
+                "limitations": {
+                  "diagnostic_use": "This result is not a patient diagnosis and must not be used as a substitute for qualified clinical interpretation.",
+                  "scope": "Automated variant-level ACMG/AMP decision support for one GRCh38 nuclear SNV, simple indel, or delins smaller than 50 bp.",
+                  "unavailable_context": "Patient phenotype, genotype, family, segregation, de novo, case-specific, and private override evidence were not evaluated."
+                },
+                "provenance": {
+                  "annotation_resolved": true,
+                  "annotation_source": "vep_cache",
+                  "classification_completed": true,
+                  "classifier_version": "3.39.1",
+                  "classifier_version_label": "v3.39.1",
+                  "reference_assembly": "GRCh38",
+                  "reference_versions": [
+                    {
+                      "name": "clingen_dosage",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "clingen_gdv",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "clinvar",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "dbnsfp",
+                      "version": "4.9c"
+                    },
+                    {
+                      "name": "ensembl_vep",
+                      "version": "Release 113"
+                    },
+                    {
+                      "name": "erepo_classifications",
+                      "version": "erepo-2026-06-04"
+                    },
+                    {
+                      "name": "exon_pext",
+                      "version": "2.1.1"
+                    },
+                    {
+                      "name": "g2p",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "gnomad",
+                      "version": "4.1"
+                    },
+                    {
+                      "name": "gnomad_constraint",
+                      "version": "4.1"
+                    },
+                    {
+                      "name": "gof_genes",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "hpo",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "interpro_pfam",
+                      "version": "2026-03"
+                    },
+                    {
+                      "name": "mane_select",
+                      "version": "2.0"
+                    },
+                    {
+                      "name": "mt_apogee2_scores",
+                      "version": "APOGEE2 v2.0"
+                    },
+                    {
+                      "name": "mt_clinvar_variants",
+                      "version": "ClinVar 2026-01 (mtDNA subset)"
+                    },
+                    {
+                      "name": "mt_gene_coordinates",
+                      "version": "rCRS NC_012920.1"
+                    },
+                    {
+                      "name": "mt_haplogroups",
+                      "version": "PhyloTree Build 17 (FU1a)"
+                    },
+                    {
+                      "name": "mt_helix_curated",
+                      "version": "(empty -- clinician-populated via PR-6 UI)"
+                    },
+                    {
+                      "name": "mt_population_frequencies",
+                      "version": "MITOMAP 2026-01 + HelixMTdb 20200327"
+                    },
+                    {
+                      "name": "nuclear_numt_known_regions",
+                      "version": "Calabrese 2017 + Dayama 2014"
+                    },
+                    {
+                      "name": "orphanet",
+                      "version": "2025-12"
+                    },
+                    {
+                      "name": "pubmed",
+                      "version": "(real-time)"
+                    },
+                    {
+                      "name": "spliceai",
+                      "version": "1.3"
+                    },
+                    {
+                      "name": "vcep_specs",
+                      "version": "2026-03"
+                    }
+                  ],
+                  "vep_cache_version": "ensembl-vep-113-mane-v2",
+                  "vep_version": "113"
+                },
+                "status": "success",
+                "warnings": [
+                  "external_link_unavailable"
+                ]
+              },
+              "resolution": {
+                "input_accession": null,
+                "input_version": null,
+                "mapping_sources": [],
+                "normalized_query": "chr17:43115777 A>G",
+                "notation_family": "coordinate",
+                "resolver_asset_version": "pvr-sha256-02400e1bac7f3ed7db3de7027c6e86e6a7fb6d49d1dcf61fb5d8379d1feab137",
+                "resolver_schema_version": "public-variant-resolver-3",
+                "warnings": []
+              },
+              "search_contract_version": "1.0",
+              "status": "resolved"
+            },
+            "usage_boundary": {
+              "intended_use": "professional_variant_review",
+              "not_for": [
+                "patient_diagnosis",
+                "treatment_decision",
+                "standalone_clinical_reporting"
+              ],
+              "patient_context_evaluated": false,
+              "result_type": "automated_variant_level_classification",
+              "review_required": true
+            }
+          }
+        }
+      },
+      "endpoint": "https://api.helena.bio/folklore/v1/mcp"
+    },
+    {
+      "case_id": "conflicting-brca1",
+      "input": "chr17:43104953 G>C",
+      "status": "resolved",
+      "identity": {
+        "alternate": "C",
+        "assembly": "GRCh38",
+        "canonical_key": "GRCh38:chr17:43104953:G:C",
+        "chromosome": "chr17",
+        "position": 43104953,
+        "reference": "G",
+        "variant_type": "SNV"
+      },
+      "automated_class": "VUS",
+      "criteria": "PP3_Supporting [VCEP:ENIGMA BRCA1/2 v1.2.0]",
+      "classifier_version": "3.39.1",
+      "evidence_availability": {
+        "clinvar": "available",
+        "conservation": "available",
+        "dosage": "available",
+        "expert": "available",
+        "gene_constraints": "available",
+        "population": "available",
+        "predictors": "available",
+        "spliceai": "available"
+      },
+      "observed_at_utc": "2026-09-10T16:37:53Z",
+      "reference_versions": [
+        {
+          "name": "clingen_dosage",
+          "version": "2026-01"
+        },
+        {
+          "name": "clingen_gdv",
+          "version": "2026-01"
+        },
+        {
+          "name": "clinvar",
+          "version": "2026-01"
+        },
+        {
+          "name": "dbnsfp",
+          "version": "4.9c"
+        },
+        {
+          "name": "ensembl_vep",
+          "version": "Release 113"
+        },
+        {
+          "name": "erepo_classifications",
+          "version": "erepo-2026-06-04"
+        },
+        {
+          "name": "exon_pext",
+          "version": "2.1.1"
+        },
+        {
+          "name": "g2p",
+          "version": "2026-01"
+        },
+        {
+          "name": "gnomad",
+          "version": "4.1"
+        },
+        {
+          "name": "gnomad_constraint",
+          "version": "4.1"
+        },
+        {
+          "name": "gof_genes",
+          "version": "2026-01"
+        },
+        {
+          "name": "hpo",
+          "version": "2026-01"
+        },
+        {
+          "name": "interpro_pfam",
+          "version": "2026-03"
+        },
+        {
+          "name": "mane_select",
+          "version": "2.0"
+        },
+        {
+          "name": "mt_apogee2_scores",
+          "version": "APOGEE2 v2.0"
+        },
+        {
+          "name": "mt_clinvar_variants",
+          "version": "ClinVar 2026-01 (mtDNA subset)"
+        },
+        {
+          "name": "mt_gene_coordinates",
+          "version": "rCRS NC_012920.1"
+        },
+        {
+          "name": "mt_haplogroups",
+          "version": "PhyloTree Build 17 (FU1a)"
+        },
+        {
+          "name": "mt_helix_curated",
+          "version": "(empty -- clinician-populated via PR-6 UI)"
+        },
+        {
+          "name": "mt_population_frequencies",
+          "version": "MITOMAP 2026-01 + HelixMTdb 20200327"
+        },
+        {
+          "name": "nuclear_numt_known_regions",
+          "version": "Calabrese 2017 + Dayama 2014"
+        },
+        {
+          "name": "orphanet",
+          "version": "2025-12"
+        },
+        {
+          "name": "pubmed",
+          "version": "(real-time)"
+        },
+        {
+          "name": "spliceai",
+          "version": "1.3"
+        },
+        {
+          "name": "vcep_specs",
+          "version": "2026-03"
+        }
+      ],
+      "interpretation_status": "success",
+      "user_request": "Review the classification and available source assertions for chr17:43104953 G>C on GRCh38.",
+      "tool_call": {
+        "name": "search_variant_evidence",
+        "arguments": {
+          "assembly": "GRCh38",
+          "query": "chr17:43104953 G>C"
+        }
+      },
+      "response_guidance": "Keep the automated VUS result separate from individual source assertions and preserve their review states and provenance.",
+      "raw_response": {
+        "id": 5,
+        "jsonrpc": "2.0",
+        "result": {
+          "_meta": {
+            "io.modelcontextprotocol/serverInfo": {
+              "description": "Classify and interpret supported GRCh38 germline variants under ACMG/AMP with structured evidence, provenance and related literature through the official public, read-only Helena Bioinformatics MCP.",
+              "icons": [
+                {
+                  "mimeType": "image/png",
+                  "src": "https://folklore.helena.bio/images/logos/folklore.png"
+                }
+              ],
+              "name": "folklore",
+              "title": "Folklore Clinical Variant Interpretation MCP",
+              "version": "1.4.1",
+              "websiteUrl": "https://folklore.helena.bio"
+            }
+          },
+          "content": [
+            {
+              "text": "Folklore resolved chr17:43104953 G>C in BRCA1. Automated ACMG/AMP class: VUS; criteria: PP3_Supporting [VCEP:ENIGMA BRCA1/2 v1.2.0]. This result is not a patient diagnosis and must not be used as a substitute for qualified clinical interpretation. Patient phenotype, genotype, family, segregation, de novo, case-specific, and private override evidence were not evaluated. Record: https://folklore.helena.bio/variant?assembly=GRCh38&chromosome=chr17&position=43104953&reference=G&alternate=C",
+              "type": "text"
+            }
+          ],
+          "isError": false,
+          "resultType": "complete",
+          "structuredContent": {
+            "adapter_error": null,
+            "contract_version": "1",
+            "record_url": "https://folklore.helena.bio/variant?assembly=GRCh38&chromosome=chr17&position=43104953&reference=G&alternate=C",
+            "result": {
+              "identity": {
+                "alternate": "C",
+                "assembly": "GRCh38",
+                "canonical_key": "GRCh38:chr17:43104953:G:C",
+                "chromosome": "chr17",
+                "position": 43104953,
+                "reference": "G",
+                "variant_type": "SNV"
+              },
+              "interpretation": {
+                "annotation": {
+                  "biotype": "protein_coding",
+                  "consequence": "missense_variant",
+                  "domains": [
+                    "CDD:cd16498",
+                    "ENSP_mappings:1jm7",
+                    "ENSP_mappings:7jzv",
+                    "ENSP_mappings:7lyb",
+                    "ENSP_mappings:8grq",
+                    "ENSP_mappings:AF",
+                    "Gene3D:3",
+                    "PANTHER:PTHR13763",
+                    "PIRSF:PIRSF001734",
+                    "Superfamily:SSF57850"
+                  ],
+                  "exon_number": "5/23",
+                  "gene_id": "ENSG00000012048",
+                  "gene_symbol": "BRCA1",
+                  "impact": "MODERATE",
+                  "transcript_id": "ENST00000357654"
+                },
+                "classification": {
+                  "automated_class": "VUS",
+                  "confidence_score": 0.5,
+                  "criteria": "PP3_Supporting [VCEP:ENIGMA BRCA1/2 v1.2.0]",
+                  "framework": "acmg_2015",
+                  "pm1_evidence_availability": "not_applicable",
+                  "pm1_evidence_source": null
+                },
+                "contract_version": "1.0",
+                "display": {
+                  "hgvs_cdna": "ENST00000357654.9:c.216C>G",
+                  "hgvs_genomic": "chr17:g.43104953G>C",
+                  "hgvs_protein": "ENSP00000350283.3:p.Ser72Arg",
+                  "label": "chr17:43104953 G>C"
+                },
+                "evidence": {
+                  "clinvar": {
+                    "availability": "available",
+                    "canonical_url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/182123/",
+                    "clinical_significance": "Conflicting_classifications_of_pathogenicity",
+                    "disease_names": [
+                      "Breast-ovarian_cancer,_familial,_susceptibility_to,_1",
+                      "Familial_cancer_of_breast",
+                      "Fanconi_anemia,_complementation_group_S",
+                      "Hereditary_breast_ovarian_cancer_syndrome",
+                      "Hereditary_cancer-predisposing_syndrome",
+                      "Pancreatic_cancer,_susceptibility_to,_4",
+                      "not_provided",
+                      "not_specified"
+                    ],
+                    "protein_representation": null,
+                    "review_stars": 0,
+                    "review_status": "criteria_provided,_conflicting_classifications",
+                    "rsid": "80356967",
+                    "variation_id": "182123"
+                  },
+                  "clinvar_review_stars": 0,
+                  "clinvar_significance": "Conflicting_classifications_of_pathogenicity",
+                  "conservation": {
+                    "availability": "available",
+                    "gerp_rs": 2.2699999809265137,
+                    "phylop100way_vertebrate": 1.4450000524520874
+                  },
+                  "dosage": {
+                    "availability": "available",
+                    "haploinsufficiency_score": 3,
+                    "triplosensitivity_score": 0
+                  },
+                  "erepo_assertion": null,
+                  "erepo_disease": null,
+                  "erepo_panel": null,
+                  "expert": {
+                    "availability": "available",
+                    "erepo_assertion": null,
+                    "erepo_disease": null,
+                    "erepo_panel": null,
+                    "erepo_summary": null,
+                    "erepo_url": null,
+                    "vcep_applied": true,
+                    "vcep_panel": "ENIGMA BRCA1/2"
+                  },
+                  "external_links": {
+                    "clingen_erepo": null,
+                    "clinvar": "https://www.ncbi.nlm.nih.gov/clinvar/variation/182123/",
+                    "ensembl_gene": "https://www.ensembl.org/Homo_sapiens/Gene/Summary?g=ENSG00000012048",
+                    "ensembl_transcript": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000357654",
+                    "gnomad": "https://gnomad.broadinstitute.org/variant/chr17-43104953-G-C?dataset=gnomad_r4"
+                  },
+                  "gene_constraints": {
+                    "availability": "available",
+                    "loeuf": 0.927590012550354,
+                    "missense_z": 1.7336000204086304,
+                    "oe_lof": 0.8061800003051758,
+                    "pli": 5.517099828041024e-38
+                  },
+                  "population": {
+                    "availability": "available",
+                    "canonical_url": "https://gnomad.broadinstitute.org/variant/chr17-43104953-G-C?dataset=gnomad_r4",
+                    "global_allele_count": 5,
+                    "global_allele_frequency": 3.100140020251274e-06,
+                    "global_allele_number": 1612828,
+                    "group_max_allele_frequency": 8.333059668075293e-05,
+                    "homozygote_count": 0,
+                    "popmax_population": "amr",
+                    "rsid": "80356967"
+                  },
+                  "predictors": {
+                    "alphamissense": {
+                      "prediction": "P;P;P;P;P;P;P;P;P;P;P;P;P;P;P;P",
+                      "score": null
+                    },
+                    "availability": "available",
+                    "bayesdel_addaf": {
+                      "prediction": "D",
+                      "score": 0.17746099829673767
+                    },
+                    "bayesdel_noaf": {
+                      "prediction": "D",
+                      "score": 0.24283599853515625
+                    },
+                    "dann_score": 0.9977458119392395,
+                    "metasvm": {
+                      "prediction": "D",
+                      "score": 0.6603000164031982
+                    },
+                    "sift": {
+                      "prediction": "D;D;D;D;D;D;D;D;D;.;D;D;D;D;D;.",
+                      "score": null
+                    }
+                  },
+                  "spliceai": {
+                    "availability": "available",
+                    "ds_ag": 0.0,
+                    "ds_al": 0.09000000357627869,
+                    "ds_dg": 0.0,
+                    "ds_dl": 0.0,
+                    "gene": "BRCA1",
+                    "max_delta_score": 0.09000000357627869,
+                    "prediction": "BRCA1|0.0|0.09|0.0|0.0"
+                  },
+                  "vcep_applied": true,
+                  "vcep_panel": "ENIGMA BRCA1/2"
+                },
+                "identity": {
+                  "alternate": "C",
+                  "assembly": "GRCh38",
+                  "canonical_key": "GRCh38:chr17:43104953:G:C",
+                  "chromosome": "chr17",
+                  "position": 43104953,
+                  "reference": "G",
+                  "variant_type": "SNV"
+                },
+                "limitations": {
+                  "diagnostic_use": "This result is not a patient diagnosis and must not be used as a substitute for qualified clinical interpretation.",
+                  "scope": "Automated variant-level ACMG/AMP decision support for one GRCh38 nuclear SNV, simple indel, or delins smaller than 50 bp.",
+                  "unavailable_context": "Patient phenotype, genotype, family, segregation, de novo, case-specific, and private override evidence were not evaluated."
+                },
+                "provenance": {
+                  "annotation_resolved": true,
+                  "annotation_source": "vep_cache",
+                  "classification_completed": true,
+                  "classifier_version": "3.39.1",
+                  "classifier_version_label": "v3.39.1",
+                  "reference_assembly": "GRCh38",
+                  "reference_versions": [
+                    {
+                      "name": "clingen_dosage",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "clingen_gdv",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "clinvar",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "dbnsfp",
+                      "version": "4.9c"
+                    },
+                    {
+                      "name": "ensembl_vep",
+                      "version": "Release 113"
+                    },
+                    {
+                      "name": "erepo_classifications",
+                      "version": "erepo-2026-06-04"
+                    },
+                    {
+                      "name": "exon_pext",
+                      "version": "2.1.1"
+                    },
+                    {
+                      "name": "g2p",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "gnomad",
+                      "version": "4.1"
+                    },
+                    {
+                      "name": "gnomad_constraint",
+                      "version": "4.1"
+                    },
+                    {
+                      "name": "gof_genes",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "hpo",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "interpro_pfam",
+                      "version": "2026-03"
+                    },
+                    {
+                      "name": "mane_select",
+                      "version": "2.0"
+                    },
+                    {
+                      "name": "mt_apogee2_scores",
+                      "version": "APOGEE2 v2.0"
+                    },
+                    {
+                      "name": "mt_clinvar_variants",
+                      "version": "ClinVar 2026-01 (mtDNA subset)"
+                    },
+                    {
+                      "name": "mt_gene_coordinates",
+                      "version": "rCRS NC_012920.1"
+                    },
+                    {
+                      "name": "mt_haplogroups",
+                      "version": "PhyloTree Build 17 (FU1a)"
+                    },
+                    {
+                      "name": "mt_helix_curated",
+                      "version": "(empty -- clinician-populated via PR-6 UI)"
+                    },
+                    {
+                      "name": "mt_population_frequencies",
+                      "version": "MITOMAP 2026-01 + HelixMTdb 20200327"
+                    },
+                    {
+                      "name": "nuclear_numt_known_regions",
+                      "version": "Calabrese 2017 + Dayama 2014"
+                    },
+                    {
+                      "name": "orphanet",
+                      "version": "2025-12"
+                    },
+                    {
+                      "name": "pubmed",
+                      "version": "(real-time)"
+                    },
+                    {
+                      "name": "spliceai",
+                      "version": "1.3"
+                    },
+                    {
+                      "name": "vcep_specs",
+                      "version": "2026-03"
+                    }
+                  ],
+                  "vep_cache_version": "ensembl-vep-113-mane-v2",
+                  "vep_version": "113"
+                },
+                "status": "success",
+                "warnings": []
+              },
+              "resolution": {
+                "input_accession": null,
+                "input_version": null,
+                "mapping_sources": [],
+                "normalized_query": "chr17:43104953 G>C",
+                "notation_family": "coordinate",
+                "resolver_asset_version": "pvr-sha256-02400e1bac7f3ed7db3de7027c6e86e6a7fb6d49d1dcf61fb5d8379d1feab137",
+                "resolver_schema_version": "public-variant-resolver-3",
+                "warnings": []
+              },
+              "search_contract_version": "1.0",
+              "status": "resolved"
+            },
+            "usage_boundary": {
+              "intended_use": "professional_variant_review",
+              "not_for": [
+                "patient_diagnosis",
+                "treatment_decision",
+                "standalone_clinical_reporting"
+              ],
+              "patient_context_evaluated": false,
+              "result_type": "automated_variant_level_classification",
+              "review_required": true
+            }
+          }
+        }
+      },
+      "endpoint": "https://api.helena.bio/folklore/v1/mcp"
+    },
+    {
+      "case_id": "rsid-multiallelic-brca1",
+      "input": "rs80357914",
+      "status": "ambiguous",
+      "identity": null,
+      "automated_class": null,
+      "criteria": null,
+      "classifier_version": null,
+      "evidence_availability": {
+        "clinvar": "not_reported",
+        "conservation": "not_reported",
+        "dosage": "not_reported",
+        "expert": "not_reported",
+        "gene_constraints": "not_reported",
+        "population": "not_reported",
+        "predictors": "not_reported",
+        "spliceai": "not_reported"
+      },
+      "observed_at_utc": "2026-09-10T16:38:03Z",
+      "reference_versions": [],
+      "interpretation_status": null,
+      "user_request": "Interpret rs80357914.",
+      "tool_call": {
+        "name": "search_variant_evidence",
+        "arguments": {
+          "assembly": "GRCh38",
+          "query": "rs80357914"
+        }
+      },
+      "response_guidance": "Show the returned candidates and request an exact allele. Do not select the first candidate or report a classification.",
+      "raw_response": {
+        "id": 6,
+        "jsonrpc": "2.0",
+        "result": {
+          "_meta": {
+            "io.modelcontextprotocol/serverInfo": {
+              "description": "Classify and interpret supported GRCh38 germline variants under ACMG/AMP with structured evidence, provenance and related literature through the official public, read-only Helena Bioinformatics MCP.",
+              "icons": [
+                {
+                  "mimeType": "image/png",
+                  "src": "https://folklore.helena.bio/images/logos/folklore.png"
+                }
+              ],
+              "name": "folklore",
+              "title": "Folklore Clinical Variant Interpretation MCP",
+              "version": "1.4.1",
+              "websiteUrl": "https://folklore.helena.bio"
+            }
+          },
+          "content": [
+            {
+              "text": "The query is ambiguous and has 2 supported GRCh38 candidates. Ask the user to choose; do not guess.",
+              "type": "text"
+            }
+          ],
+          "isError": false,
+          "resultType": "complete",
+          "structuredContent": {
+            "adapter_error": null,
+            "contract_version": "1",
+            "record_url": null,
+            "result": {
+              "candidates": [
+                {
+                  "gene_symbol": null,
+                  "hgvs_cdna": null,
+                  "hgvs_genomic": null,
+                  "hgvs_protein": null,
+                  "identity": {
+                    "alternate": "ACT",
+                    "assembly": "GRCh38",
+                    "canonical_key": "GRCh38:chr17:43124027:A:ACT",
+                    "chromosome": "chr17",
+                    "position": 43124027,
+                    "reference": "A",
+                    "variant_type": "INS"
+                  },
+                  "transcript_id": null
+                },
+                {
+                  "gene_symbol": null,
+                  "hgvs_cdna": null,
+                  "hgvs_genomic": null,
+                  "hgvs_protein": null,
+                  "identity": {
+                    "alternate": "A",
+                    "assembly": "GRCh38",
+                    "canonical_key": "GRCh38:chr17:43124027:ACT:A",
+                    "chromosome": "chr17",
+                    "position": 43124027,
+                    "reference": "ACT",
+                    "variant_type": "DEL"
+                  },
+                  "transcript_id": null
+                }
+              ],
+              "candidates_truncated": false,
+              "error": {
+                "code": "ambiguous_variant",
+                "message": "The query identifies more than one supported variant.",
+                "retryable": false
+              },
+              "resolution": {
+                "input_accession": "rs80357914",
+                "input_version": null,
+                "mapping_sources": [
+                  {
+                    "name": "clinvar",
+                    "version": "2026-06-07"
+                  },
+                  {
+                    "name": "dbsnp",
+                    "version": "b157"
+                  }
+                ],
+                "normalized_query": "rs80357914",
+                "notation_family": "rsid",
+                "resolver_asset_version": "pvr-sha256-02400e1bac7f3ed7db3de7027c6e86e6a7fb6d49d1dcf61fb5d8379d1feab137",
+                "resolver_schema_version": "public-variant-resolver-3",
+                "warnings": []
+              },
+              "search_contract_version": "1.0",
+              "status": "ambiguous",
+              "total_candidate_count": 2
+            },
+            "usage_boundary": {
+              "intended_use": "professional_variant_review",
+              "not_for": [
+                "patient_diagnosis",
+                "treatment_decision",
+                "standalone_clinical_reporting"
+              ],
+              "patient_context_evaluated": false,
+              "result_type": "automated_variant_level_classification",
+              "review_required": true
+            }
+          }
+        }
+      },
+      "endpoint": "https://api.helena.bio/folklore/v1/mcp"
+    },
+    {
+      "case_id": "wrong-refseq-version",
+      "input": "NM_007294.3:c.68_69del",
+      "status": "not_found",
+      "identity": null,
+      "automated_class": null,
+      "criteria": null,
+      "classifier_version": null,
+      "evidence_availability": {
+        "clinvar": "not_reported",
+        "conservation": "not_reported",
+        "dosage": "not_reported",
+        "expert": "not_reported",
+        "gene_constraints": "not_reported",
+        "population": "not_reported",
+        "predictors": "not_reported",
+        "spliceai": "not_reported"
+      },
+      "observed_at_utc": "2026-09-10T16:38:14Z",
+      "reference_versions": [],
+      "interpretation_status": null,
+      "user_request": "Interpret NM_007294.3:c.68_69del exactly as written.",
+      "tool_call": {
+        "name": "search_variant_evidence",
+        "arguments": {
+          "assembly": "GRCh38",
+          "query": "NM_007294.3:c.68_69del"
+        }
+      },
+      "response_guidance": "Report not_found for this transcript version. Do not silently substitute NM_007294.4 or infer an allele.",
+      "raw_response": {
+        "id": 7,
+        "jsonrpc": "2.0",
+        "result": {
+          "_meta": {
+            "io.modelcontextprotocol/serverInfo": {
+              "description": "Classify and interpret supported GRCh38 germline variants under ACMG/AMP with structured evidence, provenance and related literature through the official public, read-only Helena Bioinformatics MCP.",
+              "icons": [
+                {
+                  "mimeType": "image/png",
+                  "src": "https://folklore.helena.bio/images/logos/folklore.png"
+                }
+              ],
+              "name": "folklore",
+              "title": "Folklore Clinical Variant Interpretation MCP",
+              "version": "1.4.1",
+              "websiteUrl": "https://folklore.helena.bio"
+            }
+          },
+          "content": [
+            {
+              "text": "Folklore search outcome not_found: No supported variant was found for this query.",
+              "type": "text"
+            }
+          ],
+          "isError": false,
+          "resultType": "complete",
+          "structuredContent": {
+            "adapter_error": null,
+            "contract_version": "1",
+            "record_url": null,
+            "result": {
+              "error": {
+                "code": "variant_not_found",
+                "message": "No supported variant was found for this query.",
+                "retryable": false
+              },
+              "resolution": {
+                "input_accession": "NM_007294.3",
+                "input_version": "3",
+                "mapping_sources": [],
+                "normalized_query": "NM_007294.3:c.68_69del",
+                "notation_family": "transcript_hgvs",
+                "resolver_asset_version": "pvr-sha256-02400e1bac7f3ed7db3de7027c6e86e6a7fb6d49d1dcf61fb5d8379d1feab137",
+                "resolver_schema_version": "public-variant-resolver-3",
+                "warnings": []
+              },
+              "search_contract_version": "1.0",
+              "status": "not_found"
+            },
+            "usage_boundary": {
+              "intended_use": "professional_variant_review",
+              "not_for": [
+                "patient_diagnosis",
+                "treatment_decision",
+                "standalone_clinical_reporting"
+              ],
+              "patient_context_evaluated": false,
+              "result_type": "automated_variant_level_classification",
+              "review_required": true
+            }
+          }
+        }
+      },
+      "endpoint": "https://api.helena.bio/folklore/v1/mcp"
+    },
+    {
+      "case_id": "rsid-resolved-apoe-1",
+      "input": "rs429358",
+      "status": "resolved",
+      "identity": {
+        "alternate": "C",
+        "assembly": "GRCh38",
+        "canonical_key": "GRCh38:chr19:44908684:T:C",
+        "chromosome": "chr19",
+        "position": 44908684,
+        "reference": "T",
+        "variant_type": "SNV"
+      },
+      "automated_class": "B",
+      "criteria": "BA1,BS2,BP4",
+      "classifier_version": "3.39.1",
+      "evidence_availability": {
+        "clinvar": "available",
+        "conservation": "available",
+        "dosage": "no_record",
+        "expert": "no_record",
+        "gene_constraints": "available",
+        "population": "available",
+        "predictors": "available",
+        "spliceai": "available"
+      },
+      "observed_at_utc": "2026-09-10T16:38:24Z",
+      "reference_versions": [
+        {
+          "name": "clingen_dosage",
+          "version": "2026-01"
+        },
+        {
+          "name": "clingen_gdv",
+          "version": "2026-01"
+        },
+        {
+          "name": "clinvar",
+          "version": "2026-01"
+        },
+        {
+          "name": "dbnsfp",
+          "version": "4.9c"
+        },
+        {
+          "name": "ensembl_vep",
+          "version": "Release 113"
+        },
+        {
+          "name": "erepo_classifications",
+          "version": "erepo-2026-06-04"
+        },
+        {
+          "name": "exon_pext",
+          "version": "2.1.1"
+        },
+        {
+          "name": "g2p",
+          "version": "2026-01"
+        },
+        {
+          "name": "gnomad",
+          "version": "4.1"
+        },
+        {
+          "name": "gnomad_constraint",
+          "version": "4.1"
+        },
+        {
+          "name": "gof_genes",
+          "version": "2026-01"
+        },
+        {
+          "name": "hpo",
+          "version": "2026-01"
+        },
+        {
+          "name": "interpro_pfam",
+          "version": "2026-03"
+        },
+        {
+          "name": "mane_select",
+          "version": "2.0"
+        },
+        {
+          "name": "mt_apogee2_scores",
+          "version": "APOGEE2 v2.0"
+        },
+        {
+          "name": "mt_clinvar_variants",
+          "version": "ClinVar 2026-01 (mtDNA subset)"
+        },
+        {
+          "name": "mt_gene_coordinates",
+          "version": "rCRS NC_012920.1"
+        },
+        {
+          "name": "mt_haplogroups",
+          "version": "PhyloTree Build 17 (FU1a)"
+        },
+        {
+          "name": "mt_helix_curated",
+          "version": "(empty -- clinician-populated via PR-6 UI)"
+        },
+        {
+          "name": "mt_population_frequencies",
+          "version": "MITOMAP 2026-01 + HelixMTdb 20200327"
+        },
+        {
+          "name": "nuclear_numt_known_regions",
+          "version": "Calabrese 2017 + Dayama 2014"
+        },
+        {
+          "name": "orphanet",
+          "version": "2025-12"
+        },
+        {
+          "name": "pubmed",
+          "version": "(real-time)"
+        },
+        {
+          "name": "spliceai",
+          "version": "1.3"
+        },
+        {
+          "name": "vcep_specs",
+          "version": "2026-03"
+        }
+      ],
+      "interpretation_status": "success",
+      "user_request": "What evidence is available for rs429358?",
+      "tool_call": {
+        "name": "search_variant_evidence",
+        "arguments": {
+          "assembly": "GRCh38",
+          "query": "rs429358"
+        }
+      },
+      "response_guidance": "Report the returned automated B classification and its evidence as a dated variant-level result. It is not a patient risk assessment or reassurance.",
+      "raw_response": {
+        "id": 8,
+        "jsonrpc": "2.0",
+        "result": {
+          "_meta": {
+            "io.modelcontextprotocol/serverInfo": {
+              "description": "Classify and interpret supported GRCh38 germline variants under ACMG/AMP with structured evidence, provenance and related literature through the official public, read-only Helena Bioinformatics MCP.",
+              "icons": [
+                {
+                  "mimeType": "image/png",
+                  "src": "https://folklore.helena.bio/images/logos/folklore.png"
+                }
+              ],
+              "name": "folklore",
+              "title": "Folklore Clinical Variant Interpretation MCP",
+              "version": "1.4.1",
+              "websiteUrl": "https://folklore.helena.bio"
+            }
+          },
+          "content": [
+            {
+              "text": "Folklore resolved chr19:44908684 T>C in APOE. Automated ACMG/AMP class: B; criteria: BA1,BS2,BP4. This result is not a patient diagnosis and must not be used as a substitute for qualified clinical interpretation. Patient phenotype, genotype, family, segregation, de novo, case-specific, and private override evidence were not evaluated. Record: https://folklore.helena.bio/variant?assembly=GRCh38&chromosome=chr19&position=44908684&reference=T&alternate=C",
+              "type": "text"
+            }
+          ],
+          "isError": false,
+          "resultType": "complete",
+          "structuredContent": {
+            "adapter_error": null,
+            "contract_version": "1",
+            "record_url": "https://folklore.helena.bio/variant?assembly=GRCh38&chromosome=chr19&position=44908684&reference=T&alternate=C",
+            "result": {
+              "identity": {
+                "alternate": "C",
+                "assembly": "GRCh38",
+                "canonical_key": "GRCh38:chr19:44908684:T:C",
+                "chromosome": "chr19",
+                "position": 44908684,
+                "reference": "T",
+                "variant_type": "SNV"
+              },
+              "interpretation": {
+                "annotation": {
+                  "biotype": "protein_coding",
+                  "consequence": "missense_variant",
+                  "domains": [
+                    "ENSP_mappings:1b68",
+                    "ENSP_mappings:1bz4",
+                    "ENSP_mappings:1ea8",
+                    "ENSP_mappings:1gs9",
+                    "ENSP_mappings:1h7i",
+                    "ENSP_mappings:1le2",
+                    "ENSP_mappings:1le4",
+                    "ENSP_mappings:1lpe",
+                    "ENSP_mappings:1nfn",
+                    "ENSP_mappings:1nfo",
+                    "ENSP_mappings:1or2",
+                    "ENSP_mappings:1or3",
+                    "ENSP_mappings:2kc3",
+                    "ENSP_mappings:2l7b",
+                    "ENSP_mappings:6iwb",
+                    "ENSP_mappings:6ncn",
+                    "ENSP_mappings:6nco",
+                    "ENSP_mappings:6v7m",
+                    "ENSP_mappings:7fcr",
+                    "ENSP_mappings:7fcs",
+                    "ENSP_mappings:7uvj",
+                    "ENSP_mappings:8ax8",
+                    "ENSP_mappings:8ax9",
+                    "ENSP_mappings:8cdy",
+                    "ENSP_mappings:8ce0",
+                    "ENSP_mappings:8grx",
+                    "ENSP_mappings:AF",
+                    "Gene3D:1",
+                    "PANTHER:PTHR18976",
+                    "Pfam:PF01442",
+                    "Superfamily:SSF58113"
+                  ],
+                  "exon_number": "4/4",
+                  "gene_id": "ENSG00000130203",
+                  "gene_symbol": "APOE",
+                  "impact": "MODERATE",
+                  "transcript_id": "ENST00000252486"
+                },
+                "classification": {
+                  "automated_class": "B",
+                  "confidence_score": 0.8500000238418579,
+                  "criteria": "BA1,BS2,BP4",
+                  "framework": "acmg_2015",
+                  "pm1_evidence_availability": "not_applicable",
+                  "pm1_evidence_source": null
+                },
+                "contract_version": "1.0",
+                "display": {
+                  "hgvs_cdna": "ENST00000252486.9:c.388T>C",
+                  "hgvs_genomic": "chr19:g.44908684T>C",
+                  "hgvs_protein": "ENSP00000252486.3:p.Cys130Arg",
+                  "label": "chr19:44908684 T>C"
+                },
+                "evidence": {
+                  "clinvar": {
+                    "availability": "available",
+                    "canonical_url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/17864/",
+                    "clinical_significance": "Conflicting_classifications_of_pathogenicity|other|risk_factor",
+                    "disease_names": [
+                      "Alzheimer_disease",
+                      "Alzheimer_disease_2",
+                      "Alzheimer_disease_4",
+                      "Familial_hypercholesterolemia",
+                      "Lipoprotein_glomerulopathy",
+                      "Primary_degenerative_dementia_of_the_Alzheimer_type,_presenile_onset",
+                      "Warfarin_response",
+                      "not_provided",
+                      "not_specified"
+                    ],
+                    "protein_representation": null,
+                    "review_stars": 0,
+                    "review_status": "criteria_provided,_conflicting_classifications",
+                    "rsid": "429358",
+                    "variation_id": "17864"
+                  },
+                  "clinvar_review_stars": 0,
+                  "clinvar_significance": "Conflicting_classifications_of_pathogenicity|other|risk_factor",
+                  "conservation": {
+                    "availability": "available",
+                    "gerp_rs": 3.0199999809265137,
+                    "phylop100way_vertebrate": 0.8399999737739563
+                  },
+                  "dosage": {
+                    "availability": "no_record",
+                    "haploinsufficiency_score": null,
+                    "triplosensitivity_score": null
+                  },
+                  "erepo_assertion": null,
+                  "erepo_disease": null,
+                  "erepo_panel": null,
+                  "expert": {
+                    "availability": "no_record",
+                    "erepo_assertion": null,
+                    "erepo_disease": null,
+                    "erepo_panel": null,
+                    "erepo_summary": null,
+                    "erepo_url": null,
+                    "vcep_applied": false,
+                    "vcep_panel": null
+                  },
+                  "external_links": {
+                    "clingen_erepo": null,
+                    "clinvar": "https://www.ncbi.nlm.nih.gov/clinvar/variation/17864/",
+                    "ensembl_gene": "https://www.ensembl.org/Homo_sapiens/Gene/Summary?g=ENSG00000130203",
+                    "ensembl_transcript": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000252486",
+                    "gnomad": "https://gnomad.broadinstitute.org/variant/chr19-44908684-T-C?dataset=gnomad_r4"
+                  },
+                  "gene_constraints": {
+                    "availability": "available",
+                    "loeuf": 1.2948999404907227,
+                    "missense_z": -0.22622999548912048,
+                    "oe_lof": 0.7633799910545349,
+                    "pli": 0.0014179999707266688
+                  },
+                  "population": {
+                    "availability": "available",
+                    "canonical_url": "https://gnomad.broadinstitute.org/variant/chr19-44908684-T-C?dataset=gnomad_r4",
+                    "global_allele_count": 232864,
+                    "global_allele_frequency": 0.14851999282836914,
+                    "global_allele_number": 1567892,
+                    "group_max_allele_frequency": 0.22046299278736115,
+                    "homozygote_count": 17710,
+                    "popmax_population": "afr",
+                    "rsid": "429358"
+                  },
+                  "predictors": {
+                    "alphamissense": {
+                      "prediction": "B;B;B;B",
+                      "score": null
+                    },
+                    "availability": "available",
+                    "bayesdel_addaf": {
+                      "prediction": "T",
+                      "score": -0.4759480059146881
+                    },
+                    "bayesdel_noaf": {
+                      "prediction": "T",
+                      "score": -0.3126220107078552
+                    },
+                    "dann_score": 0.2173970490694046,
+                    "metasvm": {
+                      "prediction": "T",
+                      "score": -1.0125999450683594
+                    },
+                    "sift": {
+                      "prediction": "T;T;.;T",
+                      "score": null
+                    }
+                  },
+                  "spliceai": {
+                    "availability": "available",
+                    "ds_ag": 0.0,
+                    "ds_al": 0.0,
+                    "ds_dg": 0.0,
+                    "ds_dl": 0.0,
+                    "gene": "APOE",
+                    "max_delta_score": 0.0,
+                    "prediction": "APOE|0.0|0.0|0.0|0.0"
+                  },
+                  "vcep_applied": false,
+                  "vcep_panel": null
+                },
+                "identity": {
+                  "alternate": "C",
+                  "assembly": "GRCh38",
+                  "canonical_key": "GRCh38:chr19:44908684:T:C",
+                  "chromosome": "chr19",
+                  "position": 44908684,
+                  "reference": "T",
+                  "variant_type": "SNV"
+                },
+                "limitations": {
+                  "diagnostic_use": "This result is not a patient diagnosis and must not be used as a substitute for qualified clinical interpretation.",
+                  "scope": "Automated variant-level ACMG/AMP decision support for one GRCh38 nuclear SNV, simple indel, or delins smaller than 50 bp.",
+                  "unavailable_context": "Patient phenotype, genotype, family, segregation, de novo, case-specific, and private override evidence were not evaluated."
+                },
+                "provenance": {
+                  "annotation_resolved": true,
+                  "annotation_source": "vep_cache",
+                  "classification_completed": true,
+                  "classifier_version": "3.39.1",
+                  "classifier_version_label": "v3.39.1",
+                  "reference_assembly": "GRCh38",
+                  "reference_versions": [
+                    {
+                      "name": "clingen_dosage",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "clingen_gdv",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "clinvar",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "dbnsfp",
+                      "version": "4.9c"
+                    },
+                    {
+                      "name": "ensembl_vep",
+                      "version": "Release 113"
+                    },
+                    {
+                      "name": "erepo_classifications",
+                      "version": "erepo-2026-06-04"
+                    },
+                    {
+                      "name": "exon_pext",
+                      "version": "2.1.1"
+                    },
+                    {
+                      "name": "g2p",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "gnomad",
+                      "version": "4.1"
+                    },
+                    {
+                      "name": "gnomad_constraint",
+                      "version": "4.1"
+                    },
+                    {
+                      "name": "gof_genes",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "hpo",
+                      "version": "2026-01"
+                    },
+                    {
+                      "name": "interpro_pfam",
+                      "version": "2026-03"
+                    },
+                    {
+                      "name": "mane_select",
+                      "version": "2.0"
+                    },
+                    {
+                      "name": "mt_apogee2_scores",
+                      "version": "APOGEE2 v2.0"
+                    },
+                    {
+                      "name": "mt_clinvar_variants",
+                      "version": "ClinVar 2026-01 (mtDNA subset)"
+                    },
+                    {
+                      "name": "mt_gene_coordinates",
+                      "version": "rCRS NC_012920.1"
+                    },
+                    {
+                      "name": "mt_haplogroups",
+                      "version": "PhyloTree Build 17 (FU1a)"
+                    },
+                    {
+                      "name": "mt_helix_curated",
+                      "version": "(empty -- clinician-populated via PR-6 UI)"
+                    },
+                    {
+                      "name": "mt_population_frequencies",
+                      "version": "MITOMAP 2026-01 + HelixMTdb 20200327"
+                    },
+                    {
+                      "name": "nuclear_numt_known_regions",
+                      "version": "Calabrese 2017 + Dayama 2014"
+                    },
+                    {
+                      "name": "orphanet",
+                      "version": "2025-12"
+                    },
+                    {
+                      "name": "pubmed",
+                      "version": "(real-time)"
+                    },
+                    {
+                      "name": "spliceai",
+                      "version": "1.3"
+                    },
+                    {
+                      "name": "vcep_specs",
+                      "version": "2026-03"
+                    }
+                  ],
+                  "vep_cache_version": "ensembl-vep-113-mane-v2",
+                  "vep_version": "113"
+                },
+                "status": "success",
+                "warnings": [
+                  "expert_evidence_not_available"
+                ]
+              },
+              "resolution": {
+                "input_accession": "rs429358",
+                "input_version": null,
+                "mapping_sources": [
+                  {
+                    "name": "clinvar",
+                    "version": "2026-06-07"
+                  },
+                  {
+                    "name": "dbsnp",
+                    "version": "b157"
+                  }
+                ],
+                "normalized_query": "rs429358",
+                "notation_family": "rsid",
+                "resolver_asset_version": "pvr-sha256-02400e1bac7f3ed7db3de7027c6e86e6a7fb6d49d1dcf61fb5d8379d1feab137",
+                "resolver_schema_version": "public-variant-resolver-3",
+                "warnings": []
+              },
+              "search_contract_version": "1.0",
+              "status": "resolved"
+            },
+            "usage_boundary": {
+              "intended_use": "professional_variant_review",
+              "not_for": [
+                "patient_diagnosis",
+                "treatment_decision",
+                "standalone_clinical_reporting"
+              ],
+              "patient_context_evaluated": false,
+              "result_type": "automated_variant_level_classification",
+              "review_required": true
+            }
+          }
+        }
+      },
+      "endpoint": "https://api.helena.bio/folklore/v1/mcp"
+    }
+  ]
+}
