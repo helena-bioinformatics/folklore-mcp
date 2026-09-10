@@ -263,10 +263,10 @@ release. The prior 1.3.3 archive remains available as
 
 Apache License 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
 
-### Portable Agent Skill 1.2.0
+### Portable Agent Skill 1.3.0
 
-Download the versioned [ZIP](https://raw.githubusercontent.com/helena-bioinformatics/folklore-mcp/main/skills/releases/1.2.0/folklore-clinical-variant-interpretation-1.2.0.zip)
-and [SHA-256](https://raw.githubusercontent.com/helena-bioinformatics/folklore-mcp/main/skills/releases/1.2.0/folklore-clinical-variant-interpretation-1.2.0.zip.sha256).
+Download the versioned [ZIP](https://raw.githubusercontent.com/helena-bioinformatics/folklore-mcp/main/skills/releases/1.3.0/folklore-clinical-variant-interpretation-1.3.0.zip)
+and [SHA-256](https://raw.githubusercontent.com/helena-bioinformatics/folklore-mcp/main/skills/releases/1.3.0/folklore-clinical-variant-interpretation-1.3.0.zip.sha256).
 Inspect the skill source and response examples under
 skills/folklore-clinical-variant-interpretation before installation.
 Extract that folder into your host's skills directory and configure the

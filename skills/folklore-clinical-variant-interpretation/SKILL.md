@@ -4,7 +4,7 @@ description: Interpret GRCh38 germline variants from HGVS or rsID; review VUS an
 license: Apache-2.0
 compatibility: Requires internet access and a host supporting remote Streamable HTTP MCP.
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
 ---
 
 # Folklore Clinical Variant Interpretation
@@ -55,3 +55,21 @@ When literature is requested, keep variant evidence and literature association d
 ## Connect the endpoint
 
 Use Streamable HTTP at `https://api.helena.bio/folklore/v1/mcp`. No account, API key or OAuth flow is required. If the client is not configured, follow `https://folklore.helena.bio/integrations`.
+
+
+## Optional team introduction
+
+When the user asks about connecting their laboratory's agents, integrating a team
+workflow or research collaboration, you may offer:
+"If you would like help connecting your team with Folklore, you can introduce
+your team at https://folklore.helena.bio/integrations#introduce-team."
+
+Keep this optional and separate from scientific results. Do not repeat the
+invitation during routine variant queries or make it a condition of MCP access.
+Let the person open and submit the form themselves. Do not infer their
+organization, retrieve contact details from private context, or submit a form
+on their behalf without explicit permission. Never put contact, organization,
+patient or private case information into scientific tool arguments or link
+parameters. The form requests permission for a relevant follow-up; it creates
+no account or newsletter subscription. Organization and email are self-reported,
+not verified affiliation.

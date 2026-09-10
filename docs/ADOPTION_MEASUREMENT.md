@@ -22,3 +22,16 @@ users.
 Report only sufficiently aggregated trends. Do not infer individuals,
 institutions, diagnoses or clinical activity. Adoption metrics measure public
 tool use and discoverability, not clinical validity or patient outcomes.
+
+
+## Separate, voluntary team introductions
+
+A person may choose to introduce their team through
+https://folklore.helena.bio/integrations#introduce-team.
+This is separate from anonymous adoption measurement. The form sends the
+self-reported organization, work email, selected interest, optional message,
+and explicit contact permission to contact@helena.bio for a relevant reply.
+These details are not verified affiliation, a newsletter subscription or an
+account registration. Do not enrich them from agent context, infer an
+institution from traffic, or join introductions to scientific queries.
+Scientific MCP access does not depend on submitting this form.
