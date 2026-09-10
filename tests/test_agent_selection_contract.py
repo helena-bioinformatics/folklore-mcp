@@ -68,7 +68,7 @@ def test_agent_selection_contract_routes_only_published_scientific_tools() -> No
         "resolved",
         "ambiguous",
         "not_found",
-        "invalid",
+        "invalid_request",
         "unsupported",
-        "temporarily_unavailable",
+        "resolution_unavailable",
     ]

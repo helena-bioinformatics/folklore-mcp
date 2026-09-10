@@ -66,3 +66,17 @@ provider, locale and query cohort. It never combines the rates into one score.
 - Allow a declared indexation interval before the identical rerun.
 - Report new queries and translated queries as separate cohorts.
 - Keep search discovery separate from MCP connection and clinical evaluation.
+
+## Weekly comparisons
+
+Preserve the existing weekly host, model, mode, country and query order.
+The summarizer separates every run and condition; do not pool weeks or models.
+Archive the 60-query search ledger and raw host responses alongside the
+unchanged 100-case agent-selection corpus. Deterministic selection checks
+are regression tests, not evidence of real host selection or web ranking.
+If access to a provider or Search Console is unavailable, record unavailable.
+
+The separate holdout-v1.csv is an eight-query exploratory corpus. Never add
+it to the baseline denominator or claim it is a rerun of the original 60.
+The runtime discovery-regressions.csv adds five exact-identity and evidence
+cases separately from the original variant interpretation cases.

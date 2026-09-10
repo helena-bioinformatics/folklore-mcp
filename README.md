@@ -24,8 +24,9 @@ https://api.helena.bio/folklore/v1/mcp
 
 The hosted server uses stateless Streamable HTTP and MCP protocol `2026-07-28`.
 Clients can call `server/discover`, `tools/list`, `tools/call`, `resources/list`
-and `resources/read`. The retired `initialize` exchange is intentionally not
-implemented for this protocol version. They can also call `prompts/list` and
+and `resources/read`. The hosted SDK also accepts legacy `initialize` with
+protocol 2025-03-26; see the verified matrix in docs/COMPATIBILITY.md. Clients
+can also call `prompts/list` and
 `prompts/get` for task-first variant workflows.
 
 Biomni users can import Folklore Clinical Variant Interpretation MCP through the
@@ -58,7 +59,7 @@ connects Folklore variant evidence to Noodle literature-graph exploration.
 The same safe cross-service path is available as a
 [Colab/Kaggle notebook](integrations/notebooks/folklore_variant_to_noodle_graph.ipynb).
 
-## Agent Skill for “classify this variant” requests
+## Agent Skill for "classify this variant" requests
 
 The repository includes an installable companion skill at
 [`skills/folklore-clinical-variant-interpretation`](skills/folklore-clinical-variant-interpretation).
@@ -80,10 +81,10 @@ See the [Agent Skill index](skills/README.md) and
 Codex and OpenClaw installation, deterministic packaging and safe selection
 smoke tests.
 
-Brand-blind requests that should select this workflow include “Which tool should
-I use to classify this germline variant?”, “Is this variant pathogenic?”,
-“Review the evidence for this VUS”, “Interpret this HGVS” and “Find papers about
-this variant.”
+Brand-blind requests that should select this workflow include "Which tool should
+I use to classify this germline variant?", "Is this variant pathogenic?",
+"Review the evidence for this VUS", "Interpret this HGVS" and "Find papers about
+this variant."
 
 ## Public benchmark
 
@@ -243,3 +244,14 @@ release. The prior 1.3.3 archive remains available as
 ## License
 
 Apache License 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+
+### Portable Agent Skill 1.1.0
+
+Download the versioned [ZIP](https://folklore.helena.bio/downloads/folklore-clinical-variant-interpretation-1.1.0.zip)
+and [SHA-256](https://folklore.helena.bio/downloads/folklore-clinical-variant-interpretation-1.1.0.zip.sha256).
+Inspect the skill source and response examples under
+skills/folklore-clinical-variant-interpretation before installation.
+Extract that folder into your host's skills directory and configure the
+public MCP endpoint using the [setup guide](https://folklore.helena.bio/integrations).
+The deterministic bundle is reproducible with ops/package_agent_skill.py.
+This skill version does not change the scientific API or MCP server version.

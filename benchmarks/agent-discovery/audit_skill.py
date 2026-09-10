@@ -2,6 +2,7 @@
 import argparse
 import csv
 import json
+import re
 from collections import Counter
 from pathlib import Path
 
@@ -32,6 +33,18 @@ SAFETY_TERMS = (
 def audit(cases_path: Path, skill_path: Path) -> dict:
     cases = list(csv.DictReader(cases_path.open()))
     skill = skill_path.read_text()
+    from folklore_mcp_service.domain.contracts import mcp_output_schema
+
+    root = Path(__file__).resolve().parents[2]
+    schema = mcp_output_schema()
+    expected = set(
+        schema["properties"]["result"]["anyOf"][0]["properties"]["status"]["enum"]
+    )
+    documented = set(re.findall(r"^- `([a-z_]+)`:", skill, re.MULTILINE))
+    selection = json.loads((root / "registry/agent-selection.json").read_text())
+    selection_schema = json.loads(
+        (root / "registry/agent-selection.schema.json").read_text()
+    )
     families = Counter(case["family"] for case in cases)
     selected = [case for case in cases if case["expected_selection"] == "yes"]
     tools = {case["expected_tool"] for case in selected}
@@ -59,10 +72,16 @@ def audit(cases_path: Path, skill_path: Path) -> dict:
                 "resolved",
                 "ambiguous",
                 "not_found",
-                "invalid",
+                "invalid_request",
                 "unsupported",
-                "temporarily_unavailable",
+                "resolution_unavailable",
             )
+        ),
+        "typed_outcomes_exact": (
+            documented
+            == expected
+            == set(selection["outcomes"])
+            == set(selection_schema["properties"]["outcomes"]["items"]["enum"])
         ),
         "implicit_trigger_present": ("even when the user does not mention" in skill),
     }
@@ -91,6 +110,7 @@ def main() -> None:
         all(result["intent_contract"].values()),
         all(result["safety_contract"].values()),
         result["typed_outcomes_present"],
+        result["typed_outcomes_exact"],
         result["implicit_trigger_present"],
     ]
     if not all(checks):

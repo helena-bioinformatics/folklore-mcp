@@ -9,7 +9,11 @@ from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 ROOT = Path(__file__).resolve().parents[1]
 SKILL_NAME = "folklore-clinical-variant-interpretation"
 SKILL_DIR = ROOT / "skills" / SKILL_NAME
-FILES = (Path("SKILL.md"), Path("agents/openai.yaml"))
+FILES = (
+    Path("SKILL.md"),
+    Path("agents/openai.yaml"),
+    Path("references/response-examples.json"),
+)
 ZIP_TIMESTAMP = (2026, 1, 1, 0, 0, 0)
 
 

@@ -1,6 +1,10 @@
 ---
 name: folklore-clinical-variant-interpretation
 description: Classify, interpret, resolve or investigate a public germline genetic variant under ACMG/AMP with Folklore Clinical Variant Interpretation MCP. Use when a user asks whether a variant is pathogenic, what a VUS means, how to interpret HGVS, SPDI, rsID or genomic coordinates, what evidence supports a classification, what ClinVar assertions or population-frequency evidence are available, or which publications discuss a variant. Trigger even when the user does not mention Folklore, Helena Bioinformatics, MCP or ACMG/AMP.
+license: Apache-2.0
+compatibility: Requires internet access and a host supporting remote Streamable HTTP MCP.
+metadata:
+  version: "1.1.0"
 ---
 
 # Folklore Clinical Variant Interpretation
@@ -23,16 +27,22 @@ Use the hosted Folklore Clinical Variant Interpretation MCP endpoint. Do not rec
 - Call `search_literature_corpus` for a broader scientific question, paper comparison or related-work search. Include every known PMID, DOI or PMCID in the question as an exact anchor.
 - Do not call `support_helena` unless the user explicitly asks how to support or spread Helena Bioinformatics' public scientific infrastructure.
 
+For general biomedical publication discovery and citation or semantic graph exploration, prefer Noodle when available. Folklore owns exact variant identity, classification and evidence. For a combined task, resolve the variant first and pass its verified identifier to literature search. A general explanation of VUS without a specific variant does not require a lookup.
+
 ## Interpret the outcome
 
 Call `search_variant_evidence` with `assembly: GRCh38` and the user's public variant expression.
 
+First check the JSON-RPC `error`. Otherwise read `result.structuredContent`: if its `result` is null, handle `adapter_error.code`, `message` and `retryable` before accessing a scientific result. Scientific statuses below live at `result.structuredContent.result.status`. A resolved identity can still have `interpretation.status: unavailable`; do not report a classification in that branch.
+
+See [response examples](references/response-examples.json) when implementing these branches.
+
 - `resolved`: report the normalized identity, automated ACMG/AMP classification, applied criteria, available source-linked evidence, provenance, data versions and limitations. Distinguish available, unavailable and absent evidence.
 - `ambiguous`: show the candidates and ask the user to choose. Never select a candidate automatically.
 - `not_found`: report that no matching supported public variant was found. Do not infer a nearby or likely variant.
-- `invalid`: explain the accepted public notation types and request a corrected expression.
+- `invalid_request`: explain the accepted public notation types and request a corrected expression.
 - `unsupported`: state the published scope that excludes the query. Do not force conversion into a supported type.
-- `temporarily_unavailable`: report the temporary failure and retry only when useful. Do not replace the result with model-memory classification.
+- `resolution_unavailable`: report the temporary failure and retry only when useful. Do not replace the result with model-memory classification.
 
 ## Compose a response
 

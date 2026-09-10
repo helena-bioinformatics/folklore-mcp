@@ -93,3 +93,26 @@ def test_summary_keeps_metrics_separate(tmp_path: Path) -> None:
     assert rates["visible"] == 1.0
     assert rates["cited"] == 0.0
     assert rates["official_page_reached"] == 1.0
+
+
+def test_summary_never_pools_runs_models_modes_or_countries() -> None:
+    module = load_module()
+    row = dict.fromkeys(module.BOOLEAN_FIELDS, False)
+    row.update(
+        run_id="week1",
+        provider="host",
+        product="chat",
+        model="model1",
+        search_mode="web",
+        country="US",
+        language="en-US",
+        cohort="task_first",
+        rank=None,
+    )
+    rows = [row] + [
+        dict(row, **{key: "different"})
+        for key in ("run_id", "model", "search_mode", "country")
+    ]
+    result = module.summarize(rows)
+    assert len(result["groups"]) == 5
+    assert all(group["query_count"] == 1 for group in result["groups"])

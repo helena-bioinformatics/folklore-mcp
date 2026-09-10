@@ -256,9 +256,9 @@ def test_public_dx_and_adoption_docs_preserve_safety_boundaries() -> None:
         "resolved",
         "ambiguous",
         "not_found",
-        "invalid",
+        "invalid_request",
         "unsupported",
-        "temporarily_unavailable",
+        "resolution_unavailable",
     ):
         assert f"`{status}`" in outcomes
     assert "Variant expressions" in adoption

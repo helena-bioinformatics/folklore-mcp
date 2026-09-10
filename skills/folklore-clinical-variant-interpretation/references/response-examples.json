@@ -1,0 +1,73 @@
+{
+  "fixture_kind": "synthetic control-flow examples, not observed classifications",
+  "scientific_failures": [
+    {
+      "name": "not_found",
+      "scientific_result": {
+        "search_contract_version": "1.0",
+        "status": "not_found",
+        "resolution": {},
+        "error": {
+          "code": "not_found",
+          "message": "Synthetic contract fixture",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "name": "invalid_request",
+      "scientific_result": {
+        "search_contract_version": "1.0",
+        "status": "invalid_request",
+        "resolution": null,
+        "error": {
+          "code": "invalid_request",
+          "message": "Synthetic contract fixture",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "name": "unsupported",
+      "scientific_result": {
+        "search_contract_version": "1.0",
+        "status": "unsupported",
+        "resolution": null,
+        "error": {
+          "code": "unsupported",
+          "message": "Synthetic contract fixture",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "name": "resolution_unavailable",
+      "scientific_result": {
+        "search_contract_version": "1.0",
+        "status": "resolution_unavailable",
+        "resolution": null,
+        "error": {
+          "code": "resolution_unavailable",
+          "message": "Synthetic contract fixture",
+          "retryable": true
+        }
+      }
+    }
+  ],
+  "adapter_failure": {
+    "result": null,
+    "adapter_error": {
+      "code": "upstream_timeout",
+      "message": "Folklore search timed out.",
+      "retryable": true
+    }
+  },
+  "rpc_failure": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "error": {
+      "code": -32601,
+      "message": "Method not found"
+    }
+  }
+}

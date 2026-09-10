@@ -23,6 +23,10 @@ def _request(
             "id": request_id,
             "method": "tools/call",
             "params": {
+                "_meta": {
+                    "io.modelcontextprotocol/protocolVersion": "2026-07-28",
+                    "io.modelcontextprotocol/clientCapabilities": {},
+                },
                 "name": "search_variant_evidence",
                 "arguments": {"query": query, "assembly": assembly},
             },
@@ -35,6 +39,9 @@ def _request(
             "Content-Type": "application/json",
             "Accept": "application/json, text/event-stream",
             "User-Agent": "folklore-public-variant-benchmark/1",
+            "MCP-Protocol-Version": "2026-07-28",
+            "Mcp-Method": "tools/call",
+            "Mcp-Name": "search_variant_evidence",
         },
         method="POST",
     )
@@ -50,7 +57,7 @@ def _request(
                     raise
             retry_after = exc.headers.get("Retry-After")
             wait_seconds = float(retry_after) if retry_after else 2**attempt
-            time.sleep(min(max(wait_seconds, 1.0), 30.0))
+            time.sleep(max(wait_seconds, 1.0))
     raise RuntimeError("unreachable retry state")
 
 
@@ -84,9 +91,6 @@ def _record(
     provenance = interpretation.get("provenance") or {}
     boundary = structured.get("usage_boundary") or {}
     identity = result.get("identity")
-    if identity is None:
-        candidates = result.get("candidates") or []
-        identity = (candidates[0].get("identity") if candidates else None) or {}
     return {
         **case,
         "observed_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
@@ -98,6 +102,10 @@ def _record(
         "status": result.get("status"),
         "normalized_query": (result.get("resolution") or {}).get("normalized_query"),
         "identity": identity,
+        "candidates": result.get("candidates") or [],
+        "adapter_error": structured.get("adapter_error"),
+        "interpretation_status": interpretation.get("status"),
+        "raw_response": response,
         "gene_symbol": annotation.get("gene_symbol"),
         "transcript_id": annotation.get("transcript_id"),
         "automated_class": classification.get("automated_class"),
@@ -123,7 +131,7 @@ def main() -> None:
     args = parser.parse_args()
     with args.cases.open(newline="", encoding="utf-8") as source:
         cases = list(csv.DictReader(source))
-    with args.output.open("w", encoding="utf-8") as output:
+    with args.output.open("x", encoding="utf-8") as output:
         for request_id, case in enumerate(cases, start=1):
             started = time.perf_counter()
             try:
@@ -135,6 +143,12 @@ def main() -> None:
             elapsed_ms = round((time.perf_counter() - started) * 1000)
             output.write(
                 json.dumps(_record(case, response, elapsed_ms), sort_keys=True) + "\n"
+            )
+            output.flush()
+            print(
+                case["case_id"],
+                _record(case, response, elapsed_ms)["status"],
+                flush=True,
             )
             if request_id < len(cases):
                 time.sleep(max(args.delay_seconds, 0.0))

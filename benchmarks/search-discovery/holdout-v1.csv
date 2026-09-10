@@ -1,0 +1,9 @@
+id,query,cohort,locale
+H001,is this mutation harmful,natural_language_holdout,en-US
+H002,free variant interpretation,natural_language_holdout,en-US
+H003,what does this BRCA1 change mean,natural_language_holdout,en-US
+H004,classify NM_007294.4:c.68_69del,natural_language_holdout,en-US
+H005,how do I check if a gene variant causes disease,natural_language_holdout,en-US
+H006,what evidence is there for a variant of uncertain significance,natural_language_holdout,en-US
+H007,look up a DNA change without uploading a file,natural_language_holdout,en-US
+H008,why do variant interpretations disagree,natural_language_holdout,en-US

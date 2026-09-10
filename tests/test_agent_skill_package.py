@@ -27,6 +27,7 @@ def test_agent_skill_bundle_is_deterministic_and_bounded(tmp_path: Path) -> None
         assert archive.namelist() == [
             f"{SKILL_NAME}/SKILL.md",
             f"{SKILL_NAME}/agents/openai.yaml",
+            f"{SKILL_NAME}/references/response-examples.json",
         ]
         skill = archive.read(f"{SKILL_NAME}/SKILL.md").decode()
         metadata = archive.read(f"{SKILL_NAME}/agents/openai.yaml").decode()

@@ -18,6 +18,7 @@ REQUIRED_FIELDS = (
     "query_id",
     "provider",
     "product",
+    "model",
     "search_mode",
     "country",
     "language",
@@ -70,21 +71,23 @@ def load_ledger(
 
 
 def summarize(rows: list[dict[str, object]]) -> dict[str, object]:
-    groups: dict[
-        tuple[str, str, str, str],
-        list[dict[str, object]],
-    ] = defaultdict(list)
+    dimensions = (
+        "run_id",
+        "provider",
+        "product",
+        "model",
+        "search_mode",
+        "country",
+        "language",
+        "cohort",
+    )
+    groups: dict[tuple[str, ...], list[dict[str, object]]] = defaultdict(list)
     for row in rows:
-        key = (
-            str(row["provider"]),
-            str(row["product"]),
-            str(row["language"]),
-            str(row["cohort"]),
-        )
+        key = tuple(str(row.get(field, "")) for field in dimensions)
         groups[key].append(row)
 
     summaries = []
-    for (provider, product, language, cohort), members in sorted(groups.items()):
+    for key, members in sorted(groups.items()):
         count = len(members)
         rates = {
             field: sum(bool(row[field]) for row in members) / count
@@ -93,10 +96,7 @@ def summarize(rows: list[dict[str, object]]) -> dict[str, object]:
         ranked = [int(row["rank"]) for row in members if row["rank"] is not None]
         summaries.append(
             {
-                "provider": provider,
-                "product": product,
-                "language": language,
-                "cohort": cohort,
+                **dict(zip(dimensions, key, strict=True)),
                 "query_count": count,
                 "rates": rates,
                 "best_rank": min(ranked) if ranked else None,

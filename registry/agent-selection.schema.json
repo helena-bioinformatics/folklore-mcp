@@ -63,7 +63,7 @@
       "minItems": 4
     },
     "outcomes": {
-      "items": {"enum": ["resolved", "ambiguous", "not_found", "invalid", "unsupported", "temporarily_unavailable"]},
+      "items": {"enum": ["resolved", "ambiguous", "not_found", "invalid_request", "unsupported", "resolution_unavailable"]},
       "minItems": 6,
       "maxItems": 6,
       "type": "array",

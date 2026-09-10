@@ -1,0 +1,6 @@
+case_id,input,assembly,input_class
+refseq-brca1-deletion,NM_007294.4:c.68_69del,GRCh38,transcript-hgvs
+canonical-brca1-deletion,GRCh38:chr17:43124027:ACT:A,GRCh38,coordinate
+ensembl-brca1-deletion,ENST00000357654.9:c.68_69del,GRCh38,transcript-hgvs
+vus-brca1,chr17:43115777 A>G,GRCh38,coordinate
+conflicting-brca1,chr17:43104953 G>C,GRCh38,coordinate

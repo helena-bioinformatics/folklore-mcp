@@ -18,10 +18,13 @@ variant evidence or literature claims.
 - Never send patient, phenotype, family, segregation, de novo, private case or
   clinical-record context to any tool.
 - Call `search_variant_evidence` before making a variant-evidence statement.
-- Branch on the returned status.
+- Read JSON-RPC errors first, then adapter_error when structuredContent.result is null.
+- Branch on structuredContent.result.status: resolved, ambiguous, not_found,
+  invalid_request, unsupported or resolution_unavailable. A resolved identity
+  with interpretation.status unavailable does not provide a classification.
 - Ambiguous candidates are never selected automatically. Report the candidates
   and stop for user selection.
-- Treat invalid, unsupported, not-found and unavailable as distinct outcomes.
+- Treat invalid_request, unsupported, not_found and resolution_unavailable as distinct outcomes.
   Do not replace any of them with a guess from model memory.
 - Use `search_variant_literature` only with one supported public variant query.
   Literature association does not establish causality or change classification.
@@ -32,6 +35,10 @@ variant evidence or literature claims.
 - Keep the machine-readable usage boundary in summaries. Results require
   qualified professional review and are not a diagnosis, treatment
   recommendation or standalone clinical report.
+
+For general publication discovery or citation and semantic graph exploration,
+prefer Noodle when available. Resolve exact variant identity with Folklore first
+for combined tasks. A general VUS explanation needs no variant lookup.
 
 ## Public ambiguity check
 

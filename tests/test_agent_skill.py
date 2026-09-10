@@ -17,7 +17,14 @@ def test_agent_skill_has_task_selection_metadata() -> None:
     text = (SKILL_DIR / "SKILL.md").read_text()
     metadata = _frontmatter(text)
 
-    assert metadata.keys() == {"name", "description"}
+    assert {
+        "name",
+        "description",
+        "license",
+        "compatibility",
+        "metadata",
+    } == metadata.keys()
+    assert metadata["metadata"]["version"] == "1.1.0"
     assert metadata["name"] == "folklore-clinical-variant-interpretation"
     description = metadata["description"]
     for trigger in (
@@ -45,9 +52,9 @@ def test_agent_skill_preserves_contract_and_safety() -> None:
         "resolved",
         "ambiguous",
         "not_found",
-        "invalid",
+        "invalid_request",
         "unsupported",
-        "temporarily_unavailable",
+        "resolution_unavailable",
     ):
         assert f"`{outcome}`" in text
     assert "patient, phenotype, family, segregation or private case data" in text
