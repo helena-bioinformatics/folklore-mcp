@@ -21,11 +21,11 @@ curl --fail-with-body --silent --show-error \
   -H 'MCP-Protocol-Version: 2026-07-28' \
   -H 'Mcp-Method: tools/call' \
   -H 'Mcp-Name: get_gene_disease_associations' \
-  --data '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"get_gene_disease_associations","arguments":{"gene":"BRCA1","limit":20,"offset":0}}}'
+  --data '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientCapabilities":{}},"name":"get_gene_disease_associations","arguments":{"gene":"BRCA1","limit":20,"offset":0}}}'
 ```
 
 ```json
-{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"search_disease_genes","arguments":{"disease":"Marfan","limit":20,"offset":0}}}
+{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientCapabilities":{}},"name":"search_disease_genes","arguments":{"disease":"Marfan","limit":20,"offset":0}}}
 ```
 
 ## Interpret each assertion
