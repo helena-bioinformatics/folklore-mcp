@@ -1,0 +1,34 @@
+name: Publish verified Folklore GitHub release
+
+on:
+  push:
+    branches: [main]
+    paths: ["release-publication/current.json"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: folklore-github-release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.repository == 'helena-bioinformatics/folklore-mcp'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Validate immutable release source, Registry and archive
+        run: python3 ops/publish_github_release.py --prepare-only
+      - name: Publish once without editing existing releases or tags
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 ops/publish_github_release.py --publish

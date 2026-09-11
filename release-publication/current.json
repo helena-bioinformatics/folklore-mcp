@@ -1,0 +1,9 @@
+{
+  "version": "1.5.0",
+  "sourceCommit": "473314d4fb8ebe9a3c45418141ec54446edf5b60",
+  "tagObject": "9858d0ffcc56d713ea8ee0d9d0bb49869cfb4481",
+  "officialWorkflowRun": 34589120549,
+  "notes": "release-publication/1.5.0.md",
+  "asset": "skills/releases/1.4.0/folklore-clinical-variant-interpretation-1.4.0.zip",
+  "assetSha256": "76270a627db3b3915e46f60aed2e544949a5204fc535ffca84120ea688947bd2"
+}
