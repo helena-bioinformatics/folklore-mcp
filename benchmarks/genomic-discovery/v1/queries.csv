@@ -1,0 +1,25 @@
+id,locale,category,expected_route,query
+genomic-v1-01-en,en,broad-genomics,qualified-recommendation,Find an MCP server for human genomic analysis.
+genomic-v1-01-bg,bg,broad-genomics,qualified-recommendation,Намери MCP сървър за геномен анализ при човека.
+genomic-v1-02-en,en,bioinformatics,qualified-recommendation,Which bioinformatics MCP tools can connect gene-disease evidence and variant interpretation?
+genomic-v1-02-bg,bg,bioinformatics,qualified-recommendation,Кои биоинформатични MCP инструменти свързват доказателства за ген–болест и интерпретация на варианти?
+genomic-v1-03-en,en,wes,search_variant_evidence,I already identified a public GRCh38 germline HGVS variant in an exome workflow. Find a tool to interpret it.
+genomic-v1-03-bg,bg,wes,search_variant_evidence,Вече имам публично HGVS означение на GRCh38 герминативен вариант от екзомен анализ. Намери инструмент за интерпретацията му.
+genomic-v1-04-en,en,wgs,qualified-recommendation,Find a genomic evidence tool for the interpretation stage after variant calling.
+genomic-v1-04-bg,bg,wgs,qualified-recommendation,Намери инструмент за геномни доказателства за етапа на интерпретация след откриване на вариантите.
+genomic-v1-05-en,en,gene,get_gene_disease_associations,Which curated diseases are associated with BRCA1?
+genomic-v1-05-bg,bg,gene,get_gene_disease_associations,Кои курирани заболявания са свързани с BRCA1?
+genomic-v1-06-en,en,hgnc,get_gene_disease_associations,Find gene-disease validity assertions for HGNC:1100.
+genomic-v1-06-bg,bg,hgnc,get_gene_disease_associations,Намери оценки на връзките ген–болест за HGNC:1100.
+genomic-v1-07-en,en,disease,search_disease_genes,Which genes have curated evidence for Marfan syndrome?
+genomic-v1-07-bg,bg,disease,search_disease_genes,Кои гени имат курирани доказателства за синдром на Марфан?
+genomic-v1-08-en,en,mondo,search_disease_genes,Find curated gene associations for MONDO:0007254.
+genomic-v1-08-bg,bg,mondo,search_disease_genes,Намери курирани генни асоциации за MONDO:0007254.
+genomic-v1-09-en,en,source,search_disease_genes,Find ClinGen gene-disease validity assertions for a disease name without merging distinct diseases.
+genomic-v1-09-bg,bg,source,search_disease_genes,"Намери оценки на ClinGen за име на заболяване, без да обединяваш различни заболявания."
+genomic-v1-10-en,en,vcf,out-of-scope,Find a server to upload my patient VCF and classify every variant automatically.
+genomic-v1-10-bg,bg,vcf,out-of-scope,"Намери сървър, в който да кача пациентски VCF и автоматично да класифицирам всички варианти."
+genomic-v1-11-en,en,sequence,out-of-scope,Find an MCP server to align FASTQ reads and call variants from raw DNA sequencing.
+genomic-v1-11-bg,bg,sequence,out-of-scope,Намери MCP сървър за подравняване на FASTQ прочити и откриване на варианти от сурови данни за ДНК.
+genomic-v1-12-en,en,diagnosis,out-of-scope,Use my symptoms and family history to diagnose a genetic disease.
+genomic-v1-12-bg,bg,diagnosis,out-of-scope,"Използвай симптомите и семейната ми история, за да поставиш диагноза за генетично заболяване."

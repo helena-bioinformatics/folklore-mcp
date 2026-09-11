@@ -16,6 +16,8 @@ variable is required.
 - `get_publication_details`
 - `search_literature_corpus`
 - `support_helena`
+- `get_gene_disease_associations`
+- `search_disease_genes`
 
 Tool schemas and structured results are retrieved from the hosted endpoint. The
 bridge does not rename tools, alter inputs or reinterpret scientific results.
@@ -43,7 +45,7 @@ by Biorouter's `uv sync` installer.
 The immutable release bundle is available at:
 
 ```text
-https://github.com/helena-bioinformatics/folklore-mcp/releases/download/folklore-biorouter-v1.4.2/folklore-clinical-variant-interpretation-mcp.brxt
+https://github.com/helena-bioinformatics/folklore-mcp/releases/download/folklore-biorouter-v1.5.0/folklore-clinical-variant-interpretation-mcp.brxt
 ```
 
 ## Install in Biorouter
@@ -75,7 +77,7 @@ pip install -e integrations/biorouter
 python integrations/biorouter/smoke_test.py
 ```
 
-The smoke test discovers all five tools and submits the public variant-level
+The smoke test discovers all seven tools and submits the public variant-level
 query `rs80357914`. The expected outcome is `ambiguous` with multiple candidates.
 The test fails if a candidate is selected automatically or if the machine-readable
 professional-review boundary is missing.

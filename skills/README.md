@@ -4,7 +4,7 @@ Use the official
 [`folklore-clinical-variant-interpretation`](folklore-clinical-variant-interpretation/SKILL.md)
 skill when a user asks to classify, interpret, resolve or investigate one public
 germline variant, review VUS evidence, inspect available ClinVar or population
-evidence, or find variant-linked literature.
+evidence, find variant-linked literature, or retrieve ClinGen gene-disease assertions from a gene or disease query.
 
 The skill is deliberately task-first. It can trigger when the user does not
 mention Helena Bioinformatics, Folklore, MCP or ACMG/AMP. Example requests
@@ -21,7 +21,7 @@ The skill delegates scientific work to Folklore Clinical Variant Interpretation
 MCP at `https://api.helena.bio/folklore/v1/mcp`. It does not implement variant
 resolution, evidence aggregation or ACMG/AMP logic.
 
-Send only one public variant expression. Do not send patient, phenotype, family,
+For variant tools, send only one public variant expression. Gene-disease tools accept a public gene symbol/HGNC identifier or disease name/MONDO identifier. Do not send patient, phenotype, family,
 segregation or private case data. Results are automated variant-level decision
 support for qualified professional review, not a diagnosis or treatment
 recommendation.

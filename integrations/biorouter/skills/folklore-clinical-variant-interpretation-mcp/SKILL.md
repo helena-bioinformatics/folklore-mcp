@@ -1,6 +1,6 @@
 ---
 name: folklore-clinical-variant-interpretation-mcp
-description: Use Folklore Clinical Variant Interpretation MCP for public clinical variant evidence, variant-linked literature, publication details, or semantic biomedical Literature Corpus search from Biorouter.
+description: Use Folklore Clinical Variant Interpretation MCP for public clinical variant evidence, variant-linked literature, publication details, ClinGen gene-disease assertions, or semantic biomedical Literature Corpus search from Biorouter.
 license: Apache-2.0
 user-invocable: false
 ---
@@ -13,13 +13,14 @@ variant evidence or literature claims.
 
 ## Operating rules
 
-- Accept only a public variant identifier or notation supported by the published
+- For variant tools, accept only a public variant identifier or notation supported by the published
   GRCh38 germline nuclear SNV and simple-indel contract.
 - Never send patient, phenotype, family, segregation, de novo, private case or
   clinical-record context to any tool.
+- Call `get_gene_disease_associations` for one exact gene symbol/HGNC identifier; call `search_disease_genes` for an exact MONDO identifier or disease-name substring. Preserve distinct disease identities, source assertions, inheritance, evidence assessments and dates. These tools cover ClinGen Gene-Disease Validity, not all known associations. Empty results do not prove absence of association. Neither tool accepts patient data, VCFs or sequencing files.
 - Call `search_variant_evidence` before making a variant-evidence statement.
 - Read JSON-RPC errors first, then adapter_error when structuredContent.result is null.
-- Branch on structuredContent.result.status: resolved, ambiguous, not_found,
+- For variant interpretation, branch on structuredContent.result.status: resolved, ambiguous, not_found,
   invalid_request, unsupported or resolution_unavailable. A resolved identity
   with interpretation.status unavailable does not provide a classification.
 - Ambiguous candidates are never selected automatically. Report the candidates

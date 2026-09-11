@@ -1,0 +1,15 @@
+{
+  "cohort": "genomic-discovery",
+  "version": 1,
+  "adapter_release": "1.5.0",
+  "created": "2026-09-11",
+  "query_count": 24,
+  "locales": [
+    "en",
+    "bg"
+  ],
+  "query_file": "queries.csv",
+  "status": "preregistered-unmeasured",
+  "baseline_sets": "Existing search-discovery 60 queries and agent-discovery 100 cases remain unchanged.",
+  "scope": "Search visibility and installed-tool routing are measured separately; no clinical accuracy claim."
+}

@@ -12,6 +12,8 @@ EXPECTED_TOOLS = {
     "get_publication_details",
     "search_literature_corpus",
     "support_helena",
+    "get_gene_disease_associations",
+    "search_disease_genes",
 }
 
 

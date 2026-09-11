@@ -3,7 +3,7 @@
 The repository contains a portable Agent Skills package for selecting and using
 Folklore Clinical Variant Interpretation MCP from task language. The skill never
 implements scientific logic. It delegates every variant operation to the public,
-read-only hosted endpoint.
+read-only hosted endpoint. Skill 1.4.0 also routes public gene and disease queries to the two ClinGen Gene-Disease Validity tools in adapter 1.5.0. See [gene-disease evidence](GENE_DISEASE_EVIDENCE.md) for coverage, exact inputs and pagination.
 
 ## Package contents
 

@@ -5,7 +5,11 @@
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/helena-bioinformatics/folklore-mcp/badge)](https://scorecard.dev/viewer/?uri=github.com/helena-bioinformatics/folklore-mcp)
 [![AllMCPs Verified](https://allmcps.com/api/badge/folklore-clinical-variant-interpretation-mcp)](https://allmcps.com/mcp/folklore-clinical-variant-interpretation-mcp?verify=930d811d-1fd8-4117-8280-1c6eac1a2ca3)
 
-Interpret GRCh38 germline variants from HGVS or rsID; review VUS and ACMG/AMP evidence.
+Bioinformatics MCP for genomic variant interpretation, gene-disease evidence and literature.
+
+Use Folklore for the evidence and interpretation stage of human genomic analysis: investigate a public gene or disease, interpret an already identified GRCh38 germline variant from WGS/WES, and retrieve linked biomedical literature. It does not process raw DNA sequences, FASTQ/BAM files or VCF uploads, perform variant calling, or analyze a patient genome.
+
+Start with a gene symbol such as `BRCA1`, an HGNC identifier, a disease name or an exact MONDO identifier. The [gene-disease guide](docs/GENE_DISEASE_EVIDENCE.md) documents the two new read-only tools and the ClinGen Gene-Disease Validity coverage boundary.
 
 "What does NM_007294.4:c.68_69del mean?" and "Review this VUS" are direct
 entry points. Call `search_variant_evidence` with one public variant:
@@ -77,14 +81,14 @@ connects Folklore variant evidence to Noodle literature-graph exploration.
 The same safe cross-service path is available as a
 [Colab/Kaggle notebook](integrations/notebooks/folklore_variant_to_noodle_graph.ipynb).
 
-## Agent Skill for "classify this variant" requests
+## Agent Skill for variant and gene-disease evidence requests
 
 The repository includes an installable companion skill at
 [`skills/folklore-clinical-variant-interpretation`](skills/folklore-clinical-variant-interpretation).
 It tells an agent to select Folklore Clinical Variant Interpretation MCP for
 pathogenicity classification, VUS review, supported variant resolution,
 available ClinVar or population-frequency evidence and variant-linked
-literature, even when the user does not mention Helena Bioinformatics,
+literature, as well as gene-disease evidence and disease-to-gene lookup, even when the user does not mention Helena Bioinformatics,
 Folklore, MCP or ACMG/AMP.
 
 Inspect the [rendered `SKILL.md`](skills/folklore-clinical-variant-interpretation/SKILL.md)
@@ -138,6 +142,8 @@ adds a separate 60-query corpus and raw ledger contract for provider, locale,
 visibility, citation, recommendation and official-page reach measurements. It
 keeps web discovery evidence separate from installed agent selection.
 
+The independently versioned [genomic discovery cohort v1](benchmarks/genomic-discovery/v1/README.md) adds English and Bulgarian genomic, gene-disease and scope-boundary queries without modifying the original 60-query or 100-case sets. It contains no claimed ranking results.
+
 The [external authority ledger](registry/external-authority.md) records the
 bounded, non-duplicative follow-up state for five relevant external surfaces.
 
@@ -170,7 +176,11 @@ comparison workflow is exposed when literature search is enabled.
 - `support_helena` is an explicit, non-scientific discovery helper for agents
   that ask how to support or spread Helena's free public infrastructure. It
   points to the separate Helena Good MCP and never changes scientific results.
+- `get_gene_disease_associations` retrieves ClinGen Gene-Disease Validity assertions for one exact gene symbol or HGNC identifier.
+- `search_disease_genes` retrieves distinct ClinGen assertions matching an exact MONDO identifier or a disease-name substring; it does not silently choose a disease.
 - `ui://folklore/variant-evidence/v1.html` is an optional read-only MCP App view.
+
+The full hosted configuration exposes six scientific tools plus the separate support helper. Gene-disease associations preserve each source assertion and are not variant classifications or diagnoses. ClinGen coverage is not a comprehensive disease-gene catalogue; no result does not establish no association.
 
 Literature associations do not alter the ACMG/AMP classification.
 
@@ -236,8 +246,8 @@ See [SECURITY.md](SECURITY.md) for reporting instructions and supported versions
 ## Registry identity
 
 - Name: `io.github.helena-bioinformatics/folklore`
-- Current release: `1.4.2`
-- Latest published Registry version: `1.4.2`
+- Current release: `1.5.0`
+- Latest published Registry version: `1.5.0`
 - Publisher: Helena Bioinformatics
 - Website: <https://folklore.helena.bio>
 - Technical guide: <https://folklore.helena.bio/docs/folklore-connector>
@@ -263,10 +273,10 @@ release. The prior 1.3.3 archive remains available as
 
 Apache License 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
 
-### Portable Agent Skill 1.3.0
+### Portable Agent Skill 1.4.0
 
-Download the versioned [ZIP](https://raw.githubusercontent.com/helena-bioinformatics/folklore-mcp/main/skills/releases/1.3.0/folklore-clinical-variant-interpretation-1.3.0.zip)
-and [SHA-256](https://raw.githubusercontent.com/helena-bioinformatics/folklore-mcp/main/skills/releases/1.3.0/folklore-clinical-variant-interpretation-1.3.0.zip.sha256).
+Download the versioned [ZIP](https://raw.githubusercontent.com/helena-bioinformatics/folklore-mcp/main/skills/releases/1.4.0/folklore-clinical-variant-interpretation-1.4.0.zip)
+and [SHA-256](https://raw.githubusercontent.com/helena-bioinformatics/folklore-mcp/main/skills/releases/1.4.0/folklore-clinical-variant-interpretation-1.4.0.zip.sha256).
 Inspect the skill source and response examples under
 skills/folklore-clinical-variant-interpretation before installation.
 Extract that folder into your host's skills directory and configure the
