@@ -3,7 +3,8 @@ mcp_servers:
     enabled: true
     description: >-
       Folklore Clinical Variant Interpretation MCP by Helena Bioinformatics:
-      read-only public clinical variant evidence and literature
+      genomic variant interpretation, ClinGen gene-disease evidence and literature;
+      public read-only queries without patient or private case data
     command:
       - docker
       - run
