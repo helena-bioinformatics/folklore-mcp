@@ -7,8 +7,9 @@ import os
 import re
 import subprocess
 import tempfile
+import time
 from pathlib import Path
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -60,16 +61,36 @@ def fetch_json(url: str, *, missing_ok: bool = False) -> dict | None:
     }
     if url.startswith(API + "/") and os.environ.get("GH_TOKEN"):
         headers["Authorization"] = f"Bearer {os.environ['GH_TOKEN']}"
-    try:
-        with urlopen(Request(url, headers=headers), timeout=30) as response:  # noqa: S310 - fixed public API roots
-            body = response.read(2_097_153)
-            if len(body) > 2_097_152:
-                raise ValueError("Oversized release verification response")
-            return json.loads(body)
-    except HTTPError as exc:
-        if missing_ok and exc.code == 404:
-            return None
-        raise
+    # Only the Registry GET may retry; publication and validation never do.
+    delays = (2, 4, 8) if url == REGISTRY else ()
+    for attempt in range(len(delays) + 1):
+        try:
+            with urlopen(Request(url, headers=headers), timeout=30) as response:  # noqa: S310 - fixed public API roots
+                body = response.read(2_097_153)
+                if len(body) > 2_097_152:
+                    raise ValueError("Oversized release verification response")
+                return json.loads(body)
+        except HTTPError as exc:
+            status = exc.code
+            exc.close()
+            if missing_ok and status == 404:
+                return None
+            if status not in (408, 429, 500, 502, 503, 504) or attempt == len(delays):
+                raise
+        except URLError as exc:
+            if not isinstance(
+                exc.reason, (TimeoutError, ConnectionError)
+            ) or attempt == len(delays):
+                raise
+        except (TimeoutError, ConnectionError):
+            if attempt == len(delays):
+                raise
+        delay = delays[attempt]
+        print(
+            f"Registry temporarily unavailable; retry {attempt + 1}/{len(delays)} in {delay}s",
+            flush=True,
+        )
+        time.sleep(delay)
 
 
 def validate_registry(body: dict, declared: dict) -> None:

@@ -9,3 +9,15 @@ The request pins the annotated tag object, peeled source commit, successful Offi
 This workflow verifies the pinned tag object and successful Registry publication; it does not assert that GitHub recognizes the tag signer's key. A Registry release and GitHub Release are separate publication events. Confirm the resulting release URL and assets, then observe any Zenodo DOI created by the configured archive integration before claiming it exists.
 
 MCP Central remains governed by its separate Registry workflow. Biorouter bundles use the distinct signed `folklore-biorouter-v<version>` tag and its existing build-and-install verification workflow.
+
+## Temporary Registry failures
+
+The Registry verification GET retries up to three times after the first attempt,
+waiting 2, 4 and 8 seconds. Each request keeps its 30-second timeout. Retries apply
+to connection timeouts/resets and HTTP 408, 429, 500, 502, 503 and 504. The log
+reports retry number and delay without request headers. Exhausted retries fail
+verification and prevent publication.
+
+Malformed or oversized responses, other HTTP errors and release identity/version
+mismatches fail immediately. GitHub API requests and release creation are not
+retried by this policy. Existing releases and immutable tags remain preserved.
