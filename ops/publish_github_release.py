@@ -181,4 +181,12 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except (ValueError, OSError, subprocess.CalledProcessError) as exc:
+        # Public verification failures become visible without exposing request headers.
+        detail = str(exc).replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+        print(
+            f"::error title=Release verification failed::{type(exc).__name__}: {detail}"
+        )
+        raise SystemExit(1) from None

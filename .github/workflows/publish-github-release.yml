@@ -3,7 +3,10 @@ name: Publish verified Folklore GitHub release
 on:
   push:
     branches: [main]
-    paths: ["release-publication/current.json"]
+    paths:
+      - "release-publication/current.json"
+      - ".github/workflows/publish-github-release.yml"
+      - "ops/publish_github_release.py"
   workflow_dispatch:
 
 permissions:
@@ -27,6 +30,8 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - name: Validate immutable release source, Registry and archive
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: python3 ops/publish_github_release.py --prepare-only
       - name: Publish once without editing existing releases or tags
         env:
