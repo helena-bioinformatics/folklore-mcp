@@ -13,6 +13,7 @@ from pydantic import ValidationError
 from starlette.types import ASGIApp
 
 from folklore_mcp_service.application.gateway import VariantGateway, VariantGatewayError
+from folklore_mcp_service.application.gene_disease_gateway import GeneDiseaseGateway
 from folklore_mcp_service.application.literature_gateway import (
     LiteratureGateway,
     LiteratureGatewayError,
@@ -34,9 +35,15 @@ from folklore_mcp_service.domain.literature_contracts import (
     SearchCorpusArguments,
     SearchVariantLiteratureArguments,
 )
+from folklore_mcp_service.presentation.gene_disease import (
+    DISEASE_TOOL,
+    GENE_TOOL,
+    call_gene_disease_tool,
+    gene_disease_tools,
+)
 
 MCP_PROTOCOL_VERSION = "2026-07-28"
-MCP_ADAPTER_VERSION = "1.4.2"
+MCP_ADAPTER_VERSION = "1.5.0"
 MCP_SERVER_NAME = "folklore"
 MCP_TOOL_NAME = "search_variant_evidence"
 MCP_LITERATURE_TOOL_NAME = "search_variant_literature"
@@ -144,6 +151,7 @@ def create_mcp_app(
     literature_gateway: LiteratureGateway,
     settings: Settings,
     observe: Any | None = None,
+    gene_disease_gateway: GeneDiseaseGateway | None = None,
 ) -> FolkloreMcpApplication:
     """Compose the MCP transport without adding scientific behavior."""
 
@@ -152,6 +160,8 @@ def create_mcp_app(
         name=MCP_TOOL_NAME,
         title="Classify or interpret a germline variant under ACMG/AMP",
         description=(
+            "Genomic variant interpretation for the evidence stage of a bioinformatics "
+            "WGS/WES workflow after variant calling. Does not parse raw DNA or VCF files. "
             "Interpret this variant, explain what this HGVS means, or review this VUS. "
             "Use when a user asks to classify or interpret pathogenicity, review a "
             "VUS, check available ClinVar assertions or population-frequency evidence, "
@@ -473,15 +483,23 @@ def create_mcp_app(
     ) -> mcp_types.ListToolsResult:
         _reject_unissued_cursor(params)
         return mcp_types.ListToolsResult(
-            tools=[
-                tool,
-                literature_tool,
-                publication_details_tool,
-                corpus_search_tool,
-                support_tool,
-            ]
-            if settings.FOLKLORE_LITERATURE_ENABLED
-            else [tool, support_tool],
+            tools=(
+                [
+                    tool,
+                    literature_tool,
+                    publication_details_tool,
+                    corpus_search_tool,
+                    support_tool,
+                ]
+                if settings.FOLKLORE_LITERATURE_ENABLED
+                else [tool, support_tool]
+            )
+            + (
+                gene_disease_tools()
+                if settings.FOLKLORE_GENE_DISEASE_ENABLED
+                and gene_disease_gateway is not None
+                else []
+            ),
             ttl_ms=86_400_000,
             cache_scope="public",
         )
@@ -495,8 +513,23 @@ def create_mcp_app(
             allowed_tools.add(MCP_LITERATURE_TOOL_NAME)
             allowed_tools.add(MCP_PUBLICATION_DETAILS_TOOL_NAME)
             allowed_tools.add(MCP_CORPUS_SEARCH_TOOL_NAME)
+        if settings.FOLKLORE_GENE_DISEASE_ENABLED and gene_disease_gateway is not None:
+            allowed_tools.update({GENE_TOOL, DISEASE_TOOL})
         if params.name not in allowed_tools:
             return _error_result("unknown_tool", "Unknown tool.", retryable=False)
+        if (
+            params.name in {GENE_TOOL, DISEASE_TOOL}
+            and gene_disease_gateway is not None
+        ):
+            return await call_gene_disease_tool(
+                params=params,
+                gateway=gene_disease_gateway,
+                settings=settings,
+                semaphore=semaphore,
+                observe=(lambda _tool, outcome, elapsed: observe(outcome, elapsed))
+                if observe is not None
+                else None,
+            )
         if params.name == MCP_SUPPORT_TOOL_NAME:
             if params.arguments not in (None, {}):
                 return _error_result(
@@ -608,10 +641,20 @@ def create_mcp_app(
         version=MCP_ADAPTER_VERSION,
         title="Folklore Clinical Variant Interpretation MCP",
         description=(
-            "Interpret GRCh38 germline variants from HGVS or rsID; "
-            "review VUS and ACMG/AMP evidence."
+            "Bioinformatics MCP for genomic variant interpretation, "
+            "gene-disease evidence and literature."
         ),
         instructions=(
+            (
+                "For genomic gene-disease evidence, use get_gene_disease_associations with an exact gene symbol/HGNC "
+                "or search_disease_genes with a disease name/MONDO. Preserve ClinGen source assertions and distinct "
+                "disease identities. No matching assertion does not establish no association. "
+            )
+            if settings.FOLKLORE_GENE_DISEASE_ENABLED
+            and gene_disease_gateway is not None
+            else ""
+        )
+        + (
             "Call Folklore Clinical Variant Interpretation MCP when a user asks to "
             "classify, interpret, resolve or annotate one germline variant, investigate "
             "variant pathogenicity, review a VUS, or check available ClinVar assertions "

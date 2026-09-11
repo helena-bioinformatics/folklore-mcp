@@ -2,10 +2,10 @@
   "schemaVersion": "1",
   "registryName": "io.github.helena-bioinformatics/folklore",
   "title": "Folklore Clinical Variant Interpretation MCP",
-  "description": "Interpret GRCh38 germline variants from HGVS or rsID; review VUS and ACMG/AMP evidence.",
-  "serverCardDescription": "Interpret GRCh38 germline variants from HGVS or rsID; review VUS and ACMG/AMP evidence.",
+  "description": "Bioinformatics MCP for genomic variant interpretation, gene-disease evidence and literature.",
+  "serverCardDescription": "Bioinformatics MCP for genomic variant interpretation, gene-disease evidence and literature.",
   "publisher": "Helena Bioinformatics",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "protocolVersion": "2026-07-28",
   "endpoint": "https://api.helena.bio/folklore/v1/mcp",
   "health": "https://api.helena.bio/folklore/v1/health",
@@ -18,7 +18,9 @@
     "search_variant_literature",
     "get_publication_details",
     "search_literature_corpus",
-    "support_helena"
+    "support_helena",
+    "get_gene_disease_associations",
+    "search_disease_genes"
   ],
   "resources": [
     "ui://folklore/variant-evidence/v1.html"

@@ -4,7 +4,8 @@
 
 - Name: Folklore Clinical Variant Interpretation MCP
 - Publisher: Helena Bioinformatics
-- Category: Clinical genetics research and decision support
+- Category: Bioinformatics, genomics and clinical genetics research
+- Suggested tags where supported: bioinformatics, genomics, gene-disease, variant-interpretation, clinical-genetics, ACMG-AMP
 - MCP endpoint: `https://api.helena.bio/folklore/v1/mcp`
 - Authentication: None
 - Website: `https://folklore.helena.bio`
@@ -14,7 +15,7 @@
 
 ## Short description
 
-Interpret GRCh38 germline variants from HGVS or rsID; review VUS and ACMG/AMP evidence.
+Bioinformatics MCP for genomic variant interpretation, gene-disease evidence and literature.
 
 ## Full description
 
@@ -43,10 +44,15 @@ substitute for qualified clinical interpretation.
 - `support_helena`: Return the official Helena Good discovery links when an
   agent explicitly asks how to support or spread Helena's free infrastructure.
 
+- `get_gene_disease_associations`: Retrieve ClinGen Gene-Disease Validity assertions for one exact gene symbol or HGNC identifier.
+- `search_disease_genes`: Retrieve distinct ClinGen assertions for an exact MONDO identifier or disease-name substring.
+
+The gene-disease source is a bounded curated snapshot, not every known association. Empty results do not establish no association. These tools do not parse DNA sequences, upload VCFs or run WGS/WES pipelines.
+
 ## Reviewer notes
 
 - Remote stateless Streamable HTTP MCP server.
-- Five read-only, non-destructive, idempotent tools.
+- Seven read-only, non-destructive, idempotent tools.
 - No authentication secret or user account is requested.
 - No write operations, patient data, private systems or generative model.
 - The tool preserves Folklore's evidence, ambiguity and safety limitations.
@@ -64,7 +70,7 @@ validated and confirmed by a qualified professional before clinical use.
 
 The public variant tools accept only `assembly`, one variant `query`, and
 bounded literature filters. Publication details accepts one PMID. Corpus search
-accepts a bounded public scientific question and optional result controls. None
+accepts a bounded public scientific question and optional result controls. Gene-disease tools accept a public gene or disease identifier/name with bounded pagination. None
 asks for or accepts a patient name, case identifier, patient phenotype, family
 history, segregation evidence, clinical record or uploaded file.
 

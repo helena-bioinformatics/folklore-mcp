@@ -2,6 +2,13 @@
 
 All notable changes to the public Folklore MCP adapter are documented here.
 
+## 1.5.0 - 2026-09-11
+
+- Add opt-in, read-only `get_gene_disease_associations` and `search_disease_genes` tools over the public Folklore ClinGen Gene-Disease Validity API, preserving source assertions, distinct diseases, evidence limits and pagination.
+- Preserve the existing five-tool order and append the two new scientific tools when enabled. New capability defaults off for standalone adapters.
+- Validate bounded upstream responses and readiness, bind results to the requested query/page, and preserve errors without model-generated evidence.
+- Broaden genomic/bioinformatics discovery copy accurately; add gene-disease examples, companion Skill 1.4.0, seven-tool bridge metadata and a separate 24-query EN/BG discovery cohort. Existing 60/100 benchmark cases remain unchanged.
+
 ## 1.4.2 - 2026-09-10
 
 - Lead discovery descriptions with variant interpretation inputs and evidence outputs.

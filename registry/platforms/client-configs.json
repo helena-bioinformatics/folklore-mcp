@@ -10,10 +10,15 @@
     "search_variant_literature",
     "get_publication_details",
     "search_literature_corpus",
-    "support_helena"
+    "support_helena",
+    "get_gene_disease_associations",
+    "search_disease_genes"
   ],
   "clients": {
-    "generic": {"url": "https://api.helena.bio/folklore/v1/mcp", "transport": "streamable-http"},
+    "generic": {
+      "url": "https://api.helena.bio/folklore/v1/mcp",
+      "transport": "streamable-http"
+    },
     "biomni": {
       "title": "Folklore Clinical Variant Interpretation MCP",
       "publisher": "Helena Bioinformatics",
@@ -28,15 +33,60 @@
       "authentication": "none",
       "manifest": "integrations/biorouter/manifest.json"
     },
-    "codex": {"mcpServers": {"folklore": {"url": "https://api.helena.bio/folklore/v1/mcp"}}},
-    "chatgpt": {"mode": "custom MCP app", "url": "https://api.helena.bio/folklore/v1/mcp"},
-    "claude": {"mode": "custom connector", "url": "https://api.helena.bio/folklore/v1/mcp"},
-    "perplexity": {"mode": "custom remote connector", "url": "https://api.helena.bio/folklore/v1/mcp", "authentication": "none"},
-    "gemini_cli": {"command": "gemini mcp add --transport http folklore https://api.helena.bio/folklore/v1/mcp", "url": "https://api.helena.bio/folklore/v1/mcp"},
-    "grok": {"mode": "custom MCP connector", "url": "https://api.helena.bio/folklore/v1/mcp"},
-    "microsoft_copilot_studio": {"mode": "custom connector OpenAPI import", "url": "https://api.helena.bio/folklore/v1/mcp", "definition": "microsoft-copilot-openapi.yaml"},
-    "vscode": {"servers": {"folklore": {"type": "http", "url": "https://api.helena.bio/folklore/v1/mcp"}}},
-    "cursor": {"mcpServers": {"folklore": {"url": "https://api.helena.bio/folklore/v1/mcp"}}},
-    "windsurf": {"mcpServers": {"folklore": {"serverUrl": "https://api.helena.bio/folklore/v1/mcp"}}}
+    "codex": {
+      "mcpServers": {
+        "folklore": {
+          "url": "https://api.helena.bio/folklore/v1/mcp"
+        }
+      }
+    },
+    "chatgpt": {
+      "mode": "custom MCP app",
+      "url": "https://api.helena.bio/folklore/v1/mcp"
+    },
+    "claude": {
+      "mode": "custom connector",
+      "url": "https://api.helena.bio/folklore/v1/mcp"
+    },
+    "perplexity": {
+      "mode": "custom remote connector",
+      "url": "https://api.helena.bio/folklore/v1/mcp",
+      "authentication": "none"
+    },
+    "gemini_cli": {
+      "command": "gemini mcp add --transport http folklore https://api.helena.bio/folklore/v1/mcp",
+      "url": "https://api.helena.bio/folklore/v1/mcp"
+    },
+    "grok": {
+      "mode": "custom MCP connector",
+      "url": "https://api.helena.bio/folklore/v1/mcp"
+    },
+    "microsoft_copilot_studio": {
+      "mode": "custom connector OpenAPI import",
+      "url": "https://api.helena.bio/folklore/v1/mcp",
+      "definition": "microsoft-copilot-openapi.yaml"
+    },
+    "vscode": {
+      "servers": {
+        "folklore": {
+          "type": "http",
+          "url": "https://api.helena.bio/folklore/v1/mcp"
+        }
+      }
+    },
+    "cursor": {
+      "mcpServers": {
+        "folklore": {
+          "url": "https://api.helena.bio/folklore/v1/mcp"
+        }
+      }
+    },
+    "windsurf": {
+      "mcpServers": {
+        "folklore": {
+          "serverUrl": "https://api.helena.bio/folklore/v1/mcp"
+        }
+      }
+    }
   }
 }

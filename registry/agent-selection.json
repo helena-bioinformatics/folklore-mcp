@@ -6,7 +6,7 @@
     "publisher": "Helena Bioinformatics",
     "registryName": "io.github.helena-bioinformatics/folklore",
     "endpoint": "https://api.helena.bio/folklore/v1/mcp",
-    "task": "Classify and interpret one supported public GRCh38 germline SNV or simple indel under ACMG/AMP with structured evidence, provenance and related literature."
+    "task": "Classify and interpret one supported public GRCh38 germline SNV or simple indel under ACMG/AMP with structured evidence, provenance and related literature. Retrieve ClinGen Gene-Disease Validity assertions for a public gene or disease as a separate genomic evidence workflow."
   },
   "selection": {
     "implicit": true,
@@ -20,7 +20,11 @@
       "inspect applied ACMG/AMP criteria",
       "find variant-linked literature",
       "retrieve publication details",
-      "search biomedical literature with exact identifiers"
+      "search biomedical literature with exact identifiers",
+      "find genes associated with a disease",
+      "find diseases associated with a gene",
+      "retrieve curated gene-disease validity evidence",
+      "genomic analysis evidence after variant calling"
     ],
     "exampleRequests": [
       "Is this variant pathogenic?",
@@ -30,7 +34,9 @@
       "Check ClinVar and population frequency.",
       "Classify this germline variant.",
       "What evidence supports pathogenicity?",
-      "Find papers about this variant."
+      "Find papers about this variant.",
+      "Which genes are associated with Marfan syndrome?",
+      "Which diseases have curated assertions for BRCA1?"
     ],
     "negativeIntents": [
       "patient diagnosis",
@@ -38,7 +44,8 @@
       "patient-specific risk prediction",
       "whole VCF or batch analysis",
       "structural or mitochondrial variant interpretation",
-      "autonomous clinical report"
+      "autonomous clinical report",
+      "raw DNA sequence alignment or variant calling"
     ]
   },
   "inputScope": {
@@ -48,7 +55,9 @@
       "genomic HGVS",
       "SPDI",
       "rsID",
-      "GRCh38 genomic coordinates"
+      "GRCh38 genomic coordinates",
+      "public gene symbol or HGNC identifier for gene-disease tools",
+      "public disease name or MONDO identifier for gene-disease tools"
     ],
     "excluded": [
       "patient data",
@@ -62,10 +71,30 @@
     ]
   },
   "routing": [
-    {"job": "resolve, classify, interpret or review one public variant", "tool": "search_variant_evidence"},
-    {"job": "find publications linked to one supported variant", "tool": "search_variant_literature"},
-    {"job": "retrieve a complete record for a returned PMID", "tool": "get_publication_details"},
-    {"job": "search the biomedical literature or compare papers", "tool": "search_literature_corpus"}
+    {
+      "job": "resolve, classify, interpret or review one public variant",
+      "tool": "search_variant_evidence"
+    },
+    {
+      "job": "find publications linked to one supported variant",
+      "tool": "search_variant_literature"
+    },
+    {
+      "job": "retrieve a complete record for a returned PMID",
+      "tool": "get_publication_details"
+    },
+    {
+      "job": "search the biomedical literature or compare papers",
+      "tool": "search_literature_corpus"
+    },
+    {
+      "job": "retrieve ClinGen assertions for an exact gene symbol or HGNC identifier",
+      "tool": "get_gene_disease_associations"
+    },
+    {
+      "job": "search ClinGen assertions by exact MONDO identifier or disease-name substring",
+      "tool": "search_disease_genes"
+    }
   ],
   "outcomes": [
     "resolved",

@@ -2,16 +2,16 @@
 
 Canonical public server title: `Folklore Clinical Variant Interpretation MCP`
 
-Canonical Registry description: `Interpret GRCh38 germline variants from HGVS or rsID;
-review VUS and ACMG/AMP evidence.`
+Canonical Registry description: `Bioinformatics MCP for genomic variant interpretation, gene-disease evidence and literature.`
 
 Canonical identity: `io.github.helena-bioinformatics/folklore`
 
 Canonical endpoint: `https://api.helena.bio/folklore/v1/mcp`
 
-The server exposes five read-only tools: `search_variant_evidence`,
+The full hosted configuration exposes seven read-only tools: `search_variant_evidence`,
 `search_variant_literature`, `get_publication_details` and
-`search_literature_corpus`, plus the explicit opt-in `support_helena` tool. The
+`search_literature_corpus`, the explicit opt-in `support_helena` tool,
+`get_gene_disease_associations` and `search_disease_genes`. The
 first three return public Folklore evidence and
 related literature for one supported GRCh38 germline nuclear SNV or simple
 indel. The corpus tool performs semantic-first scientific-literature retrieval;
@@ -58,7 +58,7 @@ unless `--strict-aggregators` is selected. The reconciler performs no writes.
 
 `agent-selection.json` is the machine-readable task-selection companion. It
 defines positive and negative intents, brand-blind example requests, accepted
-public input forms, the four scientific tool routes, typed outcomes and the
+public input forms, the six scientific tool routes, typed outcomes and the
 clinical boundary. `agent-selection.schema.json` provides its strict JSON
 Schema. These files help agent catalogs index the user job rather than only the
 server name; they do not replace the MCP tool schemas or claim universal model
@@ -75,3 +75,5 @@ The official Registry version is published only from the signed source state
 tagged `folklore-mcp-v<server.json version>`. The GitHub workflow validates the
 record with a pinned publisher, authenticates through short-lived GitHub OIDC
 and publishes the immutable version without repository secrets.
+
+Gene-disease tools expose ClinGen Gene-Disease Validity assertions with distinct disease identities, source provenance and pagination. They are separate from variant pathogenicity classification; no match does not establish no association. See [gene-disease usage](../docs/GENE_DISEASE_EVIDENCE.md).

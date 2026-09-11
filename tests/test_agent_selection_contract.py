@@ -62,6 +62,8 @@ def test_agent_selection_contract_routes_only_published_scientific_tools() -> No
         "search_variant_literature",
         "get_publication_details",
         "search_literature_corpus",
+        "get_gene_disease_associations",
+        "search_disease_genes",
     }
     assert routed < set(discovery["tools"])
     assert selection["outcomes"] == [

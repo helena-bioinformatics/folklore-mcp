@@ -196,12 +196,13 @@ python3.12 -m venv .venv
 pip install -e '.[dev]'
 FOLKLORE_MCP_ENABLED=true \
 FOLKLORE_LITERATURE_ENABLED=true \
+FOLKLORE_GENE_DISEASE_ENABLED=true \
 folklore-mcp
 ```
 
 The adapter calls `https://api.helena.bio` over HTTPS by default. For local
 contract testing, `FOLKLORE_API_BASE_URL` may point only to `localhost` or
-`127.0.0.1`. The public capability is disabled by default.
+`127.0.0.1`. The MCP, literature and gene-disease capabilities are disabled by default; enable only the features needed. Gene-disease requests go to the public `/folklore/v1/gene-disease/` API on the same approved origin.
 
 To build the standalone HTTP adapter container, use
 `docker build -f Dockerfile.adapter .`. The default `Dockerfile` remains the

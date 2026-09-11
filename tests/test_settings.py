@@ -35,3 +35,13 @@ def test_upstream_authority_is_closed() -> None:
     assert Settings(
         FOLKLORE_API_BASE_URL="http://127.0.0.1:9001"
     ).FOLKLORE_API_BASE_URL == ("http://127.0.0.1:9001")
+
+
+def test_gene_disease_feature_flag_is_opt_in_and_strict(monkeypatch):
+    monkeypatch.delenv("FOLKLORE_GENE_DISEASE_ENABLED", raising=False)
+    assert Settings().FOLKLORE_GENE_DISEASE_ENABLED is False
+    monkeypatch.setenv("FOLKLORE_GENE_DISEASE_ENABLED", "true")
+    assert Settings().FOLKLORE_GENE_DISEASE_ENABLED is True
+    monkeypatch.setenv("FOLKLORE_GENE_DISEASE_ENABLED", "TRUE")
+    with pytest.raises(ValidationError):
+        Settings()

@@ -27,12 +27,12 @@ not a stateful initialization exchange.
 
 ## Result handling
 
-The catalogs contain five tools, five workflow prompts and one optional MCP App
+The full 1.5.0 configuration contains seven tools, five workflow prompts and one optional MCP App
 resource. Read JSON-RPC errors first. Otherwise inspect result.structuredContent:
 when its result is null, handle adapter_error; otherwise branch on result.status.
-See TYPED_OUTCOMES.md for the exact six scientific statuses.
+See TYPED_OUTCOMES.md for the exact six variant statuses. The new gene-disease tools return their own structured response directly, with source assertions, pagination and usage_boundary; errors carry adapter_error and isError. See GENE_DISEASE_EVIDENCE.md.
 
-Only one public variant expression and assembly may be sent. Do not forward
+Variant tools accept only one public variant expression and assembly. Gene-disease tools accept a public gene/disease identifier or disease name with bounded pagination. Do not forward
 patient, phenotype, family, segregation or private case context. Never
 auto-select an ambiguous candidate. Results require qualified professional
 review and are not a diagnosis or treatment recommendation.

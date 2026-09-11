@@ -19,8 +19,8 @@ or merged entry can be independently observed.
 - Public source: <https://github.com/helena-bioinformatics/folklore-mcp>
 - Endpoint: `https://api.helena.bio/folklore/v1/mcp`
 - Authentication: none
-- Scope: supported GRCh38 germline nuclear SNVs and simple indels
-- Tools: four scientific read-only tools plus one separate, opt-in
+- Scope: supported GRCh38 germline nuclear SNVs and simple indels, source-linked literature and ClinGen Gene-Disease Validity assertions
+- Tools: six scientific read-only tools plus one separate, opt-in
   `support_helena` discovery helper; all are non-destructive and idempotent
 - Data boundary: no patient, phenotype, family, segregation or case context
 - Clinical boundary: automated variant-level decision support requiring review

@@ -16,6 +16,7 @@ from prometheus_client import (
 )
 
 from folklore_mcp_service.application.gateway import VariantGateway
+from folklore_mcp_service.application.gene_disease_gateway import GeneDiseaseGateway
 from folklore_mcp_service.application.literature_gateway import LiteratureGateway
 from folklore_mcp_service.config.settings import Settings, get_settings
 from folklore_mcp_service.presentation.mcp import (
@@ -46,6 +47,7 @@ def create_app(
     *,
     gateway: VariantGateway | None = None,
     literature_gateway: LiteratureGateway | None = None,
+    gene_disease_gateway: GeneDiseaseGateway | None = None,
     metrics_registry: CollectorRegistry | None = None,
 ) -> FastAPI:
     application_settings = settings or get_settings()
@@ -53,6 +55,9 @@ def create_app(
     logger = structlog.get_logger()
     variant_gateway = gateway or VariantGateway(application_settings)
     public_literature_gateway = literature_gateway or LiteratureGateway(
+        application_settings
+    )
+    public_gene_disease_gateway = gene_disease_gateway or GeneDiseaseGateway(
         application_settings
     )
     registry = metrics_registry or CollectorRegistry()
@@ -78,6 +83,7 @@ def create_app(
     def observe(outcome: str, elapsed: float) -> None:
         allowed = {
             "resolved",
+            "ok",
             "ambiguous",
             "not_found",
             "invalid_request",
@@ -97,6 +103,7 @@ def create_app(
         mcp_application = create_mcp_app(
             gateway=variant_gateway,
             literature_gateway=public_literature_gateway,
+            gene_disease_gateway=public_gene_disease_gateway,
             settings=application_settings,
             observe=observe,
         )
@@ -117,6 +124,7 @@ def create_app(
         finally:
             await variant_gateway.close()
             await public_literature_gateway.close()
+            await public_gene_disease_gateway.close()
             logger.info("service_stopped", **fields)
 
     app = FastAPI(
@@ -130,6 +138,7 @@ def create_app(
     app.state.metrics_registry = registry
     app.state.variant_gateway = variant_gateway
     app.state.literature_gateway = public_literature_gateway
+    app.state.gene_disease_gateway = public_gene_disease_gateway
 
     if mcp_application is not None:
         app.mount("/folklore/v1/mcp", mcp_application, name="folklore-mcp")
@@ -146,10 +155,16 @@ def create_app(
             if application_settings.FOLKLORE_LITERATURE_ENABLED
             else None
         )
+        gene_disease_ready = (
+            await public_gene_disease_gateway.ready()
+            if application_settings.FOLKLORE_GENE_DISEASE_ENABLED
+            else None
+        )
         is_ready = bool(
             application_settings.FOLKLORE_MCP_ENABLED
             and upstream_ready
             and (literature_ready is not False)
+            and (gene_disease_ready is not False)
         )
         if not is_ready:
             response.status_code = 503
@@ -159,6 +174,7 @@ def create_app(
             "dependencies": {
                 "public_variant_search": upstream_ready,
                 "public_variant_literature": literature_ready,
+                "public_gene_disease": gene_disease_ready,
             },
         }
 

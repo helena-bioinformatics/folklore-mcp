@@ -31,8 +31,8 @@ def test_registry_identity_and_remote_are_exact() -> None:
     assert record["name"] == "io.github.helena-bioinformatics/folklore"
     assert record["title"] == "Folklore Clinical Variant Interpretation MCP"
     assert record["description"] == (
-        "Interpret GRCh38 germline variants from HGVS or rsID; "
-        "review VUS and ACMG/AMP evidence."
+        "Bioinformatics MCP for genomic variant interpretation, "
+        "gene-disease evidence and literature."
     )
     assert record["remotes"] == [
         {
@@ -49,8 +49,8 @@ def test_registry_identity_and_remote_are_exact() -> None:
     assert contract["title"] == record["title"]
     assert contract["description"] == record["description"]
     assert contract["serverCardDescription"] == (
-        "Interpret GRCh38 germline variants from HGVS or rsID; "
-        "review VUS and ACMG/AMP evidence."
+        "Bioinformatics MCP for genomic variant interpretation, "
+        "gene-disease evidence and literature."
     )
     assert contract["version"] == record["version"] == MCP_ADAPTER_VERSION
     assert contract["protocolVersion"] == MCP_PROTOCOL_VERSION
@@ -60,6 +60,8 @@ def test_registry_identity_and_remote_are_exact() -> None:
         MCP_PUBLICATION_DETAILS_TOOL_NAME,
         MCP_CORPUS_SEARCH_TOOL_NAME,
         MCP_SUPPORT_TOOL_NAME,
+        "get_gene_disease_associations",
+        "search_disease_genes",
     ]
     assert contract["resources"] == [MCP_UI_RESOURCE_URI]
 
@@ -79,6 +81,8 @@ def test_biomni_recipe_uses_the_hardened_pinned_stdio_bridge() -> None:
         MCP_PUBLICATION_DETAILS_TOOL_NAME,
         MCP_CORPUS_SEARCH_TOOL_NAME,
         MCP_SUPPORT_TOOL_NAME,
+        "get_gene_disease_associations",
+        "search_disease_genes",
     ]
     assert client_configs["clients"]["biomni"]["title"] == (
         "Folklore Clinical Variant Interpretation MCP"
@@ -148,8 +152,8 @@ def test_biorouter_recipe_preserves_identity_version_and_safety() -> None:
     }
     assert manifest["name"] == "folklore-clinical-variant-interpretation-mcp"
     assert manifest["display_name"] == "Folklore Clinical Variant Interpretation MCP"
-    assert manifest["version"] == MCP_ADAPTER_VERSION == "1.4.2"
-    assert manifest["tools_count"] == 5
+    assert manifest["version"] == MCP_ADAPTER_VERSION == "1.5.0"
+    assert manifest["tools_count"] == 7
     assert manifest["env_vars"] == []
     assert project["project"]["version"] == MCP_ADAPTER_VERSION
     assert project["project"]["dependencies"] == ["fastmcp==3.4.2"]
@@ -201,8 +205,8 @@ def test_release_candidate_versions_and_dois_are_consistent() -> None:
     assert zenodo["version"] == MCP_ADAPTER_VERSION
     assert f"version: {MCP_ADAPTER_VERSION}" in citation
     assert "doi: 10.5281/zenodo.21922951" in citation
-    assert "Current release: `1.4.2`" in readme
-    assert "Latest published Registry version: `1.4.2`" in readme
+    assert "Current release: `1.5.0`" in readme
+    assert "Latest published Registry version: `1.5.0`" in readme
     assert "prior 1.3.3 archive remains available" in readme
     assert "10.5281/zenodo.22102783" in readme
 

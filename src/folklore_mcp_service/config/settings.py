@@ -13,7 +13,11 @@ from pydantic_settings import (
     SettingsConfigDict,
 )
 
-BOOLEAN_SETTING_NAMES = {"FOLKLORE_MCP_ENABLED", "FOLKLORE_LITERATURE_ENABLED"}
+BOOLEAN_SETTING_NAMES = {
+    "FOLKLORE_MCP_ENABLED",
+    "FOLKLORE_LITERATURE_ENABLED",
+    "FOLKLORE_GENE_DISEASE_ENABLED",
+}
 INTEGER_SETTING_NAMES = {
     "PORT",
     "FOLKLORE_MCP_MAX_BODY_BYTES",
@@ -84,6 +88,7 @@ class Settings(BaseSettings):
     LOG_LEVEL: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"
     FOLKLORE_MCP_ENABLED: StrictBool = False
     FOLKLORE_LITERATURE_ENABLED: StrictBool = False
+    FOLKLORE_GENE_DISEASE_ENABLED: StrictBool = False
     FOLKLORE_API_BASE_URL: str = "https://api.helena.bio"
     FOLKLORE_MCP_DEADLINE_SECONDS: Annotated[
         StrictFloat, Field(ge=5.0, le=140.0, allow_inf_nan=False)
