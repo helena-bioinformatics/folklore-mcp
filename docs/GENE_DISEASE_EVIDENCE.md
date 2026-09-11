@@ -20,6 +20,7 @@ curl --fail-with-body --silent --show-error \
   -H 'Accept: application/json' \
   -H 'MCP-Protocol-Version: 2026-07-28' \
   -H 'Mcp-Method: tools/call' \
+  -H 'Mcp-Name: get_gene_disease_associations' \
   --data '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"get_gene_disease_associations","arguments":{"gene":"BRCA1","limit":20,"offset":0}}}'
 ```
 
