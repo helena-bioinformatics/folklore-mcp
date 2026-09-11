@@ -28,6 +28,7 @@ def canonical_json_fetcher(url, *, timeout, payload=None, headers=None):
             "dependencies": {
                 "public_variant_search": True,
                 "public_variant_literature": True,
+                "public_gene_disease": True,
             },
         }
     if url == expected["surfaces"]["officialRegistry"]:
@@ -192,3 +193,47 @@ def test_reconciler_reports_aggregator_drift_without_failing_default_mode() -> N
     )
     assert MODULE.exit_code(observations, strict_aggregators=False) == 0
     assert MODULE.exit_code(observations, strict_aggregators=True) == 3
+
+
+def test_reconciler_accepts_exact_registry_latest_record():
+    expected = contract()
+
+    def direct_fetcher(url, **kwargs):
+        result = canonical_json_fetcher(url, **kwargs)
+        return (
+            result["servers"][0]
+            if url == expected["surfaces"]["officialRegistry"]
+            else result
+        )
+
+    observations = MODULE.reconcile(
+        expected,
+        timeout=1,
+        json_fetcher=direct_fetcher,
+        text_fetcher=canonical_text_fetcher,
+    )
+    assert MODULE.exit_code(observations, strict_aggregators=True) == 0
+
+
+def test_reconciler_blocks_missing_gene_disease_readiness():
+    expected = contract()
+
+    def missing_reference(url, **kwargs):
+        result = canonical_json_fetcher(url, **kwargs)
+        if url == expected["readiness"]:
+            result["dependencies"]["public_gene_disease"] = None
+        return result
+
+    observations = MODULE.reconcile(
+        expected,
+        timeout=1,
+        json_fetcher=missing_reference,
+        text_fetcher=canonical_text_fetcher,
+    )
+    assert MODULE.exit_code(observations, strict_aggregators=False) == 2
+    assert (
+        next(
+            item for item in observations if item.surface == "runtime_readiness"
+        ).status
+        == "drift"
+    )

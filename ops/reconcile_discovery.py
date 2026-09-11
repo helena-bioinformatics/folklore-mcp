@@ -166,23 +166,25 @@ def reconcile(
             "status": body.get("status"),
             "public_variant_search": dependencies.get("public_variant_search"),
             "public_variant_literature": dependencies.get("public_variant_literature"),
+            "public_gene_disease": dependencies.get("public_gene_disease"),
         }
         matches = observed == {
             "status": "ready",
             "public_variant_search": True,
             "public_variant_literature": True,
+            "public_gene_disease": True,
         }
         return _observation(
             "runtime_readiness",
             "canonical",
             matches,
             observed,
-            "Both public authorities must be ready.",
+            "All three public evidence capabilities must be ready.",
         )
 
     def registry_probe() -> Observation:
         body = json_fetcher(contract["surfaces"]["officialRegistry"], timeout=timeout)
-        records = body.get("servers", [])
+        records = [body] if "server" in body else body.get("servers", [])
         record = records[0] if len(records) == 1 else {}
         server = record.get("server", {})
         official = record.get("_meta", {}).get(
@@ -211,7 +213,7 @@ def reconcile(
             "canonical",
             matches,
             observed,
-            "The version=latest query must return exactly one active canonical record.",
+            "The exact latest-version lookup must return one active canonical record.",
         )
 
     def server_card_probe() -> Observation:
