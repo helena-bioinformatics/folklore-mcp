@@ -97,7 +97,7 @@ professional review and are not a diagnosis or treatment recommendation.
 Apache License 2.0. The bundle includes the public adapter repository's
 `LICENSE` and `NOTICE` files.
 
-The 1.6.0 source and download target are prepared for the gene-profile rollout. A URL in this guide does not establish that its immutable release has been published. The bridge passes through gene identity, snapshot, source and pagination boundaries; it performs no biological inference.
+The signed Biorouter 1.6.0 release is published. Its governed frozen uv installation and package verification passed. The actual 90341-byte BRXT download has SHA-256 `635a2cd512ae89240ea525ba9805eb8182a60f5f3472e11751d48f9659c0aee7`; the published checksum matches. The bridge passes through gene identity, snapshot, source and pagination boundaries; it performs no biological inference.
 
 ## Optional journey context
 

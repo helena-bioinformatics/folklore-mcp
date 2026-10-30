@@ -25,6 +25,8 @@ abstract: >-
   It gives AI clients structured access to public germline variant evidence,
   automated ACMG/AMP decision support, provenance, variant literature, and
   semantic search across a public scientific Literature Corpus.
+  Public gene tools resolve identities and return source-qualified immutable
+  gene profiles and separate live literature captures.
   The adapter accepts no patient, phenotype, family, or case context. Folklore's
   proprietary interpretation backend and evidence database are not included.
 references:
