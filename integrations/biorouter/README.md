@@ -18,6 +18,10 @@ variable is required.
 - `support_helena`
 - `get_gene_disease_associations`
 - `search_disease_genes`
+- `resolve_gene`
+- `get_gene_profile`
+- `get_gene_section`
+- `search_gene_literature`
 
 Tool schemas and structured results are retrieved from the hosted endpoint. The
 bridge does not rename tools, alter inputs or reinterpret scientific results.
@@ -87,10 +91,18 @@ public rate-limit window to reset, then run the smoke test once more.
 
 ## Safety boundary
 
-Folklore Clinical Variant Interpretation MCP accepts public variant-level queries
-only. Do not provide patient, phenotype, family, segregation or private case data.
+Folklore Clinical Variant Interpretation MCP accepts public variant, gene and
+disease identifiers and public scientific literature questions. Do not provide
+patient records, phenotype narratives, family, segregation or private case data.
 Ambiguous candidates are never selected automatically. Results support qualified
 professional review and are not a diagnosis or treatment recommendation.
+
+For gene profiles, resolve the identity first and use the selected HGNC gene_id
+with the returned identity_snapshot_id as snapshot_id. Keep section continuation
+bound to that gene and snapshot; restart resolution after a snapshot conflict.
+Preserve each source assertion, coverage and count unit. Live gene literature is
+a separate query-matched capture, not curated gene-disease validity or variant
+classification. See [public gene profiles](../../docs/PUBLIC_GENE_PROFILES.md).
 
 ## License
 
