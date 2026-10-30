@@ -29,3 +29,7 @@ or merged entry can be independently observed.
 Directory maintainers assign their own quality, clinical-validity or compliance
 ratings. Helena Bioinformatics does not claim HIPAA certification or directory
 endorsement through these submissions.
+
+## 1.6.0 prepared capability update - 2026-10-30
+
+Prepared source adds four read-only gene-profile tools: `resolve_gene`, `get_gene_profile`, `get_gene_section` and `search_gene_literature`. With all capabilities enabled, the candidate exposes ten scientific tools and the separate support helper. Gene identity ambiguity, source-qualified assertions, snapshot identity and bounded continuation are preserved; live literature is distinct from immutable reference evidence. The table above records historical submissions, not acceptance of this update. Catalogue updates require observed release evidence and the existing non-duplication workflow.

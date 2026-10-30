@@ -17,6 +17,7 @@ BOOLEAN_SETTING_NAMES = {
     "FOLKLORE_MCP_ENABLED",
     "FOLKLORE_LITERATURE_ENABLED",
     "FOLKLORE_GENE_DISEASE_ENABLED",
+    "FOLKLORE_PUBLIC_GENE_ENABLED",
 }
 INTEGER_SETTING_NAMES = {
     "PORT",
@@ -89,6 +90,7 @@ class Settings(BaseSettings):
     FOLKLORE_MCP_ENABLED: StrictBool = False
     FOLKLORE_LITERATURE_ENABLED: StrictBool = False
     FOLKLORE_GENE_DISEASE_ENABLED: StrictBool = False
+    FOLKLORE_PUBLIC_GENE_ENABLED: StrictBool = False
     FOLKLORE_API_BASE_URL: str = "https://api.helena.bio"
     FOLKLORE_MCP_DEADLINE_SECONDS: Annotated[
         StrictFloat, Field(ge=5.0, le=140.0, allow_inf_nan=False)

@@ -18,6 +18,7 @@ from prometheus_client import (
 from folklore_mcp_service.application.gateway import VariantGateway
 from folklore_mcp_service.application.gene_disease_gateway import GeneDiseaseGateway
 from folklore_mcp_service.application.literature_gateway import LiteratureGateway
+from folklore_mcp_service.application.public_gene_gateway import PublicGeneGateway
 from folklore_mcp_service.config.settings import Settings, get_settings
 from folklore_mcp_service.presentation.mcp import (
     MCP_ADAPTER_VERSION,
@@ -48,6 +49,7 @@ def create_app(
     gateway: VariantGateway | None = None,
     literature_gateway: LiteratureGateway | None = None,
     gene_disease_gateway: GeneDiseaseGateway | None = None,
+    public_gene_gateway: PublicGeneGateway | None = None,
     metrics_registry: CollectorRegistry | None = None,
 ) -> FastAPI:
     application_settings = settings or get_settings()
@@ -60,6 +62,7 @@ def create_app(
     public_gene_disease_gateway = gene_disease_gateway or GeneDiseaseGateway(
         application_settings
     )
+    gene_gateway = public_gene_gateway or PublicGeneGateway(application_settings)
     registry = metrics_registry or CollectorRegistry()
     requests = Counter(
         "folklore_mcp_tool_calls_total",
@@ -85,6 +88,8 @@ def create_app(
             "resolved",
             "ok",
             "ambiguous",
+            "withdrawn",
+            "snapshot_unavailable",
             "not_found",
             "invalid_request",
             "unsupported",
@@ -94,6 +99,18 @@ def create_app(
             "invalid_upstream_response",
             "internal_failure",
         }
+        outcome = {
+            "gene_not_found": "not_found",
+            "gene_withdrawn": "withdrawn",
+            "invalid_gene_cursor": "invalid_request",
+            "invalid_gene_literature_cursor": "invalid_request",
+            "gene_capacity_unavailable": "upstream_unavailable",
+            "gene_snapshot_unavailable": "upstream_unavailable",
+            "gene_literature_capacity_unavailable": "upstream_unavailable",
+            "gene_literature_unavailable": "upstream_unavailable",
+            "gene_read_timeout": "upstream_timeout",
+            "gene_literature_timeout": "upstream_timeout",
+        }.get(outcome, outcome)
         safe_outcome = outcome if outcome in allowed else "internal_failure"
         requests.labels(outcome=safe_outcome).inc()
         duration.labels(outcome=safe_outcome).observe(elapsed)
@@ -104,6 +121,7 @@ def create_app(
             gateway=variant_gateway,
             literature_gateway=public_literature_gateway,
             gene_disease_gateway=public_gene_disease_gateway,
+            public_gene_gateway=gene_gateway,
             settings=application_settings,
             observe=observe,
         )
@@ -125,6 +143,7 @@ def create_app(
             await variant_gateway.close()
             await public_literature_gateway.close()
             await public_gene_disease_gateway.close()
+            await gene_gateway.close()
             logger.info("service_stopped", **fields)
 
     app = FastAPI(
@@ -139,6 +158,7 @@ def create_app(
     app.state.variant_gateway = variant_gateway
     app.state.literature_gateway = public_literature_gateway
     app.state.gene_disease_gateway = public_gene_disease_gateway
+    app.state.public_gene_gateway = gene_gateway
 
     if mcp_application is not None:
         app.mount("/folklore/v1/mcp", mcp_application, name="folklore-mcp")
@@ -160,11 +180,17 @@ def create_app(
             if application_settings.FOLKLORE_GENE_DISEASE_ENABLED
             else None
         )
+        public_gene_ready = (
+            await gene_gateway.ready()
+            if application_settings.FOLKLORE_PUBLIC_GENE_ENABLED
+            else None
+        )
         is_ready = bool(
             application_settings.FOLKLORE_MCP_ENABLED
             and upstream_ready
             and (literature_ready is not False)
             and (gene_disease_ready is not False)
+            and (public_gene_ready is not False)
         )
         if not is_ready:
             response.status_code = 503
@@ -175,6 +201,7 @@ def create_app(
                 "public_variant_search": upstream_ready,
                 "public_variant_literature": literature_ready,
                 "public_gene_disease": gene_disease_ready,
+                "public_gene_profiles": public_gene_ready,
             },
         }
 

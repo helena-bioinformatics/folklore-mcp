@@ -8,7 +8,7 @@ Canonical identity: `io.github.helena-bioinformatics/folklore`
 
 Canonical endpoint: `https://api.helena.bio/folklore/v1/mcp`
 
-The full hosted configuration exposes seven read-only tools: `search_variant_evidence`,
+The 1.6.0 source supports eleven read-only tools when all capabilities are enabled. Gene profiles are opt-in; source preparation does not establish live activation or Registry publication. The existing seven tools are: `search_variant_evidence`,
 `search_variant_literature`, `get_publication_details` and
 `search_literature_corpus`, the explicit opt-in `support_helena` tool,
 `get_gene_disease_associations` and `search_disease_genes`. The
@@ -48,7 +48,7 @@ distribution tests and the read-only operator reconciler. Run from the repositor
 root:
 
 ```bash
-python3 services/folklore_mcp_service/ops/reconcile_discovery.py
+python3 ops/reconcile_discovery.py
 ```
 
 The canonical gate uses the Official Registry `version=latest` filter and
@@ -58,7 +58,7 @@ unless `--strict-aggregators` is selected. The reconciler performs no writes.
 
 `agent-selection.json` is the machine-readable task-selection companion. It
 defines positive and negative intents, brand-blind example requests, accepted
-public input forms, the six scientific tool routes, typed outcomes and the
+public input forms, the scientific tool routes, typed outcomes and the
 clinical boundary. `agent-selection.schema.json` provides its strict JSON
 Schema. These files help agent catalogs index the user job rather than only the
 server name; they do not replace the MCP tool schemas or claim universal model
@@ -77,3 +77,5 @@ record with a pinned publisher, authenticates through short-lived GitHub OIDC
 and publishes the immutable version without repository secrets.
 
 Gene-disease tools expose ClinGen Gene-Disease Validity assertions with distinct disease identities, source provenance and pagination. They are separate from variant pathogenicity classification; no match does not establish no association. See [gene-disease usage](../docs/GENE_DISEASE_EVIDENCE.md).
+
+Version 1.6.0 adds `resolve_gene`, `get_gene_profile`, `get_gene_section` and `search_gene_literature`. Preserve ambiguous identity candidates, immutable snapshot identity, source assertions, coverage and pagination. Live gene literature is a separate query-matched capture, not a curated validity assertion or variant classification. See [public gene profiles](../docs/PUBLIC_GENE_PROFILES.md).

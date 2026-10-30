@@ -1,5 +1,7 @@
 # Folklore Clinical Variant Interpretation MCP directory submission
 
+Prepared for 1.6.0; live activation and external catalogue acceptance require separate verification.
+
 ## Listing identity
 
 - Name: Folklore Clinical Variant Interpretation MCP
@@ -46,13 +48,17 @@ substitute for qualified clinical interpretation.
 
 - `get_gene_disease_associations`: Retrieve ClinGen Gene-Disease Validity assertions for one exact gene symbol or HGNC identifier.
 - `search_disease_genes`: Retrieve distinct ClinGen assertions for an exact MONDO identifier or disease-name substring.
+- `resolve_gene`: Resolve a symbol, alias or stable identifier and preserve all ambiguous candidates.
+- `get_gene_profile`: Read a selected HGNC gene at its immutable snapshot.
+- `get_gene_section`: Continue source-qualified gene evidence without mixing snapshots.
+- `search_gene_literature`: Read a separate live literature capture with gene/snapshot/sort-bound continuation.
 
 The gene-disease source is a bounded curated snapshot, not every known association. Empty results do not establish no association. These tools do not parse DNA sequences, upload VCFs or run WGS/WES pipelines.
 
 ## Reviewer notes
 
 - Remote stateless Streamable HTTP MCP server.
-- Seven read-only, non-destructive, idempotent tools.
+- Eleven read-only, non-destructive, idempotent tools with all capabilities enabled.
 - No authentication secret or user account is requested.
 - No write operations, patient data, private systems or generative model.
 - The tool preserves Folklore's evidence, ambiguity and safety limitations.

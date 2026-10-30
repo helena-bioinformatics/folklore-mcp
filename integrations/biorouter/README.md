@@ -45,7 +45,7 @@ by Biorouter's `uv sync` installer.
 The immutable release bundle is available at:
 
 ```text
-https://github.com/helena-bioinformatics/folklore-mcp/releases/download/folklore-biorouter-v1.5.0/folklore-clinical-variant-interpretation-mcp.brxt
+https://github.com/helena-bioinformatics/folklore-mcp/releases/download/folklore-biorouter-v1.6.0/folklore-clinical-variant-interpretation-mcp.brxt
 ```
 
 ## Install in Biorouter
@@ -77,7 +77,7 @@ pip install -e integrations/biorouter
 python integrations/biorouter/smoke_test.py
 ```
 
-The smoke test discovers all seven tools and submits the public variant-level
+The smoke test discovers all eleven tools after the 1.6.0 hosted rollout and submits the public variant-level
 query `rs80357914`. The expected outcome is `ambiguous` with multiple candidates.
 The test fails if a candidate is selected automatically or if the machine-readable
 professional-review boundary is missing.
@@ -96,3 +96,5 @@ professional review and are not a diagnosis or treatment recommendation.
 
 Apache License 2.0. The bundle includes the public adapter repository's
 `LICENSE` and `NOTICE` files.
+
+The 1.6.0 source and download target are prepared for the gene-profile rollout. A URL in this guide does not establish that its immutable release has been published. The bridge passes through gene identity, snapshot, source and pagination boundaries; it performs no biological inference.

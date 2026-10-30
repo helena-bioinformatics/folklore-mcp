@@ -18,6 +18,10 @@ EXPECTED_TOOLS = {
     "support_helena",
     "get_gene_disease_associations",
     "search_disease_genes",
+    "resolve_gene",
+    "get_gene_profile",
+    "get_gene_section",
+    "search_gene_literature",
 }
 
 

@@ -18,6 +18,7 @@ from folklore_mcp_service.application.literature_gateway import (
     LiteratureGateway,
     LiteratureGatewayError,
 )
+from folklore_mcp_service.application.public_gene_gateway import PublicGeneGateway
 from folklore_mcp_service.config.settings import Settings
 from folklore_mcp_service.domain.contracts import (
     SearchVariantArguments,
@@ -41,9 +42,14 @@ from folklore_mcp_service.presentation.gene_disease import (
     call_gene_disease_tool,
     gene_disease_tools,
 )
+from folklore_mcp_service.presentation.public_gene import (
+    PUBLIC_GENE_TOOL_NAMES,
+    call_public_gene_tool,
+    public_gene_tools,
+)
 
 MCP_PROTOCOL_VERSION = "2026-07-28"
-MCP_ADAPTER_VERSION = "1.5.0"
+MCP_ADAPTER_VERSION = "1.6.0"
 MCP_SERVER_NAME = "folklore"
 MCP_TOOL_NAME = "search_variant_evidence"
 MCP_LITERATURE_TOOL_NAME = "search_variant_literature"
@@ -152,6 +158,7 @@ def create_mcp_app(
     settings: Settings,
     observe: Any | None = None,
     gene_disease_gateway: GeneDiseaseGateway | None = None,
+    public_gene_gateway: PublicGeneGateway | None = None,
 ) -> FolkloreMcpApplication:
     """Compose the MCP transport without adding scientific behavior."""
 
@@ -499,6 +506,14 @@ def create_mcp_app(
                 if settings.FOLKLORE_GENE_DISEASE_ENABLED
                 and gene_disease_gateway is not None
                 else []
+            )
+            + (
+                public_gene_tools(
+                    literature_enabled=settings.FOLKLORE_LITERATURE_ENABLED
+                )
+                if settings.FOLKLORE_PUBLIC_GENE_ENABLED
+                and public_gene_gateway is not None
+                else []
             ),
             ttl_ms=86_400_000,
             cache_scope="public",
@@ -515,8 +530,22 @@ def create_mcp_app(
             allowed_tools.add(MCP_CORPUS_SEARCH_TOOL_NAME)
         if settings.FOLKLORE_GENE_DISEASE_ENABLED and gene_disease_gateway is not None:
             allowed_tools.update({GENE_TOOL, DISEASE_TOOL})
+        if settings.FOLKLORE_PUBLIC_GENE_ENABLED and public_gene_gateway is not None:
+            allowed_tools.update(PUBLIC_GENE_TOOL_NAMES - {"search_gene_literature"})
+            if settings.FOLKLORE_LITERATURE_ENABLED:
+                allowed_tools.add("search_gene_literature")
         if params.name not in allowed_tools:
             return _error_result("unknown_tool", "Unknown tool.", retryable=False)
+        if params.name in PUBLIC_GENE_TOOL_NAMES and public_gene_gateway is not None:
+            return await call_public_gene_tool(
+                params=params,
+                gateway=public_gene_gateway,
+                settings=settings,
+                semaphore=semaphore,
+                observe=(lambda _tool, outcome, elapsed: observe(outcome, elapsed))
+                if observe is not None
+                else None,
+            )
         if (
             params.name in {GENE_TOOL, DISEASE_TOOL}
             and gene_disease_gateway is not None
@@ -645,6 +674,16 @@ def create_mcp_app(
             "gene-disease evidence and literature."
         ),
         instructions=(
+            "For public gene evidence, call resolve_gene, stop for ambiguity, then "
+            "get_gene_profile using the selected HGNC gene_id and identity_snapshot_id "
+            "as snapshot_id. Use get_gene_section for continuation pages and "
+            "search_gene_literature for a separate live capture when enabled. "
+            "Keep source assertions, snapshot identity and coverage; gene evidence "
+            "does not change variant classification. "
+            if settings.FOLKLORE_PUBLIC_GENE_ENABLED and public_gene_gateway is not None
+            else ""
+        )
+        + (
             (
                 "For genomic gene-disease evidence, use get_gene_disease_associations with an exact gene symbol/HGNC "
                 "or search_disease_genes with a disease name/MONDO. Preserve ClinGen source assertions and distinct "

@@ -178,9 +178,13 @@ comparison workflow is exposed when literature search is enabled.
   points to the separate Helena Good MCP and never changes scientific results.
 - `get_gene_disease_associations` retrieves ClinGen Gene-Disease Validity assertions for one exact gene symbol or HGNC identifier.
 - `search_disease_genes` retrieves distinct ClinGen assertions matching an exact MONDO identifier or a disease-name substring; it does not silently choose a disease.
+- `resolve_gene` resolves a public symbol, alias, previous symbol or stable identifier without choosing ambiguous candidates.
+- `get_gene_profile` reads the selected HGNC identity at its immutable snapshot.
+- `get_gene_section` continues one source-qualified section with a bounded page and opaque cursor.
+- `search_gene_literature` reads a separate live, abstract-free literature capture for the selected gene.
 - `ui://folklore/variant-evidence/v1.html` is an optional read-only MCP App view.
 
-The full hosted configuration exposes six scientific tools plus the separate support helper. Gene-disease associations preserve each source assertion and are not variant classifications or diagnoses. ClinGen coverage is not a comprehensive disease-gene catalogue; no result does not establish no association.
+The 1.6.0 source supports ten scientific tools plus the separate support helper when all capabilities are enabled. The four new gene-profile tools are opt-in; production activation and immutable Registry publication are separate release checks. See [public gene profiles](docs/PUBLIC_GENE_PROFILES.md). Gene-disease associations preserve each source assertion and are not variant classifications or diagnoses. ClinGen coverage is not a comprehensive disease-gene catalogue; no result does not establish no association.
 
 Literature associations do not alter the ACMG/AMP classification.
 
@@ -197,12 +201,13 @@ pip install -e '.[dev]'
 FOLKLORE_MCP_ENABLED=true \
 FOLKLORE_LITERATURE_ENABLED=true \
 FOLKLORE_GENE_DISEASE_ENABLED=true \
+FOLKLORE_PUBLIC_GENE_ENABLED=true \
 folklore-mcp
 ```
 
 The adapter calls `https://api.helena.bio` over HTTPS by default. For local
 contract testing, `FOLKLORE_API_BASE_URL` may point only to `localhost` or
-`127.0.0.1`. The MCP, literature and gene-disease capabilities are disabled by default; enable only the features needed. Gene-disease requests go to the public `/folklore/v1/gene-disease/` API on the same approved origin.
+`127.0.0.1`. The MCP, literature, gene-disease and public gene-profile capabilities are disabled by default; enable only the features needed. The gene literature tool requires both public gene profiles and literature. Gene profiles use the existing anonymous `/public/v1/genes/{resolve,profile,section,literature}` API; they do not require private credentials. Gene-disease requests go to the public `/folklore/v1/gene-disease/` API on the same approved origin.
 
 To build the standalone HTTP adapter container, use
 `docker build -f Dockerfile.adapter .`. The default `Dockerfile` remains the
@@ -247,11 +252,11 @@ See [SECURITY.md](SECURITY.md) for reporting instructions and supported versions
 ## Registry identity
 
 - Name: `io.github.helena-bioinformatics/folklore`
-- Current release: `1.5.0`
+- Current release: `1.6.0` (source candidate; publication pending)
 - Latest published Registry version: `1.5.0`
 - Publisher: Helena Bioinformatics
 - Website: <https://folklore.helena.bio>
-- Technical guide: <https://folklore.helena.bio/docs/folklore-connector>
+- Technical guide: <https://folklore.helena.bio/integrations/mcp>
 
 Machine-readable metadata is under [`registry/`](registry/).
 The strict [agent-selection contract](registry/agent-selection.json) makes

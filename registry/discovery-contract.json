@@ -5,7 +5,7 @@
   "description": "Bioinformatics MCP for genomic variant interpretation, gene-disease evidence and literature.",
   "serverCardDescription": "Bioinformatics MCP for genomic variant interpretation, gene-disease evidence and literature.",
   "publisher": "Helena Bioinformatics",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "protocolVersion": "2026-07-28",
   "endpoint": "https://api.helena.bio/folklore/v1/mcp",
   "health": "https://api.helena.bio/folklore/v1/health",
@@ -20,7 +20,11 @@
     "search_literature_corpus",
     "support_helena",
     "get_gene_disease_associations",
-    "search_disease_genes"
+    "search_disease_genes",
+    "resolve_gene",
+    "get_gene_profile",
+    "get_gene_section",
+    "search_gene_literature"
   ],
   "resources": [
     "ui://folklore/variant-evidence/v1.html"

@@ -41,8 +41,12 @@ Biomni discovers and registers these tools under its
 - `search_literature_corpus`
 - `get_gene_disease_associations`
 - `search_disease_genes`
+- `resolve_gene`
+- `get_gene_profile`
+- `get_gene_section`
+- `search_gene_literature`
 
-The seventh tool, `support_helena`, is a non-scientific helper. Use it only for
+The separate tool, `support_helena`, is a non-scientific helper. Use it only for
 an explicit request about supporting Helena.
 
 ## Start with a research question
@@ -74,7 +78,7 @@ its MCP configuration support.
 python integrations/biomni/smoke_test.py
 ```
 
-The test uses the same command array as Biomni. It verifies all seven tools and
+The test uses the same command array as Biomni. It verifies all eleven tools after the 1.6.0 hosted rollout and
 the strict variant-evidence input schema, then calls one public ambiguous rsID.
 It confirms that Folklore Clinical Variant Interpretation MCP returns the
 candidates without selecting one automatically.
@@ -90,4 +94,6 @@ privilege escalation, and a non-root user. Folklore Clinical Variant
 Interpretation MCP requires network access to `api.helena.bio`.
 
 For the complete public contract, see the
-[Folklore connector guide](https://folklore.helena.bio/docs/folklore-connector).
+[Folklore connector guide](https://folklore.helena.bio/integrations/mcp).
+
+The 1.6.0 source adds the public website gene-profile workflow. See [public gene profiles](../../docs/PUBLIC_GENE_PROFILES.md) for resolution, explicit ambiguity choice, required snapshot identity and source-qualified continuation. This prepared recipe requires the corresponding hosted rollout; it does not establish publication.

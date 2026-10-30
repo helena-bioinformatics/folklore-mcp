@@ -2,11 +2,11 @@
   "name": "folklore-clinical-variant-interpretation-mcp",
   "display_name": "Folklore Clinical Variant Interpretation MCP",
   "description": "Bioinformatics MCP for genomic variant interpretation, gene-disease evidence and literature.",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "entry_point": "folklore-clinical-variant-interpretation-mcp",
   "repository": "https://github.com/helena-bioinformatics/folklore-mcp/tree/main/integrations/biorouter",
   "license": "Apache-2.0",
-  "tools_count": 7,
+  "tools_count": 11,
   "env_vars": [],
   "skills": [
     {

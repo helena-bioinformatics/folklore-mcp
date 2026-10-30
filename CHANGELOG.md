@@ -2,6 +2,13 @@
 
 All notable changes to the public Folklore MCP adapter are documented here.
 
+## 1.6.0 - Unreleased
+
+- Add opt-in `resolve_gene`, `get_gene_profile`, `get_gene_section` and `search_gene_literature` over the existing anonymous public gene API.
+- Preserve all thirteen profile sections, source assertions, immutable snapshot identity, ambiguity, unavailable states, count units and bounded continuation. Live literature captures remain separate from reference snapshots.
+- Validate request/response identity, source references and exact page bindings; emit complete structured results with matching JSON text for text-only clients.
+- Retain all seven existing tools and the public-only standalone source boundary. Registry, hosted rollout and GitHub Release publication require their own verification.
+
 ## 1.5.0 - 2026-09-11
 
 - Add opt-in, read-only `get_gene_disease_associations` and `search_disease_genes` tools over the public Folklore ClinGen Gene-Disease Validity API, preserving source assertions, distinct diseases, evidence limits and pagination.

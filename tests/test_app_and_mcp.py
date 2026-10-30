@@ -160,7 +160,7 @@ def test_mcp_2026_discovery_is_stateless_and_initialize_is_retired() -> None:
     assert result["_meta"]["io.modelcontextprotocol/serverInfo"] == {
         "name": "folklore",
         "title": "Folklore Clinical Variant Interpretation MCP",
-        "version": "1.5.0",
+        "version": "1.6.0",
         "description": (
             "Bioinformatics MCP for genomic variant interpretation, "
             "gene-disease evidence and literature."
@@ -499,6 +499,7 @@ def test_ready_requires_enabled_adapter_and_upstream_resolver() -> None:
         "public_variant_search": True,
         "public_variant_literature": None,
         "public_gene_disease": None,
+        "public_gene_profiles": None,
     }
 
 
