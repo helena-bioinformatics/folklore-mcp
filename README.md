@@ -265,14 +265,29 @@ available to agent catalogs without requiring brand-name queries.
 
 ## Citation and archival releases
 
-Citation metadata is available in [`CITATION.cff`](CITATION.cff). Versioned
-software releases are archived in Zenodo from this public repository; each
-archived release receives a persistent DOI. Use the concept DOI
-[`10.5281/zenodo.21922951`](https://doi.org/10.5281/zenodo.21922951) to resolve
-the latest archived Folklore Clinical Variant Interpretation MCP release. The immutable `1.2.2` archive remains
-available as [`10.5281/zenodo.21922952`](https://doi.org/10.5281/zenodo.21922952).
-Record a new version-specific DOI only after Zenodo confirms archival processing.
-The concept DOI above resolves the latest archived release. The prior 1.3.3 archive remains available as
+Citation metadata is available in [`CITATION.cff`](CITATION.cff). For the exact
+MCP adapter `1.6.0` release, cite
+[`10.5281/zenodo.23817704`](https://doi.org/10.5281/zenodo.23817704), archived
+from signed tag `folklore-mcp-v1.6.0` at source
+`55a332c6dd6bd4650e921c12ac145b8e0f90476a`.
+
+The separate [`10.5281/zenodo.23818207`](https://doi.org/10.5281/zenodo.23818207)
+archive comes from `folklore-biorouter-v1.6.0`. It contains the same repository
+source under a different release tag; it is not the exact MCP release citation
+or the downloadable BRXT binary asset.
+
+The repository-wide concept DOI
+[`10.5281/zenodo.21922951`](https://doi.org/10.5281/zenodo.21922951) follows the
+latest archive in this version family and currently resolves to the Biorouter-tag
+record. Use the exact MCP DOI above for reproducible `1.6.0` citations.
+The historical `1.5.0` citation
+[`10.5281/zenodo.22706754`](https://doi.org/10.5281/zenodo.22706754) remains a
+`1.5.0` citation.
+No published archive or immutable tag is rewritten by this metadata correction.
+
+The immutable `1.2.2` archive remains available as
+[`10.5281/zenodo.21922952`](https://doi.org/10.5281/zenodo.21922952).
+The prior 1.3.3 archive remains available as
 [`10.5281/zenodo.22102783`](https://doi.org/10.5281/zenodo.22102783).
 
 ## License

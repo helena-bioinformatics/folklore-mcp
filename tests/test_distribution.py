@@ -1,6 +1,7 @@
 import hashlib
 import json
 import py_compile
+import re
 import subprocess
 import tomllib
 import zipfile
@@ -212,7 +213,18 @@ def test_release_candidate_versions_and_dois_are_consistent() -> None:
     assert package["project"]["version"] == MCP_ADAPTER_VERSION == __version__
     assert zenodo["version"] == MCP_ADAPTER_VERSION
     assert f"version: {MCP_ADAPTER_VERSION}" in citation
-    assert "doi: 10.5281/zenodo.21922951" in citation
+    citation_data = yaml.safe_load(citation)
+    official_doi = "10.5281/zenodo.23817704"
+    concept_doi = "10.5281/zenodo.21922951"
+    bridge_archive_doi = "10.5281/zenodo.23818207"
+    assert citation_data["doi"] == official_doi
+    linked_dois = set(re.findall(r"\]\(https://doi\.org/([^\)]+)\)", readme))
+    assert {
+        official_doi,
+        concept_doi,
+        bridge_archive_doi,
+        "10.5281/zenodo.22706754",
+    } <= linked_dois
     assert "Current release: `1.6.0`" in readme
     assert "Latest published Registry version: `1.6.0`" in readme
     assert "prior 1.3.3 archive remains available" in readme
