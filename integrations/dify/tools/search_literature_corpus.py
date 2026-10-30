@@ -17,5 +17,8 @@ class SearchLiteratureCorpusTool(Tool):
             "sort": "relevance",
         }
         yield self.create_text_message(
-            json.dumps(call_tool("search_literature_corpus", args), ensure_ascii=False)
+            json.dumps(
+                call_tool("search_literature_corpus", args, analytics=tool_parameters),
+                ensure_ascii=False,
+            )
         )

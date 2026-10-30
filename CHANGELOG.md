@@ -24,6 +24,14 @@ All notable changes to the public Folklore MCP adapter are documented here.
 
 ## Unreleased
 
+- Add optional, explicitly enabled caller pseudonyms, conversation/run IDs and
+  closed intent categories to the Dify, Galaxy, KNIME, n8n, notebook and OpenAI
+  Agents Python source integrations. Defaults remain anonymous; malformed or
+  disabled context is omitted and scientific arguments/results are unchanged.
+- Verify Biorouter metadata pass-through and document external host boundaries
+  in `integrations/JOURNEY_CONTEXT.md`. This source change does not upgrade
+  existing installations, publish a Registry version or enable analytics.
+
 ## 1.4.1 - 2026-08-30
 
 - Added a cold-start run generator that pre-populates all 100 case IDs and a

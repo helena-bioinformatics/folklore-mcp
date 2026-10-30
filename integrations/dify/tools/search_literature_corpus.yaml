@@ -21,4 +21,34 @@ parameters:
     human_description: {en_US: Maximum results.}
     llm_description: Maximum results to return.
     form: llm
+  - name: analytics_opt_in
+    type: boolean
+    required: false
+    default: false
+    label: {en_US: Enable pseudonymous usage analytics}
+    human_description: {en_US: Explicit opt-in. Leave off to remain anonymous.}
+    form: form
+  - name: analytics_user_id
+    type: string
+    required: false
+    label: {en_US: Analytics pseudonym}
+    human_description: {en_US: Caller-owned random lowercase UUIDv4. Never use an account or clinical identifier.}
+    form: form
+  - name: analytics_session_id
+    type: string
+    required: false
+    label: {en_US: Analytics session}
+    human_description: {en_US: Optional random lowercase UUIDv4 for this conversation or workflow run.}
+    form: form
+  - name: analytics_intent
+    type: select
+    required: false
+    label: {en_US: Analytics category}
+    human_description: {en_US: Optional closed category; no free text.}
+    options:
+      - {value: variant_evidence, label: {en_US: Variant evidence}}
+      - {value: literature_review, label: {en_US: Literature review}}
+      - {value: gene_disease_review, label: {en_US: Gene disease review}}
+      - {value: infrastructure_support, label: {en_US: Infrastructure support}}
+    form: form
 extra: {python: {source: tools/search_literature_corpus.py}}

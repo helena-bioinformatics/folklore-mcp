@@ -17,5 +17,8 @@ class SearchVariantLiteratureTool(Tool):
             "limit": int(tool_parameters.get("limit", 10)),
         }
         yield self.create_text_message(
-            json.dumps(call_tool("search_variant_literature", args), ensure_ascii=False)
+            json.dumps(
+                call_tool("search_variant_literature", args, analytics=tool_parameters),
+                ensure_ascii=False,
+            )
         )

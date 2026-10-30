@@ -16,6 +16,7 @@ class GetPublicationDetailsTool(Tool):
                 call_tool(
                     "get_publication_details",
                     {"pmid": str(tool_parameters.get("pmid", "")).strip()},
+                    analytics=tool_parameters,
                 ),
                 ensure_ascii=False,
             )

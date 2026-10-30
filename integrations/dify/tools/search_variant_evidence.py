@@ -16,5 +16,8 @@ class SearchVariantEvidenceTool(Tool):
             "query": str(tool_parameters.get("query", "")).strip(),
         }
         yield self.create_text_message(
-            json.dumps(call_tool("search_variant_evidence", args), ensure_ascii=False)
+            json.dumps(
+                call_tool("search_variant_evidence", args, analytics=tool_parameters),
+                ensure_ascii=False,
+            )
         )

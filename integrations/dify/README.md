@@ -21,5 +21,15 @@ Rebuild reproducibly with Dify CLI `0.6.10`:
 
 ```bash
 dify plugin package integrations/dify \
-  -o folklore-clinical-variant-interpretation-0.1.0.difypkg
+  -o folklore-clinical-variant-interpretation-0.1.1.difypkg
 ```
+
+## Optional journey context
+
+See [caller-owned journey context](../JOURNEY_CONTEXT.md) for support,
+explicit opt-in, application-owned pseudonyms and conversation/run boundaries.
+Connection-only configuration does not supply user identity automatically.
+
+The previously linked 0.1.0 package predates optional journey settings. To use
+those settings, build from the reviewed source; do not assume an installed
+0.1.0 archive has acquired them.

@@ -97,3 +97,9 @@ For the complete public contract, see the
 [Folklore connector guide](https://folklore.helena.bio/integrations/mcp).
 
 The 1.6.0 source adds the public website gene-profile workflow. See [public gene profiles](../../docs/PUBLIC_GENE_PROFILES.md) for resolution, explicit ambiguity choice, required snapshot identity and source-qualified continuation. This prepared recipe requires the corresponding hosted rollout; it does not establish publication.
+
+## Optional journey context
+
+See [caller-owned journey context](../JOURNEY_CONTEXT.md) for support,
+explicit opt-in, application-owned pseudonyms and conversation/run boundaries.
+Connection-only configuration does not supply user identity automatically.

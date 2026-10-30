@@ -13,7 +13,7 @@ https://openai.github.io/openai-agents-python/mcp/
 ```bash
 python -m venv .venv
 . .venv/bin/activate
-pip install "openai-agents" "mcp>=2,<3"
+pip install "openai-agents==0.24.0" "mcp>=2,<3"
 ```
 
 Set `OPENAI_API_KEY` through your normal secret-management process, then run:
@@ -36,3 +36,7 @@ still requires the user's own OpenAI API access.
 Do not put patient or private case data in the command-line request. Results are
 automated variant-level decision support for qualified professional review, not
 a diagnosis or treatment recommendation.
+
+Optional analytics uses the SDK `tool_meta_resolver`, with caller-owned context
+kept outside model arguments. See [journey context](../JOURNEY_CONTEXT.md).
+The default run remains anonymous; no account ID or prompt is used as an ID.

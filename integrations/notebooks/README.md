@@ -8,3 +8,9 @@
 Both notebooks use only Python's standard library, require no secrets, and run
 unchanged in Google Colab or Kaggle. They call the canonical hosted MCP
 endpoints and do not duplicate scientific logic.
+
+## Optional journey context
+
+See [caller-owned journey context](../JOURNEY_CONTEXT.md) for support,
+explicit opt-in, application-owned pseudonyms and conversation/run boundaries.
+Connection-only configuration does not supply user identity automatically.

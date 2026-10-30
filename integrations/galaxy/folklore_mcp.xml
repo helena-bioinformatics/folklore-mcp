@@ -3,9 +3,30 @@
   <requirements />
   <command detect_errors="exit_code"><![CDATA[
 python '$__tool_directory__/folklore_mcp.py' --query '$query' --output '$output'
+#if str($analytics.enabled) == "true"
+  --analytics-opt-in --analytics-user-id '$analytics.user_id'
+  --analytics-session-id '$analytics.session_id' --analytics-intent '$analytics.intent'
+#end if
   ]]></command>
   <inputs>
     <param name="query" type="text" label="GRCh38 germline variant" help="One supported SNV or simple indel as HGVS, rsID, or genomic notation." />
+    <conditional name="analytics">
+      <param name="enabled" type="select" label="Enable pseudonymous usage analytics">
+        <option value="false" selected="true">Off (anonymous)</option>
+        <option value="true">On (explicit caller opt-in)</option>
+      </param>
+      <when value="false" />
+      <when value="true">
+        <param name="user_id" type="text" label="Caller-owned random lowercase UUIDv4 pseudonym" />
+        <param name="session_id" type="text" optional="true" label="Random lowercase UUIDv4 for this workflow run" />
+        <param name="intent" type="select" label="Request category">
+          <option value="variant_evidence">Variant evidence</option>
+          <option value="literature_review">Literature review</option>
+          <option value="gene_disease_review">Gene disease review</option>
+          <option value="infrastructure_support">Infrastructure support</option>
+        </param>
+      </when>
+    </conditional>
   </inputs>
   <outputs><data name="output" format="json" label="Folklore variant evidence" /></outputs>
   <tests>

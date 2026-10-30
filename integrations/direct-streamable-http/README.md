@@ -31,3 +31,9 @@ Folklore Clinical Variant Interpretation MCP is published by Helena
 Bioinformatics. It accepts no patient, phenotype, family, segregation or
 private case data. Results require qualified professional review and are not a
 diagnosis or treatment recommendation.
+
+## Optional journey context
+
+See [caller-owned journey context](../JOURNEY_CONTEXT.md) for support,
+explicit opt-in, application-owned pseudonyms and conversation/run boundaries.
+Connection-only configuration does not supply user identity automatically.

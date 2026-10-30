@@ -98,3 +98,9 @@ Apache License 2.0. The bundle includes the public adapter repository's
 `LICENSE` and `NOTICE` files.
 
 The 1.6.0 source and download target are prepared for the gene-profile rollout. A URL in this guide does not establish that its immutable release has been published. The bridge passes through gene identity, snapshot, source and pagination boundaries; it performs no biological inference.
+
+## Optional journey context
+
+See [caller-owned journey context](../JOURNEY_CONTEXT.md) for support,
+explicit opt-in, application-owned pseudonyms and conversation/run boundaries.
+Connection-only configuration does not supply user identity automatically.

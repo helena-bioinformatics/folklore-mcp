@@ -14,3 +14,9 @@ templates accept public, non-sensitive research inputs only.
 | `noodle-biomedical-literature-search.json` | Noodle biomedical paper search |
 | `folklore-variant-interpretation.json` | Folklore germline variant evidence |
 | `ask-helena-public-knowledge.json` | Ask Helena source-cited public knowledge |
+
+## Optional journey context
+
+See [caller-owned journey context](../JOURNEY_CONTEXT.md) for support,
+explicit opt-in, application-owned pseudonyms and conversation/run boundaries.
+Connection-only configuration does not supply user identity automatically.
