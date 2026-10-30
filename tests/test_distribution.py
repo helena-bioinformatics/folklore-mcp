@@ -214,7 +214,7 @@ def test_release_candidate_versions_and_dois_are_consistent() -> None:
     assert f"version: {MCP_ADAPTER_VERSION}" in citation
     assert "doi: 10.5281/zenodo.21922951" in citation
     assert "Current release: `1.6.0`" in readme
-    assert "Latest published Registry version: `1.5.0`" in readme
+    assert "Latest published Registry version: `1.6.0`" in readme
     assert "prior 1.3.3 archive remains available" in readme
     assert "10.5281/zenodo.22102783" in readme
 

@@ -184,7 +184,7 @@ comparison workflow is exposed when literature search is enabled.
 - `search_gene_literature` reads a separate live, abstract-free literature capture for the selected gene.
 - `ui://folklore/variant-evidence/v1.html` is an optional read-only MCP App view.
 
-The 1.6.0 source supports ten scientific tools plus the separate support helper when all capabilities are enabled. The four new gene-profile tools are opt-in; production activation and immutable Registry publication are separate release checks. See [public gene profiles](docs/PUBLIC_GENE_PROFILES.md). Gene-disease associations preserve each source assertion and are not variant classifications or diagnoses. ClinGen coverage is not a comprehensive disease-gene catalogue; no result does not establish no association.
+The full hosted 1.6.0 configuration exposes ten scientific tools plus the separate support helper. The four new gene-profile tools are opt-in for standalone adapters. Production activation and active/latest Official Registry 1.6.0 were verified on 2026-10-30. See [public gene profiles](docs/PUBLIC_GENE_PROFILES.md). Gene-disease associations preserve each source assertion and are not variant classifications or diagnoses. ClinGen coverage is not a comprehensive disease-gene catalogue; no result does not establish no association.
 
 Literature associations do not alter the ACMG/AMP classification.
 
@@ -252,8 +252,8 @@ See [SECURITY.md](SECURITY.md) for reporting instructions and supported versions
 ## Registry identity
 
 - Name: `io.github.helena-bioinformatics/folklore`
-- Current release: `1.6.0` (source candidate; publication pending)
-- Latest published Registry version: `1.5.0`
+- Current release: `1.6.0`
+- Latest published Registry version: `1.6.0`
 - Publisher: Helena Bioinformatics
 - Website: <https://folklore.helena.bio>
 - Technical guide: <https://folklore.helena.bio/integrations/mcp>

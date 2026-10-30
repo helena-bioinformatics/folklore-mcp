@@ -2,7 +2,7 @@
 
 All notable changes to the public Folklore MCP adapter are documented here.
 
-## 1.6.0 - Unreleased
+## 1.6.0 - 2026-10-30
 
 - Add opt-in `resolve_gene`, `get_gene_profile`, `get_gene_section` and `search_gene_literature` over the existing anonymous public gene API.
 - Preserve all thirteen profile sections, source assertions, immutable snapshot identity, ambiguity, unavailable states, count units and bounded continuation. Live literature captures remain separate from reference snapshots.
