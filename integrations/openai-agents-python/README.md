@@ -20,22 +20,19 @@ Set `OPENAI_API_KEY` through your normal secret-management process, then run:
 
 ```bash
 python integrations/openai-agents-python/main.py \
-  "Review the public evidence for ENST00000226413.5:c.317A>G"
+  "Classify ENST00000226413.5:c.317A>G under ACMG/AMP"
 ```
 
-The example exposes only the four scientific read-only tools. It instructs the
-agent to send one public variant expression, preserve typed outcomes and retain
-the qualified-professional-review boundary. It does not transmit patient,
-phenotype, family, segregation or private case context.
+The example exposes four scientific tools. It sends one public variant
+expression and preserves classification, source evidence and typed outcomes.
 
 The endpoint needs no Folklore account or API key. The OpenAI Agents SDK call
 still requires the user's own OpenAI API access.
 
-## Safety
+## Inputs and output
 
-Do not put patient or private case data in the command-line request. Results are
-automated variant-level decision support for qualified professional review, not
-a diagnosis or treatment recommendation.
+The command-line request identifies one public variant or a scientific
+literature question. Results retain the returned classification and source fields.
 
 Optional analytics uses the SDK `tool_meta_resolver`, with caller-owned context
 kept outside model arguments. See [journey context](../JOURNEY_CONTEXT.md).

@@ -2,16 +2,15 @@
 
 Use this method when the task is to compare tools that may expose ClinVar
 assertions, automated classification, structured evidence, an API or an
-agent-facing interface. The comparison must not assume that an archive and an
-automated classifier answer the same question.
+agent-facing interface. Record archive assertions and automated classifications
+as separate output types.
 
 ## Preregister the comparison
 
 Record the public case set, assembly, transcript policy, access date, tool and
 source versions, authentication requirements, run count, measured fields and
 conflict-resolution procedure before collecting results. Use only public
-variant expressions. Do not add patient, phenotype, family, segregation or
-private case data.
+variant expressions.
 
 ## Preserve identity before comparing labels
 
@@ -30,8 +29,7 @@ or substitute a nearby variant.
 5. Failure behavior: not found, invalid, unsupported and unavailable states.
 6. Reproducibility: repeated identity, contract and source-version observations.
 7. Interface: public portal, API, MCP tools and workflow prompts.
-8. Safety: patient-data policy, professional review and diagnosis or treatment
-   exclusions.
+8. Input contract: accepted public identifiers, assemblies and variant types.
 
 Keep submitted ClinVar assertions, aggregate archive states and an automated
 classification as separate fields. Keep publication association separate from
@@ -44,8 +42,5 @@ unsupported cases rather than removing them. Report provenance completeness as
 field coverage rather than a quality score. Measure latency only with a public
 protocol, timestamps and at least five sequential runs per tool.
 
-Concordance does not establish accuracy, clinical validity or superiority. An
-accuracy claim requires an independently curated evaluation set, prespecified
-acceptance criteria, qualified reviewers and a documented conflict-resolution
-process. A publisher-run benchmark must be labelled as such and must not be
-presented as independent validation.
+Concordance measures agreement on the recorded cases. Accuracy evaluation uses
+a curated reference set, prespecified acceptance criteria and documented adjudication.

@@ -1,7 +1,7 @@
 name: folklore_clinical_variant_interpretation
 owner: helena_bioinformatics
-description: Retrieve public evidence for one supported GRCh38 germline variant.
-long_description: Read-only professional-review output from Folklore Clinical Variant Interpretation MCP.
+description: Classify one supported GRCh38 germline variant with ACMG/AMP assessment.
+long_description: Automated classification, criterion-level evidence and source provenance from Folklore MCP.
 categories:
   - Variant Analysis
   - Web Services

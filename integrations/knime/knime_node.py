@@ -50,7 +50,7 @@ def call_folklore(query: str, *, analytics=None) -> dict:
         "id": 1,
         "method": "tools/call",
         "params": {
-            "name": "search_variant_evidence",
+            "name": "classify_germline_variant",
             "arguments": {"assembly": "GRCh38", "query": query},
             "_meta": {
                 "io.modelcontextprotocol/protocolVersion": PROTOCOL,
@@ -67,7 +67,7 @@ def call_folklore(query: str, *, analytics=None) -> dict:
             "Content-Type": "application/json",
             "MCP-Protocol-Version": PROTOCOL,
             "Mcp-Method": "tools/call",
-            "Mcp-Name": "search_variant_evidence",
+            "Mcp-Name": "classify_germline_variant",
             "User-Agent": "knime-folklore-mcp/0.1.0",
         },
         method="POST",

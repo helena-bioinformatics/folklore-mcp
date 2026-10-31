@@ -7,7 +7,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Review the public comparison protocol for Folklore Clinical Variant Interpretation MCP. This route is for methods criticism, not endorsement. Do not include patient, phenotype, family, segregation or private case data.
+        Review the sampling, classification, criteria, provenance and reproducibility methods in the public comparison protocol.
   - type: input
     id: qualification
     attributes:
@@ -34,7 +34,7 @@ body:
         - Provenance completeness
         - Reproducibility and latency
         - Ambiguous, invalid, unsupported or unavailable outcomes
-        - Conflict-of-interest or clinical-safety boundary
+        - Conflict of interest or input/output contract
         - Other methods concern
     validations:
       required: true
@@ -69,9 +69,9 @@ body:
   - type: checkboxes
     id: boundaries
     attributes:
-      label: Safety confirmation
+      label: Review materials
       options:
-        - label: I included no patient, phenotype, family, segregation or private case data.
+        - label: I linked the public cases and sources supporting this observation.
           required: true
-        - label: I understand that concordance is not clinical accuracy or superiority.
+        - label: I specified the metric and a reproducible acceptance criterion.
           required: true

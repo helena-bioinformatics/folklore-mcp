@@ -12,9 +12,9 @@ SKILL_DIR = ROOT / "skills" / SKILL_NAME
 FILES = (
     Path("SKILL.md"),
     Path("agents/openai.yaml"),
-    Path("references/response-examples.json"),
-    Path("references/task-workflows.json"),
     Path("references/gene-disease.md"),
+    Path("LICENSE"),
+    Path("NOTICE"),
 )
 ZIP_TIMESTAMP = (2026, 1, 1, 0, 0, 0)
 
@@ -23,7 +23,11 @@ def build(output: Path) -> str:
     output.parent.mkdir(parents=True, exist_ok=True)
     with ZipFile(output, "w", compression=ZIP_DEFLATED, compresslevel=9) as archive:
         for relative in FILES:
-            source = SKILL_DIR / relative
+            source = (
+                ROOT / relative
+                if relative.name in {"LICENSE", "NOTICE"}
+                else SKILL_DIR / relative
+            )
             info = ZipInfo(f"{SKILL_NAME}/{relative.as_posix()}", ZIP_TIMESTAMP)
             info.compress_type = ZIP_DEFLATED
             info.external_attr = 0o100644 << 16

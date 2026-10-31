@@ -6,9 +6,9 @@ documentation, tests or safe failure handling are welcome.
 Before opening a pull request:
 
 1. Keep the service read-only and stateless.
-2. Do not add patient, phenotype, family or private case inputs.
+2. Match the public variant, gene, disease and literature input contracts.
 3. Do not add credentials, private endpoints or deployment topology.
-4. Preserve ambiguity and professional-review boundaries.
+4. Preserve exact identity, ambiguity, typed errors and source provenance.
 5. Run `pytest`, `ruff check .` and `ruff format --check .`.
 
 Scientific resolver, annotation, evidence and ACMG/AMP changes belong to the

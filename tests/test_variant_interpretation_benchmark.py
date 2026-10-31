@@ -46,7 +46,7 @@ def test_record_projection_is_bounded_and_preserves_safety() -> None:
         "result": {
             "isError": False,
             "structuredContent": {
-                "contract_version": "1",
+                "contract_version": "2",
                 "result": {
                     "search_contract_version": "1.0",
                     "status": "resolved",
@@ -61,11 +61,6 @@ def test_record_projection_is_bounded_and_preserves_safety() -> None:
                             "reference_versions": [],
                         },
                     },
-                },
-                "usage_boundary": {
-                    "review_required": True,
-                    "patient_context_evaluated": False,
-                    "not_for": ["patient_diagnosis", "treatment_decision"],
                 },
             },
         }
@@ -82,7 +77,7 @@ def test_record_projection_is_bounded_and_preserves_safety() -> None:
     )
     assert record["status"] == "resolved"
     assert record["identity"]["canonical_key"] == "key"
-    assert record["review_required"] is True
-    assert record["patient_context_evaluated"] is False
-    assert "patient_diagnosis" in record["not_for"]
+    assert "review_required" not in record
+    assert record["automated_class"] == "VUS"
+    assert record["evidence_availability"]["clinvar"] == "available"
     assert "content" not in record

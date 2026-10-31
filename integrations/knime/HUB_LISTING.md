@@ -1,6 +1,6 @@
 # Folklore Clinical Variant Interpretation
 
-Retrieve structured evidence for supported public GRCh38 germline variants
+Classify supported public GRCh38 germline variants under ACMG/AMP
 through Helena Bioinformatics' public Folklore MCP service.
 
 - Category: Life Sciences / Genomics
@@ -9,5 +9,4 @@ through Helena Bioinformatics' public Folklore MCP service.
 - Website: https://folklore.helena.bio
 - Source: https://github.com/helena-bioinformatics/folklore-mcp
 
-The workflow is read-only, accepts no patient or private case context, and its
-results require qualified professional review.
+The read-only workflow takes one public GRCh38 variant expression and assembly.

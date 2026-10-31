@@ -3,9 +3,9 @@
 Folklore Clinical Variant Interpretation MCP uses the hosted endpoint
 https://api.helena.bio/folklore/v1/mcp without an account, API key or OAuth.
 
-## Current 1.6.0 surface and qualification
+## 1.7.0 source surface
 
-The fully enabled 1.6.0 configuration exposes ten scientific tools and the
+The fully enabled 1.7.0 configuration exposes ten scientific tools and the
 separate, optional support_helena helper, five workflow prompts and one optional
 MCP App resource. Self-hosted feature gates can reduce that inventory. Read
 tools/list for the actual enabled tools; support discovery is not scientific
@@ -16,11 +16,9 @@ The modern 2026-07-28 path is stateless. Each request carries matching protocol
 metadata and routing headers; it has no initialize exchange or Mcp-Session-Id.
 [The direct HTTP recipe](../integrations/direct-streamable-http/README.md)
 contains a complete request and a one-call identity/snapshot smoke.
-The smoke qualifies only the hosted JSON response to resolve_gene for BRCA1.
-It does not qualify named SDK clients, streaming responses, profile retrieval
-or clinical accuracy. Record the exact client package/version, protocol,
-transport, date, discovery outcome and scientific result for any broader
-compatibility claim.
+The identity smoke checks the JSON response to resolve_gene for BRCA1.
+Client qualification records package/version, protocol, transport, date,
+discovery outcome and scientific result.
 
 All MCP requests, including optional discovery and lists, consume the
 [shared network budget](RATE_LIMITS.md). A single smoke also consumes that
@@ -36,11 +34,8 @@ Publisher observation on 2026-09-10, adapter 1.4.1 and MCP Python SDK 2.0.0:
 | Stateless 2026-07-28 | server/discover | supportedVersions contains 2026-07-28; tools/list is directly callable. |
 | Legacy 2025-03-26 | initialize | Returns protocolVersion 2025-03-26 and capabilities. |
 
-The SDK supplied legacy negotiation in that observation. There was no
-extra remote bridge in the hosted request path. The local Biomni/Biorouter
-stdio bridges are separate client integrations. Do not infer that initialize
-is rejected because the modern protocol no longer requires it, or claim
-every legacy version is verified from this one probe.
+The SDK supplied legacy negotiation for that recorded version. Local
+Biomni/Biorouter stdio bridges are separate client integrations.
 
 For 2026-07-28 requests send MCP-Protocol-Version and Mcp-Method. Also send
 Mcp-Name matching params.name for tools/call and prompts/get, or params.uri
@@ -56,19 +51,16 @@ Check result.isError and adapter_error; HTTP 200 alone is insufficient.
 Variant envelopes have a nullable result: preserve adapter_error when it is null
 and otherwise branch on result.status. See [Typed outcomes](TYPED_OUTCOMES.md).
 The gene-disease tools return their source assertions, pagination and
-usage_boundary directly; see [Gene-disease evidence](GENE_DISEASE_EVIDENCE.md).
+source metadata directly; see [Gene-disease evidence](GENE_DISEASE_EVIDENCE.md).
 The four gene-profile tools use a nullable result envelope and preserve gene,
 snapshot, source and section identity; see [Public gene profiles](PUBLIC_GENE_PROFILES.md).
-A corpus-scoped miss or unavailable reference section is not biological absence.
+Empty and unavailable outcomes retain their source/corpus scope.
 
-Variant tools accept only one public variant expression and assembly. Gene-disease tools accept a public gene/disease identifier or disease name with bounded pagination. Do not forward
-patient-specific histories or phenotype narratives, family or segregation
-context, or private case data. Public phenotype/HPO/OMIM reference-literature
-queries remain allowed by their published schema. Never
-auto-select an ambiguous candidate. Results require qualified professional
-review and are not a diagnosis or treatment recommendation.
+Variant input is one public GRCh38 nuclear germline SNV or simple indel
+smaller than 50 bp. Gene-disease input is a public gene/disease identifier or
+disease-name substring. Literature queries accept public phenotype/HPO/OMIM
+concepts. Ambiguous results require an explicit candidate selection.
 
-Run python3 ops/public_smoke.py for modern discovery. That check does not
-execute a scientific tool. Run the separate one-call identity/snapshot smoke
+Run python3 ops/public_smoke.py for modern discovery metadata. Run the separate one-call identity/snapshot smoke
 from the direct HTTP recipe for its bounded scientific acceptance criteria.
 Keep discovery, transport acceptance and scientific results separate.

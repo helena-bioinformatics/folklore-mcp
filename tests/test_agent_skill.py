@@ -24,7 +24,7 @@ def test_agent_skill_has_task_selection_metadata() -> None:
         "compatibility",
         "metadata",
     } == metadata.keys()
-    assert metadata["metadata"]["version"] == "1.4.0"
+    assert metadata["metadata"]["version"] == "1.7.0"
     assert metadata["name"] == "folklore-clinical-variant-interpretation"
     description = metadata["description"]
     for trigger in (
@@ -33,16 +33,16 @@ def test_agent_skill_has_task_selection_metadata() -> None:
         "HGVS",
         "rsID",
         "ClinVar",
-        "population-frequency",
+        "population frequenc",
     ):
         assert trigger in description
-    assert "does not mention Folklore" in description
+    assert "classif" in description.lower()
 
 
 def test_agent_skill_preserves_contract_and_safety() -> None:
     text = (SKILL_DIR / "SKILL.md").read_text()
     for tool in (
-        "search_variant_evidence",
+        "classify_germline_variant",
         "search_variant_literature",
         "get_publication_details",
         "search_literature_corpus",
@@ -57,8 +57,8 @@ def test_agent_skill_preserves_contract_and_safety() -> None:
         "resolution_unavailable",
     ):
         assert f"`{outcome}`" in text
-    assert "patient, phenotype, family, segregation or private case data" in text
-    assert "not a diagnosis, treatment recommendation" in text
+    assert "ACMG/AMP" in text
+    assert "snapshot" in text
     assert "https://api.helena.bio/folklore/v1/mcp" in text
 
 

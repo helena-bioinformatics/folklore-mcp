@@ -125,7 +125,7 @@ def canonical_text_fetcher(url, *, timeout):
     if url == expected["surfaces"]["agentSkillRaw"]:
         return (
             f"{expected['title']} Trigger even when the user does not mention "
-            "Folklore search_variant_evidence qualified professional review"
+            "Folklore classify_germline_variant qualified professional review"
         )
     if url == expected["surfaces"]["agentHub"]:
         return f"{expected['title']} classify ACMG/AMP"

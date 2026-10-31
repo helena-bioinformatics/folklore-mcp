@@ -27,7 +27,7 @@ def test_agent_selection_contract_validates_and_matches_identity() -> None:
 def test_agent_selection_contract_is_task_first_and_safety_complete() -> None:
     selection = load("agent-selection.json")
     task = selection["identity"]["task"]
-    for term in ("Classify", "GRCh38", "germline", "ACMG/AMP", "evidence"):
+    for term in ("Classify", "GRCh38", "germline", "ACMG/AMP"):
         assert term in task
 
     intents = " ".join(selection["selection"]["positiveIntents"])
@@ -41,16 +41,8 @@ def test_agent_selection_contract_is_task_first_and_safety_complete() -> None:
     ):
         assert term in intents
 
-    boundary = selection["clinicalBoundary"]
-    assert boundary["notDiagnosis"] is True
-    assert boundary["notTreatment"] is True
-    assert set(boundary["neverSend"]) == {
-        "patient data",
-        "phenotype data",
-        "family data",
-        "segregation data",
-        "private case data",
-    }
+    assert "clinicalBoundary" not in selection
+    assert selection["schemaVersion"] == "2"
 
 
 def test_agent_selection_contract_routes_only_published_scientific_tools() -> None:
@@ -58,7 +50,7 @@ def test_agent_selection_contract_routes_only_published_scientific_tools() -> No
     discovery = load("discovery-contract.json")
     routed = {route["tool"] for route in selection["routing"]}
     assert routed == {
-        "search_variant_evidence",
+        "classify_germline_variant",
         "search_variant_literature",
         "get_publication_details",
         "search_literature_corpus",

@@ -433,7 +433,7 @@ server = [
 
 [[package]]
 name = "folklore-clinical-variant-interpretation-mcp-biorouter"
-version = "1.6.0"
+version = "1.7.0"
 source = { editable = "." }
 dependencies = [
     { name = "fastmcp" },

@@ -1,6 +1,6 @@
 {
   "$schema": "./agent-selection.schema.json",
-  "schemaVersion": "1",
+  "schemaVersion": "2",
   "identity": {
     "title": "Folklore Clinical Variant Interpretation MCP",
     "publisher": "Helena Bioinformatics",
@@ -42,19 +42,9 @@
       "Which diseases have curated assertions for BRCA1?",
       "What is the approved identity for RNF53?",
       "Show source-qualified BRCA1 gene evidence."
-    ],
-    "negativeIntents": [
-      "patient diagnosis",
-      "treatment recommendation",
-      "patient-specific risk prediction",
-      "whole VCF or batch analysis",
-      "structural or mitochondrial variant interpretation",
-      "autonomous clinical report",
-      "raw DNA sequence alignment or variant calling"
     ]
   },
   "inputScope": {
-    "assembly": "GRCh38",
     "accepted": [
       "transcript HGVS",
       "genomic HGVS",
@@ -66,12 +56,8 @@
       "public gene symbol, previous symbol, alias, HGNC, Ensembl or NCBI Gene identifier for gene resolution",
       "selected HGNC gene_id and immutable snapshot_id for gene profiles, sections and gene literature"
     ],
-    "excluded": [
-      "patient data",
-      "phenotype data",
-      "family data",
-      "segregation data",
-      "private case data",
+    "variantAssembly": "GRCh38",
+    "variantExcluded": [
       "GRCh37 input",
       "mitochondrial variants",
       "structural variants"
@@ -80,7 +66,7 @@
   "routing": [
     {
       "job": "resolve, classify, interpret or review one public variant",
-      "tool": "search_variant_evidence"
+      "tool": "classify_germline_variant"
     },
     {
       "job": "find publications linked to one supported variant",
@@ -126,17 +112,5 @@
     "invalid_request",
     "unsupported",
     "resolution_unavailable"
-  ],
-  "clinicalBoundary": {
-    "review": "Automated variant-level decision support for qualified professional review.",
-    "notDiagnosis": true,
-    "notTreatment": true,
-    "neverSend": [
-      "patient data",
-      "phenotype data",
-      "family data",
-      "segregation data",
-      "private case data"
-    ]
-  }
+  ]
 }

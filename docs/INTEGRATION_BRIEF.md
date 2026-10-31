@@ -1,7 +1,7 @@
-# Integrate Folklore genomic evidence into an AI workflow
+# Integrate Folklore classification into an AI workflow
 
-Folklore supplies the evidence and interpretation stage of human genomic analysis:
-one already identified GRCh38 germline variant, a public gene, or a disease query.
+Folklore classifies and assesses identified GRCh38 germline variants under ACMG/AMP.
+Gene, disease and literature tools provide source-qualified scientific context.
 It is a hosted, read-only MCP with no account or API key requirement.
 
 Endpoint: `https://api.helena.bio/folklore/v1/mcp`
@@ -10,7 +10,7 @@ Endpoint: `https://api.helena.bio/folklore/v1/mcp`
 
 | User question | Tool | Public input |
 | --- | --- | --- |
-| What is known about this genetic variant? | `search_variant_evidence` | `{"assembly":"GRCh38","query":"NM_007294.4:c.68_69del"}` |
+| Classify and assess this germline variant. | `classify_germline_variant` | `{"assembly":"GRCh38","query":"NM_007294.4:c.68_69del"}` |
 | Which diseases are associated with this gene? | `get_gene_disease_associations` | `{"gene":"FBN1"}` |
 | Which genes are associated with this disease? | `search_disease_genes` | `{"disease":"Marfan syndrome"}` |
 | Which papers discuss this variant? | `search_variant_literature` | Use the canonical identity returned by variant evidence; inspect the tool schema. |
@@ -20,18 +20,17 @@ Endpoint: `https://api.helena.bio/folklore/v1/mcp`
 
 The [per-tool task contracts](../registry/task-contracts.json) cover all ten
 scientific tools, including corpus search and publication details. Literal
-examples are input recipes, not claims about returned evidence. Response-bound
-recipes are not executable until real response values have been selected.
-The older [selection metadata](../registry/agent-selection.json) remains valid;
-its global GRCh38 assembly and variant outcomes apply to the variant workflow,
-while the new companion describes each tool's distinct scope.
+examples specify literal arguments. Response-bound recipes use values selected
+from a successful response.
+The [selection metadata](../registry/agent-selection.json) defines task routing.
+GRCh38 assembly and variant statuses apply to the classification workflow.
 
 The variant response already contains annotation, automated classification and
 criteria, available ClinVar assertions, expert evidence, population frequencies,
 predictors, source versions and explicit missing-data states. The gene-disease
 tools preserve individual ClinGen assertions, including disputed assessments.
-These are distinct evidence types; a gene-disease association does not classify
-a variant. Literature links do not establish causality.
+Variant classification, gene-disease validity assertions and literature matches
+retain their separate producers and source semantics.
 
 ## Connection options
 
@@ -39,13 +38,11 @@ a variant. Literature links do not establish causality.
 - [Biomni stdio bridge and smoke check](../integrations/biomni/README.md)
 - [Compatibility and protocol contract](COMPATIBILITY.md)
 - [Schemas and coverage for gene-disease evidence](GENE_DISEASE_EVIDENCE.md)
-- [Actual dated response examples](https://folklore.helena.bio/examples/acmg-variant-classification)
 
-Discover tools dynamically. With all capabilities enabled, the 1.6.0 source
+Discover tools dynamically. With all capabilities enabled, the 1.7.0 source
 exposes ten scientific tools plus `support_helena`, a separate non-scientific
 helper appropriate only when the user explicitly asks about supporting Helena.
-Standalone capabilities are opt-in; a source recipe is not proof of live
-activation or client compatibility. See [compatibility](COMPATIBILITY.md) and
+Standalone capabilities use explicit feature gates. See [compatibility](COMPATIBILITY.md) and
 [shared request budgets](RATE_LIMITS.md) before integration.
 
 Before taking values from a response, check transport and JSON-RPC errors,
@@ -55,36 +52,21 @@ companion start at MCP CallToolResult, not the outer JSON-RPC response. Gene
 identity and snapshot bindings must come from the same successful resolution
 and explicitly selected candidate. Missing fields, unresolved ambiguity or identity/
 snapshot mismatch stop the recipe. On snapshot_unavailable, resolve again;
-do not substitute a newer snapshot or mix pages. The companion contains no
-executor and cannot enforce these instructions on an agent.
+do not substitute a newer snapshot or mix pages. The companion provides declarative input and output recipes.
 
 Preserve source assertions, releases, native assemblies, count units and
 pagination. The two gene-disease tools expose ClinGen Gene-Disease Validity
-snapshots, not a comprehensive disease catalogue. Profile source sections and
+snapshots. Profile source sections and
 a separate live, abstract-free gene-literature capture have different coverage
-and provenance. Public phenotype, HPO or OMIM literature concepts are allowed;
-patient phenotype narratives and private case context are not.
+and provenance. Literature input accepts public phenotype, HPO and OMIM reference concepts.
 
-Use another appropriate workflow for unsupported variant classes, sequencing
-files or patient-level decisions. Consult the named primary authority when the
+Variant input is an identified public allele. Consult the named primary authority when the
 latest ClinVar assertion, source release or broader literature/disease coverage
-is required. Empty snapshot/corpus results do not establish biological absence;
-a query-matched paper is not curated validity or causal evidence. These recipes
-do not establish that Folklore is preferable to every competing source.
-
-The eight [dated variant captures](../skills/folklore-clinical-variant-interpretation/references/task-workflows.json)
-remain separate historical observations. New task recipes are source-derived
-schema examples, not additional observed results, clinical validation or a
-measured improvement in search visibility or agent selection.
+is required. Empty results describe the queried snapshot or corpus. Literature results
+carry query-match labels; validity assertions carry their source assessments.
 
 ## Integration scope
 
-The public MCP does not accept sequencing files, VCF uploads, patient histories
-or private case data. It does not perform variant calling or whole-genome batch
-analysis. Results support qualified professional review.
-
-This package is maintained by Helena Bioinformatics. A working client recipe
-does not mean an upstream platform has endorsed or bundled Folklore. The Biomni
-proposal is tracked in [issue 331](https://github.com/snap-stanford/Biomni/issues/331).
-Other aggregators can use the same hosted endpoint and public contracts; their
-acceptance and client compatibility must be verified separately.
+Variant input is one public GRCh38 nuclear germline SNV or simple indel
+smaller than 50 bp. Gene and disease tools accept the public identifiers and
+names specified in their schemas.

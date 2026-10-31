@@ -11,6 +11,4 @@ endpoints and do not duplicate scientific logic.
 
 ## Optional journey context
 
-See [caller-owned journey context](../JOURNEY_CONTEXT.md) for support,
-explicit opt-in, application-owned pseudonyms and conversation/run boundaries.
-Connection-only configuration does not supply user identity automatically.
+Optional analytics configuration: [journey context](../JOURNEY_CONTEXT.md).

@@ -62,9 +62,9 @@ def test_resolved_envelope_requires_matching_canonical_identity() -> None:
         "&position=43124028&reference=CTC&alternate=C"
     )
     assert "BRCA1" in text_summary(result)
-    assert "not a patient diagnosis" in text_summary(result)
+    assert "Automated ACMG/AMP class: LP" in text_summary(result)
     assert tool_result(result)["adapter_error"] is None
-    assert tool_result(result)["usage_boundary"] == usage_boundary()
+    assert "usage_boundary" not in tool_result(result)
     assert usage_boundary() == {
         "result_type": "automated_variant_level_classification",
         "review_required": True,
@@ -81,13 +81,15 @@ def test_resolved_envelope_requires_matching_canonical_identity() -> None:
 def test_marker_like_variant_text_remains_opaque_payload_content() -> None:
     marker = "[Tool result trimmed for length]"
     result = resolved_result()
-    result["interpretation"]["limitations"]["unavailable_context"] = marker
+    result["interpretation"]["display"]["label"] = marker
 
     validated = validate_upstream_result(result)
 
-    assert validated["interpretation"]["limitations"]["unavailable_context"] == marker
+    assert validated["interpretation"]["display"]["label"] == marker
     assert marker in text_summary(validated)
-    assert tool_result(validated)["result"] == validated
+    assert (
+        tool_result(validated)["result"]["interpretation"]["display"]["label"] == marker
+    )
     assert tool_result(validated)["adapter_error"] is None
 
 

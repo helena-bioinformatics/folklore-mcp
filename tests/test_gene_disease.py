@@ -201,7 +201,7 @@ def test_seven_tools_and_mcp_text_parity_and_no_variant_calls():
     ) as client:
         tools = rpc(client, "tools/list")["tools"]
         assert [tool["name"] for tool in tools] == [
-            "search_variant_evidence",
+            "classify_germline_variant",
             "search_variant_literature",
             "get_publication_details",
             "search_literature_corpus",
@@ -221,6 +221,9 @@ def test_seven_tools_and_mcp_text_parity_and_no_variant_calls():
         ]:
             mcp = rpc(client, "tools/call", {"name": name, "arguments": args})
             expected = payload()
+            expected.pop("usage_boundary")
+            expected["contractVersion"] = "2"
+            expected["warnings"] = ["Local reference snapshot."]
             if name == "search_disease_genes":
                 expected["query"] = {
                     "kind": "disease",
@@ -243,7 +246,8 @@ def test_seven_tools_and_mcp_text_parity_and_no_variant_calls():
             },
         )
         assert bad["isError"] is True
-        assert bad["structuredContent"]["usage_boundary"] == gene_disease_boundary()
+        assert "usage_boundary" not in bad["structuredContent"]
+        assert bad["structuredContent"]["adapter_error"]["code"] == "invalid_arguments"
 
 
 def test_disabled_capability_and_readiness_failure():

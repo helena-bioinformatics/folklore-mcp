@@ -14,8 +14,8 @@ from folklore_mcp_service.application.public_gene_gateway import (
 )
 from folklore_mcp_service.domain.public_gene_contracts import (
     PUBLIC_GENE_ARGUMENTS,
-    public_gene_boundary,
 )
+from folklore_mcp_service.domain.public_projection import public_schema
 
 PUBLIC_GENE_TOOL_OPERATIONS = {
     "resolve_gene": "resolve",
@@ -70,64 +70,57 @@ def public_gene_output_schema(operation: str) -> dict:
             "next_cursor",
         ],
     }[operation]
-    return {
-        "type": "object",
-        "additionalProperties": False,
-        "required": [
-            "contract_version",
-            "result",
-            "record_url",
-            "usage_boundary",
-            "adapter_error",
-        ],
-        "properties": {
-            "contract_version": {"type": "string", "const": "1"},
-            "result": {
-                "anyOf": [
-                    {
-                        "type": "object",
-                        "required": result_required,
-                        "additionalProperties": True,
-                    },
-                    {"type": "null"},
-                ]
-            },
-            "record_url": {"type": ["string", "null"], "format": "uri"},
-            "usage_boundary": {
-                "type": "object",
-                "additionalProperties": False,
-                "required": list(public_gene_boundary()),
-                "properties": {
-                    key: {"const": value}
-                    for key, value in public_gene_boundary().items()
+    return public_schema(
+        {
+            "type": "object",
+            "additionalProperties": False,
+            "required": [
+                "contract_version",
+                "result",
+                "record_url",
+                "usage_boundary",
+                "adapter_error",
+            ],
+            "properties": {
+                "contract_version": {"type": "string", "const": "1"},
+                "result": {
+                    "anyOf": [
+                        {
+                            "type": "object",
+                            "required": result_required,
+                            "additionalProperties": True,
+                        },
+                        {"type": "null"},
+                    ]
                 },
-            },
-            "adapter_error": {
-                "anyOf": [
-                    {
-                        "type": "object",
-                        "additionalProperties": False,
-                        "required": [
-                            "code",
-                            "message",
-                            "retryable",
-                            "available_snapshot_id",
-                        ],
-                        "properties": {
-                            "code": {"type": "string"},
-                            "message": {"type": "string"},
-                            "retryable": {"type": "boolean"},
-                            "available_snapshot_id": {
-                                "type": ["string", "null"],
-                                "pattern": "^[a-f0-9]{64}$",
+                "record_url": {"type": ["string", "null"], "format": "uri"},
+                "adapter_error": {
+                    "anyOf": [
+                        {
+                            "type": "object",
+                            "additionalProperties": False,
+                            "required": [
+                                "code",
+                                "message",
+                                "retryable",
+                                "available_snapshot_id",
+                            ],
+                            "properties": {
+                                "code": {"type": "string"},
+                                "message": {"type": "string"},
+                                "retryable": {"type": "boolean"},
+                                "available_snapshot_id": {
+                                    "type": ["string", "null"],
+                                    "pattern": "^[a-f0-9]{64}$",
+                                },
                             },
                         },
-                    },
-                    {"type": "null"},
-                ]
+                        {"type": "null"},
+                    ]
+                },
             },
-        },
-    }
+        }
+    )
 
 
 def public_gene_tools(*, literature_enabled: bool) -> list[types.Tool]:
@@ -135,22 +128,22 @@ def public_gene_tools(*, literature_enabled: bool) -> list[types.Tool]:
         (
             "resolve_gene",
             "Resolve a gene symbol, alias or stable identifier",
-            "Find the authoritative public human gene identity for a symbol, previous symbol, alias, HGNC, Ensembl or NCBI Gene identifier. Returns exact, alias, ambiguous, not_found or withdrawn with all candidates and identity_snapshot_id. Never choose an ambiguous candidate or substitute a withdrawn identity. Use the selected HGNC gene_id and snapshot with get_gene_profile. Gene-plus-HGVS and variant expressions belong in search_variant_evidence. No patient or case narrative.",
+            "Resolve a human gene symbol, previous symbol, alias, HGNC, Ensembl or NCBI Gene identifier. Returns exact, alias, ambiguous, not_found or withdrawn status with candidates and identity_snapshot_id. Use a selected HGNC gene_id and snapshot_id with get_gene_profile. Gene-plus-HGVS and variant expressions use classify_germline_variant.",
         ),
         (
             "get_gene_profile",
-            "Read the complete public gene evidence profile",
-            "Read one source-qualified gene profile after resolve_gene and explicit candidate selection when needed. Returns the same immutable snapshot as the public Folklore gene page: overview, disease validity, dosage, mechanisms, transcripts and native assemblies, constraint, ClinVar summaries/consequences, expression, GWAS, phenotypes and protein/pathways. Preserve each assertion, source, coverage, count unit, null and limitation. Use get_gene_section for further pages. The immutable literature section is separate from live search_gene_literature. Gene constraint, GWAS association and gene-disease validity are not variant pathogenicity or patient diagnosis.",
+            "Read the complete gene profile",
+            "Read the selected gene_id and immutable snapshot_id from resolve_gene. Returns overview, disease validity, dosage, mechanisms, transcripts, native assemblies, constraint, ClinVar summaries and consequences, expression, GWAS, phenotypes and protein/pathways with source assertions, coverage, count units and null values. get_gene_section supplies further pages. Live search_gene_literature is separate from the snapshot literature section.",
         ),
         (
             "get_gene_section",
-            "Read a page of source-qualified gene evidence",
-            "Read or continue one section of the current public gene profile using its exact gene_id, snapshot_id and opaque section cursor. Preserves source records, assembly/release, coverage, total versus observed_total, count units and source provenance. Do not merge snapshots, count mirrored assertions as independent votes, sum overlapping clinical axes, or interpret unavailable/source_has_no_record as biological absence. Restart resolution and the whole profile after snapshot_unavailable. No patient context.",
+            "Read a page of gene records",
+            "Read a gene-profile section using gene_id, snapshot_id and its returned opaque cursor. Returns source records, assembly/release, coverage, totals, count units and provenance. snapshot_unavailable requires a fresh resolution/profile request.",
         ),
         (
             "search_gene_literature",
             "Find live literature for a resolved public gene",
-            "Retrieve the public gene page live literature capture after authoritative gene resolution. Uses the canonical gene context and existing Literature Mining ranking. Returns publications, source links, match labels, capture time/hash, degradation and gene/snapshot/sort-bound cursors. This live capture is separate from the immutable reference snapshot; query relevance is not guaranteed exact gene filtering or curated gene-disease evidence. Abstracts are excluded. No patient context, diagnosis or variant classification.",
+            "Retrieve a live publication capture for a resolved gene_id and snapshot_id. Returns source links, match labels, capture time/hash, degradation and gene/snapshot/sort-bound cursors. This capture is separate from the immutable reference snapshot and contains no abstracts.",
         ),
     ]
     return [
@@ -188,12 +181,11 @@ def _result(
         if identity["status"] == "Approved":
             symbol = identity["symbol"]
     structured = {
-        "contract_version": "1",
+        "contract_version": "2",
         "result": result,
         "record_url": f"https://folklore.helena.bio/gene/{quote(symbol, safe='')}"
         if symbol
         else None,
-        "usage_boundary": public_gene_boundary(),
         "adapter_error": {
             "code": error.code,
             "message": str(error),

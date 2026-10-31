@@ -6,8 +6,7 @@ Discovery, catalog listing, protocol negotiation and scientific calls all
 consume that same POST budget. It is not a per-tool or per-conversation quota.
 Clients behind a shared gateway or NAT share the allowance.
 
-A burst allowance is not a recommendation to fill it. Existing traffic from
-other clients can occupy the bucket before a new process starts. Simultaneous
+Other clients sharing source IP consume the same bucket. Simultaneous
 connections are also bounded. The endpoint can return HTTP 429 without an
 application or scientific failure.
 
@@ -24,19 +23,16 @@ optional under HTTP. A missing or malformed value needs a conservative
 finite fallback, not a tight retry loop. A valid delay exceeding the job's
 remaining time ends that job; do not shorten the server's hint to fit it.
 
-Waiting ten seconds does not guarantee admission. Other requests sharing the
-source IP can consume capacity while this client waits. Do not rotate IPs,
-create fresh clients to escape cooldown, bypass origin/input checks or
-increase server limits to make a smoke check pass. A read-only annotation
-alone does not establish that every POST is safe to replay.
+Admission depends on the shared source-IP budget at request time. Honor
+server cooldowns and origin/input checks. Replay eligibility is determined
+by the operation contract.
 
 ## Shared-instance helper
 
 [ops/client_rate_budget.py](../ops/client_rate_budget.py) supplies RateBudget.
 It has no HTTP transport and never retries its callback. Reuse one instance
 across all cooperating requests, including metadata calls. Its default
-ten-second spacing and finite attempt count are client admission controls,
-not a distributed scheduler or a copy of the server's bucket state.
+ten-second spacing and finite attempt count apply within that shared instance.
 
 execute(operation, deadline=..., cancelled=...) admits at most one callback
 per invocation. The deadline is an absolute monotonic time. The callback
@@ -53,10 +49,8 @@ it checks elapsed cooldown, deadline and cancellation under the same lock.
 It neither sends a request nor resets attempt counts. Ordinary transport
 exceptions also consume an attempt and release the lock without replay.
 
-Separate instances, processes, hosts and unrelated applications do not share
-this lock. Coordinate their aggregate workload through one caller-owned
-scheduler where needed, or report the shared-egress limitation. This helper
-does not discover an IP address, store a caller identity or guarantee capacity.
+The lock is instance-local. Coordinate processes and hosts through a shared
+caller-owned scheduler when they share egress.
 
 ## Existing discovery smoke
 
@@ -65,14 +59,14 @@ calls share one budget, start at least ten seconds apart, and stop on 429.
 Each HTTP attempt rejects redirects, caps the body at 2 MiB and requires
 JSON media, unambiguous JSON keys and a matching successful RPC identity.
 It advertises JSON and event-stream acceptance but explicitly rejects SSE
-in this JSON-response hosted-service check; it is not a complete MCP client.
+in this JSON-response hosted-service check.
 
 The smoke supplies an admission deadline ninety seconds ahead and passes
 the smaller of twenty seconds or remaining time to the socket transport.
 This is not a forcibly enforced total I/O deadline: DNS, slow reads or an
 uncooperative transport can overrun it. A late callback cannot qualify success.
-The check sends no scientific query and does not establish scientific accuracy,
-SDK compatibility or isolated-client availability.
+The check exercises four metadata methods. Scientific calls and SDK client
+qualification have separate acceptance criteria.
 
 Run the offline validation with
 python3.12 -m pytest tests/test_client_rate_budget.py. It covers virtual-time

@@ -372,7 +372,7 @@ def reconcile(
             [
                 contract["title"],
                 "user does not mention Folklore",
-                "search_variant_evidence",
+                "classify_germline_variant",
                 "qualified professional review",
             ],
         ),

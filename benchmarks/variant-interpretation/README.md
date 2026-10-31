@@ -1,106 +1,42 @@
-# Public variant interpretation benchmark
+# Variant classification benchmark
 
-This benchmark measures whether a public variant interpretation interface can
-resolve identity, expose evidence, preserve provenance and fail safely. It does
-not evaluate patients, diagnosis, treatment or clinical outcomes.
+Compare public variant interfaces on identity, automated class, reported criteria,
+source evidence, typed outcomes and elapsed time.
 
-## Research questions
+## Cases and capture
 
-1. Does the interface preserve the exact input, assembly and normalized allele?
-2. Does it distinguish resolved, ambiguous, not found, invalid, unsupported and
-   unavailable outcomes?
-3. For resolved variants, does it expose an automated class, applied criteria,
-   evidence availability, source links and data versions?
-4. Can a repeated run be tied to the same public contract and source snapshot?
-5. Does the response keep variant-level decision support separate from patient
-   diagnosis and treatment?
-
-## Case set
-
-`cases.csv` contains public variant expressions only. It deliberately mixes
-rsIDs, transcript HGVS and coordinates, including multiallelic identifiers and
-invalid or unsupported inputs. A case label describes the input form, not the
-expected scientific result.
-
-The case set contains no patient, phenotype, family, segregation or private case
-data. Do not add any such data when extending it.
-
-## Folklore baseline
-
-Capture the current public Folklore Clinical Variant Interpretation MCP result:
+`cases.csv` contains the fixed public HGVS, rsID and coordinate inputs, including
+ambiguous, invalid and unsupported expressions. Preserve case IDs, exact inputs,
+assembly and original order.
 
 ```bash
 python3 benchmarks/variant-interpretation/capture_folklore.py \
   --output folklore-baseline.jsonl
 ```
 
-The script calls the public read-only endpoint, records one line per case and
-does not write raw response bodies. It retains the fields needed for comparison:
-status, normalized identity, gene and transcript where returned, automated
-class, criteria, evidence availability, provenance versions, safety boundary
-and elapsed time. It waits one second between cases by default and uses bounded
-retry handling for HTTP 429 responses. Keep the delay enabled on public runs.
+Record every case's status, normalized allele, transcript, automated class,
+criteria, source versions, evidence availability and elapsed time. Request pacing
+follows the shared endpoint budget. Separate technical admission failures from
+scientific outcomes.
 
-## Comparison protocol
+## Comparison and metrics
 
-The machine-readable [benchmark manifest](benchmark-manifest.json) fixes the
-public endpoint, case set, measured fields, metrics and clinical boundary. The
-[neutral comparison method](COMPARISON_METHOD.md) explains how to compare an
-archive, an automated classifier and an agent-facing API without assuming they
-answer the same question.
+Use the same case input for each tool. Compare classifications only for matching
+normalized alleles and retain unresolved cases as their exact typed outcomes.
+Record tool/version, date, protocol, authentication, source releases and run count.
 
-The [preregistered protocol](PREREGISTRATION.md) fixes the research question,
-candidate public evaluation source, sampling dimensions, outcomes and
-independent-review gate. Complete
-`dataset-manifest.template.json` with the dated public source checksum and seed
-before collecting comparative results.
+- Identity concordance: exact assembly/chromosome/position/reference/alternate agreement.
+- Class concordance: exact agreement among returned ACMG/AMP classes.
+- Criterion concordance: Jaccard similarity over reported criteria.
+- Provenance coverage: presence of source identity and version fields.
+- Outcome handling: preserved resolved, ambiguous, not_found, invalid_request,
+  unsupported and unavailable statuses.
+- Reproducibility: repeated allele/contract identity with source-version changes recorded.
+- Latency: median and interquartile range over at least five sequential runs.
 
-The [independent review request](INDEPENDENT_REVIEW.md) defines the reviewer
-scope, public materials, conflict disclosure and safe contribution route. It is
-a methods-review invitation, not a request for endorsement.
+Concordance measures agreement. Accuracy evaluation uses a curated reference set,
+prespecified acceptance criteria and documented adjudication.
 
-Before running another tool, record:
-
-- tool name, public version and access date;
-- exact input and declared assembly;
-- supported variant and data scope;
-- whether authentication or payment is required;
-- normalized genomic allele and transcript context;
-- final label and criterion-level output;
-- evidence sources, availability states and versions;
-- ambiguity, invalid-input and unavailable behavior;
-- stated clinical and patient-data boundary;
-- elapsed wall time from request to complete result.
-
-Use the same public input for every tool. Do not silently lift over, change a
-transcript, choose one allele from an ambiguous rsID, or substitute a nearby
-variant. Record unsupported cases as unsupported rather than dropping them.
-
-## Metrics
-
-- Identity concordance: exact agreement on assembly, chromosome, position,
-  reference and alternate allele among tools that resolve the case.
-- Five-class concordance: exact label agreement among tools that emit an
-  ACMG/AMP class.
-- Criterion concordance: Jaccard similarity over explicitly returned criteria.
-- Provenance completeness: presence of source identity and version fields,
-  reported as field coverage rather than a quality score.
-- Outcome safety: explicit non-resolved state without guessed identity.
-- Boundary completeness: explicit professional-review, no-diagnosis and
-  no-treatment limits plus a documented patient-data policy.
-- Reproducibility: same normalized identity and contract version on repeated
-  runs, with source-version changes reported rather than hidden.
-- Latency: median and interquartile range over at least five sequential runs,
-  reported separately from scientific results.
-
-## Interpretation limits
-
-Concordance is not accuracy. ClinVar is an archive of submitted assertions, not
-a universal ground truth, and automated tools can use different evidence dates,
-transcripts, gene-specific specifications and unavailable data. Any accuracy or
-clinical-validity claim requires an independently curated evaluation set,
-qualified reviewers, prespecified acceptance criteria and conflict resolution.
-
-Folklore Clinical Variant Interpretation MCP is published by Helena
-Bioinformatics. Its public results are automated variant-level decision support
-for qualified professional review, not a diagnosis or treatment recommendation.
+[Comparison method](COMPARISON_METHOD.md) | [Preregistration](PREREGISTRATION.md) |
+[Review](INDEPENDENT_REVIEW.md) | [Manifest](benchmark-manifest.json) |
+[Dataset template](dataset-manifest.template.json)

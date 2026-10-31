@@ -1,10 +1,10 @@
 # Folklore Clinical Variant Interpretation for Dify
 
-Official Helena Bioinformatics tools for read-only germline variant evidence,
+Automated ACMG/AMP germline variant classification, source evidence,
 variant literature, publication details, and biomedical corpus search.
 
-No authentication is required. Outputs require professional review and must not
-be used as diagnosis, treatment advice, or an autonomous clinical decision.
+Access is anonymous. The tools return automated classification, source evidence
+and literature records.
 
 - Website: https://folklore.helena.bio
 - Integration guide: https://folklore.helena.bio/integrations
@@ -13,7 +13,7 @@ be used as diagnosis, treatment advice, or an autonomous clinical decision.
 ## Install
 
 Download
-`dist/folklore-clinical-variant-interpretation-0.1.0.difypkg` and its
+`dist/folklore-clinical-variant-interpretation-0.2.0.difypkg` and its
 `.sha256` sidecar. Verify the archive, then in Dify open **Plugins**, choose
 **Install plugin from local file**, and select the `.difypkg` file.
 
@@ -21,15 +21,9 @@ Rebuild reproducibly with Dify CLI `0.6.10`:
 
 ```bash
 dify plugin package integrations/dify \
-  -o folklore-clinical-variant-interpretation-0.1.1.difypkg
+  -o folklore-clinical-variant-interpretation-0.2.0.difypkg
 ```
 
 ## Optional journey context
 
-See [caller-owned journey context](../JOURNEY_CONTEXT.md) for support,
-explicit opt-in, application-owned pseudonyms and conversation/run boundaries.
-Connection-only configuration does not supply user identity automatically.
-
-The previously linked 0.1.0 package predates optional journey settings. To use
-those settings, build from the reviewed source; do not assume an installed
-0.1.0 archive has acquired them.
+Optional analytics configuration: [journey context](../JOURNEY_CONTEXT.md).

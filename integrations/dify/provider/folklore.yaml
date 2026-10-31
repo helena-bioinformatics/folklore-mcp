@@ -4,12 +4,12 @@ identity:
   label:
     en_US: Folklore Clinical Variant Interpretation
   description:
-    en_US: Public, read-only germline variant evidence and biomedical literature.
+    en_US: Germline variant classification and biomedical literature.
   icon: icon.svg
   tags: [search]
 credentials_for_provider: {}
 tools:
-  - tools/search_variant_evidence.yaml
+  - tools/classify_germline_variant.yaml
   - tools/search_variant_literature.yaml
   - tools/get_publication_details.yaml
   - tools/search_literature_corpus.yaml

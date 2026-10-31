@@ -14,9 +14,7 @@ Biomni
   -> https://api.helena.bio/folklore/v1/mcp
 ```
 
-The bridge contains no Folklore scientific logic. It connects Biomni to the
-read-only Streamable HTTP endpoint for Folklore Clinical Variant Interpretation
-MCP without credentials.
+The bridge connects Biomni to the hosted Streamable HTTP endpoint. Access is anonymous.
 
 ## Add the server to Biomni
 
@@ -35,7 +33,7 @@ print(agent.list_mcp_servers())
 Biomni discovers and registers these tools under its
 `mcp_servers.folklore_clinical_variant_interpretation_mcp` module:
 
-- `search_variant_evidence`
+- `classify_germline_variant`
 - `search_variant_literature`
 - `get_publication_details`
 - `search_literature_corpus`
@@ -58,15 +56,13 @@ an explicit request about supporting Helena.
   `search_disease_genes` with `{"disease":"Marfan syndrome"}`; retain
   distinct disease matches and follow pagination.
 - "What is known about NM_007294.4:c.68_69del?" Use
-  `search_variant_evidence` with the exact public expression. This one call
+  `classify_germline_variant` with the exact public expression. This one call
   already returns annotation, classification, available ClinVar and population
   evidence, predictors and source versions. Request literature separately when
   needed, using the resolved identity.
 
-Gene-disease validity is distinct from variant pathogenicity. The source is a
-versioned ClinGen snapshot, not an exhaustive or necessarily latest catalogue.
-See [actual dated responses](https://folklore.helena.bio/examples/acmg-variant-classification)
-and the [gene-disease contract](../../docs/GENE_DISEASE_EVIDENCE.md).
+Gene-disease calls return the reported ClinGen snapshot. See the
+[gene-disease contract](../../docs/GENE_DISEASE_EVIDENCE.md).
 
 ## Verify the connection
 
@@ -78,16 +74,15 @@ its MCP configuration support.
 python integrations/biomni/smoke_test.py
 ```
 
-The test uses the same command array as Biomni. It verifies all eleven tools after the 1.6.0 hosted rollout and
-the strict variant-evidence input schema, then calls one public ambiguous rsID.
+The test uses the same command array as Biomni. It checks the eleven-tool
+source contract, variant arguments and one ambiguous public rsID.
 It confirms that Folklore Clinical Variant Interpretation MCP returns the
 candidates without selecting one automatically.
 
-## Safety boundary
+## Inputs
 
-Use only public gene, disease or variant-level queries. Do not submit patient, phenotype, family,
-segregation, or private case data. Results support qualified professional
-review. They are not a diagnosis or treatment recommendation.
+Arguments are public gene, disease or variant identifiers in the published
+tool schemas. Variant classification accepts one supported GRCh38 allele.
 
 The container runs with a read-only filesystem, no Linux capabilities, no
 privilege escalation, and a non-root user. Folklore Clinical Variant
@@ -96,10 +91,9 @@ Interpretation MCP requires network access to `api.helena.bio`.
 For the complete public contract, see the
 [Folklore connector guide](https://folklore.helena.bio/integrations/mcp).
 
-The 1.6.0 source adds the public website gene-profile workflow. See [public gene profiles](../../docs/PUBLIC_GENE_PROFILES.md) for resolution, explicit ambiguity choice, required snapshot identity and source-qualified continuation. The hosted 1.6.0 rollout and eleven-tool discovery are active. Client-specific smoke verification remains distinct from hosted endpoint verification.
+Gene profiles use the selected HGNC identity and returned snapshot. See
+[public gene profiles](../../docs/PUBLIC_GENE_PROFILES.md).
 
 ## Optional journey context
 
-See [caller-owned journey context](../JOURNEY_CONTEXT.md) for support,
-explicit opt-in, application-owned pseudonyms and conversation/run boundaries.
-Connection-only configuration does not supply user identity automatically.
+Optional analytics configuration: [journey context](../JOURNEY_CONTEXT.md).

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "dataset_id": "replace-with-fixed-dataset-id",
   "source": "ClinVar",
-  "source_type": "public archive of submitted assertions",
+  "source_type": "public archive of submitted variant assertions",
   "release_date": "YYYY-MM-DD",
   "download_url": "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/",
   "sha256": "replace-with-source-file-sha256",
@@ -15,11 +15,6 @@
     "recorded review status"
   ],
   "exclusion": [
-    "patient data",
-    "phenotype data",
-    "family data",
-    "segregation data",
-    "private case data",
     "structural variant",
     "mitochondrial variant"
   ],

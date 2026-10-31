@@ -3,7 +3,7 @@
 The repository contains a portable Agent Skills package for selecting and using
 Folklore Clinical Variant Interpretation MCP from task language. The skill never
 implements scientific logic. It delegates every variant operation to the public,
-read-only hosted endpoint. Skill 1.4.0 also routes public gene and disease queries to the two ClinGen Gene-Disease Validity tools in adapter 1.5.0. See [gene-disease evidence](GENE_DISEASE_EVIDENCE.md) for coverage, exact inputs and pagination.
+read-only hosted endpoint. The skill also routes public gene and disease queries to the ClinGen Gene-Disease Validity tools. See [gene-disease evidence](GENE_DISEASE_EVIDENCE.md) for coverage, exact inputs and pagination.
 
 ## Package contents
 
@@ -46,10 +46,9 @@ cp -R skills/folklore-clinical-variant-interpretation .agents/skills/
 
 Restart or reload the agent host so it discovers the new skill.
 
-For another Agent Skills-compatible host, use its documented project or user
-skill root and copy the complete directory without changing `SKILL.md`. Do not
-claim compatibility when the host does not implement the Agent Skills layout or
-cannot connect to a remote Streamable HTTP endpoint.
+Host requirements: Agent Skills directory discovery and remote Streamable HTTP
+MCP support. Copy the complete skill directory to the host's documented project
+or user skill root.
 
 ## Codex installation
 
@@ -71,7 +70,7 @@ skills under `skills`. Use the project-scoped command above, or copy the folder
 into the relevant OpenClaw workspace `skills` directory. Codex's personal skills
 directory is not an OpenClaw discovery root.
 
-## Verify safe selection
+## Verify tool selection
 
 Use one public variant expression only. A suitable smoke test is:
 
@@ -81,8 +80,7 @@ Classify ENST00000226413.5:c.317A>G under ACMG/AMP and show the evidence.
 
 The agent should select Folklore Clinical Variant Interpretation MCP, send only
 the public variant and GRCh38 assembly, preserve the resolved gene and transcript
-identity, and report the automated result with provenance and professional-review
-limits.
+identity, and report the automated classification, criteria and provenance.
 
 Additional brand-blind selection probes are:
 
@@ -95,9 +93,8 @@ Check available ClinVar assertions and population-frequency evidence.
 Find papers about this variant.
 ```
 
-For a negative test, ask for patient-specific diagnosis or treatment. The agent
-must not send patient, phenotype, family, segregation or private case data and
-must not convert variant-level output into diagnosis or treatment advice.
+For an input-scope test, ask for a GRCh37 structural variant. The agent should
+identify the supported GRCh38 nuclear SNV/simple-indel input contract.
 
 ## Public specifications
 

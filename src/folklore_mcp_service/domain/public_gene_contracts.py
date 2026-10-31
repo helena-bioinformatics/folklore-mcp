@@ -966,7 +966,7 @@ class ResolveGeneArguments(StrictModel):
         Field(
             min_length=1,
             max_length=128,
-            description="One public gene symbol, previous symbol, alias, HGNC ID, Ensembl gene ID or NCBI Gene ID. No patient or case narrative.",
+            description="One public gene symbol, previous symbol, alias, HGNC ID, Ensembl gene ID or NCBI Gene ID.",
         ),
     ]
 

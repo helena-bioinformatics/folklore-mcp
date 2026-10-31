@@ -84,14 +84,14 @@
             },
             {
               "name": "Mcp-Name",
-              "value": "search_variant_evidence"
+              "value": "classify_germline_variant"
             }
           ]
         },
         "sendBody": true,
         "contentType": "raw",
         "rawContentType": "application/json",
-        "body": "={{ JSON.stringify({jsonrpc: '2.0', id: 1, method: 'tools/call', params: {name: 'search_variant_evidence', arguments: {assembly: 'GRCh38', query: $json.variant}, _meta: {'io.modelcontextprotocol/protocolVersion': '2026-07-28', 'io.modelcontextprotocol/clientCapabilities': {}, ...(() => { const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/; if ($json.analytics_opt_in !== true || typeof $json.analytics_user_id !== 'string' || !uuid.test($json.analytics_user_id)) return {}; const c = {opt_in: true, user_id: $json.analytics_user_id}; if (typeof $json.analytics_session_id === 'string' && uuid.test($json.analytics_session_id)) c.session_id = $json.analytics_session_id; if (['variant_evidence', 'literature_review', 'gene_disease_review', 'infrastructure_support'].includes($json.analytics_intent)) c.intent = $json.analytics_intent; return {'io.helena/analytics': c}; })()}}}) }}",
+        "body": "={{ JSON.stringify({jsonrpc: '2.0', id: 1, method: 'tools/call', params: {name: 'classify_germline_variant', arguments: {assembly: 'GRCh38', query: $json.variant}, _meta: {'io.modelcontextprotocol/protocolVersion': '2026-07-28', 'io.modelcontextprotocol/clientCapabilities': {}, ...(() => { const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/; if ($json.analytics_opt_in !== true || typeof $json.analytics_user_id !== 'string' || !uuid.test($json.analytics_user_id)) return {}; const c = {opt_in: true, user_id: $json.analytics_user_id}; if (typeof $json.analytics_session_id === 'string' && uuid.test($json.analytics_session_id)) c.session_id = $json.analytics_session_id; if (['variant_evidence', 'literature_review', 'gene_disease_review', 'infrastructure_support'].includes($json.analytics_intent)) c.intent = $json.analytics_intent; return {'io.helena/analytics': c}; })()}}}) }}",
         "options": {
           "timeout": 60000
         }

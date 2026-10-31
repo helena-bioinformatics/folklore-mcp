@@ -158,7 +158,7 @@ class GetGeneDiseaseArguments(ReferenceBounds):
     gene: str = Field(
         min_length=1,
         max_length=64,
-        description="One public human gene symbol or HGNC identifier, for example BRCA1 or HGNC:1100. No patient data.",
+        description="One public human gene symbol or HGNC identifier, for example BRCA1 or HGNC:1100.",
     )
 
     @field_validator("gene")
@@ -174,7 +174,7 @@ class SearchDiseaseGenesArguments(ReferenceBounds):
     disease: str = Field(
         min_length=3,
         max_length=160,
-        description="One public disease name or exact MONDO identifier (MONDO: followed by seven digits). A name search may match multiple distinct diseases. No symptoms or patient narrative.",
+        description="One public disease name or exact MONDO identifier (MONDO: followed by seven digits). A name search may match multiple distinct diseases.",
     )
 
     @field_validator("disease")

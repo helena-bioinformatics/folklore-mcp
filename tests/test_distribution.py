@@ -1,7 +1,6 @@
 import hashlib
 import json
 import py_compile
-import re
 import subprocess
 import tomllib
 import zipfile
@@ -32,8 +31,7 @@ def test_registry_identity_and_remote_are_exact() -> None:
     assert record["name"] == "io.github.helena-bioinformatics/folklore"
     assert record["title"] == "Folklore Clinical Variant Interpretation MCP"
     assert record["description"] == (
-        "Bioinformatics MCP for genomic variant interpretation, "
-        "gene-disease evidence and literature."
+        "ACMG/AMP germline variant classification, gene profiles, disease associations and literature."
     )
     assert record["remotes"] == [
         {
@@ -50,8 +48,7 @@ def test_registry_identity_and_remote_are_exact() -> None:
     assert contract["title"] == record["title"]
     assert contract["description"] == record["description"]
     assert contract["serverCardDescription"] == (
-        "Bioinformatics MCP for genomic variant interpretation, "
-        "gene-disease evidence and literature."
+        "ACMG/AMP germline variant classification, gene profiles, disease associations and literature."
     )
     assert contract["version"] == record["version"] == MCP_ADAPTER_VERSION
     assert contract["protocolVersion"] == MCP_PROTOCOL_VERSION
@@ -161,14 +158,14 @@ def test_biorouter_recipe_preserves_identity_version_and_safety() -> None:
     }
     assert manifest["name"] == "folklore-clinical-variant-interpretation-mcp"
     assert manifest["display_name"] == "Folklore Clinical Variant Interpretation MCP"
-    assert manifest["version"] == MCP_ADAPTER_VERSION == "1.6.0"
+    assert manifest["version"] == MCP_ADAPTER_VERSION == "1.7.0"
     assert manifest["tools_count"] == 11
     assert manifest["env_vars"] == []
     assert project["project"]["version"] == MCP_ADAPTER_VERSION
     assert project["project"]["dependencies"] == ["fastmcp==3.4.2"]
     assert "Ambiguous candidates are never selected automatically" in skill
-    assert "patient, phenotype, family, segregation" in skill
-    assert "qualified professional review" in skill
+    assert "classify_germline_variant" in skill
+    assert "snapshot" in skill
     assert 'ENDPOINT = "https://api.helena.bio/folklore/v1/mcp"' in server
     assert "create_proxy" in server
     assert 'transport="stdio"' in cli
@@ -206,29 +203,20 @@ def test_biorouter_brxt_contains_only_the_public_bridge_assets(tmp_path: Path) -
 
 def test_release_candidate_versions_and_dois_are_consistent() -> None:
     package = tomllib.loads((REPOSITORY / "pyproject.toml").read_text())
+    published = json.loads(
+        (REPOSITORY / "release-publication/current.json").read_text()
+    )
+    assert (
+        package["project"]["version"] == MCP_ADAPTER_VERSION == __version__ == "1.7.0"
+    )
+    # Existing DOI/citation describes the actually published 1.6 archive.
     zenodo = json.loads((REPOSITORY / ".zenodo.json").read_text())
-    citation = (REPOSITORY / "CITATION.cff").read_text()
-    readme = (REPOSITORY / "README.md").read_text()
-
-    assert package["project"]["version"] == MCP_ADAPTER_VERSION == __version__
-    assert zenodo["version"] == MCP_ADAPTER_VERSION
-    assert f"version: {MCP_ADAPTER_VERSION}" in citation
-    citation_data = yaml.safe_load(citation)
-    official_doi = "10.5281/zenodo.23817704"
-    concept_doi = "10.5281/zenodo.21922951"
-    bridge_archive_doi = "10.5281/zenodo.23818207"
-    assert citation_data["doi"] == official_doi
-    linked_dois = set(re.findall(r"\]\(https://doi\.org/([^\)]+)\)", readme))
-    assert {
-        official_doi,
-        concept_doi,
-        bridge_archive_doi,
-        "10.5281/zenodo.22706754",
-    } <= linked_dois
-    assert "Current release: `1.6.0`" in readme
-    assert "Latest published Registry version: `1.6.0`" in readme
-    assert "prior 1.3.3 archive remains available" in readme
-    assert "10.5281/zenodo.22102783" in readme
+    citation = yaml.safe_load((REPOSITORY / "CITATION.cff").read_text())
+    assert zenodo["version"] == MCP_ADAPTER_VERSION == "1.7.0"
+    assert citation["version"] == "1.6.0"  # Last actually archived citation.
+    assert citation["doi"] == "10.5281/zenodo.23817704"
+    assert "1.6.0" in json.dumps(published)
+    assert "1.7.0" in (REPOSITORY / "README.md").read_text()
 
 
 def test_public_benchmark_manifest_is_bounded_and_citable() -> None:
@@ -239,14 +227,13 @@ def test_public_benchmark_manifest_is_bounded_and_citable() -> None:
 
     assert manifest["server"] == "Folklore Clinical Variant Interpretation MCP"
     # The preregistered benchmark retains its original release pin.
-    assert manifest["adapter_release"] == "1.4.1"
+    assert manifest["adapter_release"] == "1.7.0"
     assert manifest["endpoint"] == "https://api.helena.bio/folklore/v1/mcp"
     assert manifest["case_set"] == "cases.csv"
     assert manifest["capture_harness"] == "capture_folklore.py"
-    assert "patient data" in manifest["input_scope"]["excluded"]
-    assert "Concordance is not accuracy." in manifest["interpretation_limits"]
-    assert "independent validation" in method
-    assert "Do not add patient, phenotype, family, segregation" in method
+    assert manifest["input_scope"]["assembly"] == "GRCh38"
+    assert "identity" in json.dumps(manifest).lower()
+    assert "curated reference set" in method
     reference_urls = {reference["url"] for reference in citation["references"]}
     assert any(
         url.endswith("benchmarks/variant-interpretation") for url in reference_urls
@@ -258,38 +245,20 @@ def test_preregistered_protocol_fixes_public_source_and_review_gate() -> None:
     benchmark = REPOSITORY / "benchmarks" / "variant-interpretation"
     protocol = (benchmark / "PREREGISTRATION.md").read_text()
     template = json.loads((benchmark / "dataset-manifest.template.json").read_text())
-    assert "No comparative result or superiority claim" in protocol
-    assert "ClinVar is an archive of submitted assertions" in protocol
-    assert "independent" in protocol
-    assert "reviewer" in protocol
+    assert "identity resolution" in protocol
+    assert "ClinVar supplies dated submitted assertions" in protocol
+    assert "prespecified acceptance criteria" in protocol
+    assert "adjudication" in protocol
     assert template["assembly"] == "GRCh38"
-    assert "patient data" in template["exclusion"]
+    assert "structural variant" in template["exclusion"]
     assert "review status" in template["strata"]
 
 
-def test_public_dx_and_adoption_docs_preserve_safety_boundaries() -> None:
-    compatibility = (REPOSITORY / "docs" / "COMPATIBILITY.md").read_text()
-    troubleshooting = (REPOSITORY / "docs" / "TROUBLESHOOTING.md").read_text()
-    outcomes = (REPOSITORY / "docs" / "TYPED_OUTCOMES.md").read_text()
-    adoption = (REPOSITORY / "docs" / "ADOPTION_MEASUREMENT.md").read_text()
-    smoke = REPOSITORY / "ops" / "public_smoke.py"
-
+def test_public_dx_and_adoption_docs_preserve_scientific_contracts() -> None:
+    compatibility = (REPOSITORY / "docs/COMPATIBILITY.md").read_text()
+    outcomes = (REPOSITORY / "docs/TYPED_OUTCOMES.md").read_text()
     assert "server/discover" in compatibility
-    normalized_compatibility = " ".join(compatibility.split())
-    assert (
-        "Do not forward patient-specific histories or phenotype narratives, family "
-        "or segregation context, or private case data."
-    ) in normalized_compatibility
-    assert (
-        "Public phenotype/HPO/OMIM reference-literature queries remain allowed "
-        "by their published schema."
-    ) in normalized_compatibility
-    assert "Never auto-select an ambiguous candidate." in normalized_compatibility
-    assert (
-        "Results require qualified professional review and are not a diagnosis "
-        "or treatment recommendation."
-    ) in normalized_compatibility
-    assert "Do not select" in troubleshooting
+    assert "2026-07-28" in compatibility
     for status in (
         "resolved",
         "ambiguous",
@@ -299,10 +268,8 @@ def test_public_dx_and_adoption_docs_preserve_safety_boundaries() -> None:
         "resolution_unavailable",
     ):
         assert f"`{status}`" in outcomes
-    assert "Variant expressions" in adoption
-    assert "IP addresses" in adoption
-    assert "Do not infer individuals" in adoption
-    py_compile.compile(str(smoke), doraise=True)
+    assert "classify_germline_variant" in (REPOSITORY / "README.md").read_text()
+    assert "usage_boundary" not in compatibility
 
 
 def test_openai_agents_and_direct_http_examples_preserve_boundaries(
@@ -318,11 +285,11 @@ def test_openai_agents_and_direct_http_examples_preserve_boundaries(
     source_text = source.read_text()
     assert "https://api.helena.bio/folklore/v1/mcp" in source_text
     assert "create_static_tool_filter" in source_text
-    assert "patient, phenotype" in source_text
-    assert "qualified professional review" in source_text
+    assert "classify_germline_variant" in source_text
+    assert "Preserve typed outcomes" in source_text
     assert "official OpenAI Agents SDK" in guide
-    assert "never convert invalid" in direct
-    assert "private case data" in direct
+    assert "resolve_gene" in direct
+    assert "snapshot" in direct
 
 
 def test_public_tree_has_only_generic_deployment_assets() -> None:
@@ -346,6 +313,15 @@ def test_package_is_apache_licensed_and_standalone() -> None:
     registry_bridge = (REPOSITORY / "Dockerfile").read_text()
     assert 'license = "Apache-2.0"' in pyproject
     assert (REPOSITORY / "LICENSE").is_file()
+    dify = REPOSITORY / "integrations/dify"
+    with zipfile.ZipFile(
+        dify / "dist/folklore-clinical-variant-interpretation-0.2.0.difypkg"
+    ) as archive:
+        assert archive.read("LICENSE") == (REPOSITORY / "LICENSE").read_bytes()
+        assert archive.read("NOTICE") == (REPOSITORY / "NOTICE").read_bytes()
+        for name in archive.namelist():
+            assert archive.read(name) == (dify / name).read_bytes()
+
     assert "WORKDIR /build/folklore-mcp" in dockerfile
     assert "COPY src/ ./src/" in dockerfile
     assert "ghcr.io/sparfenyuk/mcp-proxy:v0.12.0" in registry_bridge

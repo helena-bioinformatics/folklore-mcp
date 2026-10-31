@@ -15,8 +15,7 @@ Streamable HTTP endpoint.
 
 ## Complete modern request
 
-A host configuration identifies the endpoint; it does not prove that the
-host emits the required protocol envelope. For protocol 2026-07-28 send
+For MCP 2026-07-28 send
 one POST to https://api.helena.bio/folklore/v1/mcp with these headers:
 
     Content-Type: application/json
@@ -47,15 +46,9 @@ params.uri for resources/read. Omit Mcp-Name for server/discover and list
 methods. An optional server/discover request uses its own method header and
 the same protocol metadata; it is not a required initialization exchange.
 
-Do not send initialize, notifications/initialized or Mcp-Session-Id under
-the modern version. Historical legacy observations are recorded separately in
-[Client compatibility](../../docs/COMPATIBILITY.md). They do not qualify an
-untested client/version combination. See the
-[versioned transport specification](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2026-07-28/basic/transports/streamable-http.mdx).
-
-Server-to-server requests can omit Origin. Browser clients must send their
-actual origin, which must be accepted by the service; do not spoof it or
-disable origin validation to make a connection succeed.
+MCP 2026-07-28 requests are stateless. The [compatibility matrix](../../docs/COMPATIBILITY.md)
+records version-specific client observations. Browser requests use the actual
+origin and published service origin policy; server requests can omit Origin.
 
 ## One-call identity and snapshot smoke
 
@@ -68,26 +61,24 @@ no hidden discovery, initialization, redirect following or retry. Its socket
 timeout is 150 seconds and its response limit is 2 MiB. It checks HTTP status
 and JSON media, duplicate keys, JSON-RPC correlation, MCP/adapter errors,
 one exact approved BRCA1 identity (HGNC:1100), a valid identity snapshot,
-the returned source reference and the professional-review boundary.
+and the returned source reference.
 The expected identifier is public [HGNC reference data](https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:1100).
 
-PASS covers this JSON identity/snapshot path only. The returned source_id is
-a reference, not a verification of a full source dataset, release or profile.
-An ambiguous, absent, withdrawn or unavailable result fails this specific smoke;
-it must retain its actual meaning. No candidate is selected automatically.
-The probe advertises both required media types but reports an SSE response as
-not qualified; it is not a general MCP client or a named SDK compatibility test.
-A production client must also support the standard streaming response path.
+| Check | Expected result |
+| --- | --- |
+| HTTP/JSON/RPC | Successful JSON response with matching request identity. |
+| MCP/adapter status | Successful tool response and nullable adapter error cleared. |
+| Gene identity | Exact BRCA1 identity HGNC:1100. |
+| Snapshot | Valid identity snapshot and source reference. |
+| Transport | One JSON-response request, 150-second socket timeout, 2 MiB body cap. |
 
-Every POST consumes the same [shared network budget](../../docs/RATE_LIMITS.md),
-including metadata calls and this one scientific call. Coordinate other callers
-sharing egress. HTTP 429 stops the probe without automatic replay. Discovery
-success, scientific retrieval and clinical validation are separate outcomes.
+HTTP 429 stops the probe. All POSTs share the [endpoint budget](../../docs/RATE_LIMITS.md).
+Streaming clients use the MCP event-stream response contract.
 
-## Variant evidence example
+## Variant classification example
 
-Discovery is optional. A variant evidence request uses
-search_variant_evidence with one public variant argument object:
+A variant classification request uses
+classify_germline_variant with one public variant argument object:
 
 ```json
 {
@@ -100,15 +91,10 @@ Branch on the returned typed status. Never choose an ambiguous candidate and
 never convert invalid, unsupported, not-found or unavailable into a resolved
 answer. Reuse a returned canonical key for literature composition.
 
-Folklore Clinical Variant Interpretation MCP is published by Helena
-Bioinformatics. It accepts no patient-specific histories or phenotype
-narratives, family or segregation context, or private case data. Public
-phenotype/HPO/OMIM reference-literature queries remain allowed by their
-published schema. Results require qualified professional review and are not a
-diagnosis or treatment recommendation.
+Helena Bioinformatics publishes Folklore MCP. Tool schemas define public
+variant, gene, disease and reference-literature inputs, including public
+phenotype/HPO/OMIM literature concepts.
 
 ## Optional journey context
 
-See [caller-owned journey context](../JOURNEY_CONTEXT.md) for support,
-explicit opt-in, application-owned pseudonyms and conversation/run boundaries.
-Connection-only configuration does not supply user identity automatically.
+Optional analytics configuration: [journey context](../JOURNEY_CONTEXT.md).

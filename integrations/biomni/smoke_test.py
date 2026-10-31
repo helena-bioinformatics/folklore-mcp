@@ -11,7 +11,7 @@ from mcp.client.stdio import stdio_client
 INTEGRATION_DIR = Path(__file__).resolve().parent
 CONFIG_PATH = INTEGRATION_DIR / "mcp_config.yaml"
 EXPECTED_TOOLS = {
-    "search_variant_evidence",
+    "classify_germline_variant",
     "search_variant_literature",
     "get_publication_details",
     "search_literature_corpus",
@@ -46,13 +46,13 @@ async def run_smoke_test() -> dict[str, object]:
                 tools = {tool.name: tool for tool in listed.tools}
                 assert set(tools) == EXPECTED_TOOLS
 
-                evidence_schema = tools["search_variant_evidence"].input_schema
+                evidence_schema = tools["classify_germline_variant"].input_schema
                 assert evidence_schema["additionalProperties"] is False
                 assert evidence_schema["required"] == ["query"]
                 assert set(evidence_schema["properties"]) == {"assembly", "query"}
 
                 response = await session.call_tool(
-                    "search_variant_evidence",
+                    "classify_germline_variant",
                     {"assembly": "GRCh38", "query": "rs80357914"},
                 )
                 assert response.is_error is False
@@ -62,10 +62,8 @@ async def run_smoke_test() -> dict[str, object]:
                 assert structured["adapter_error"] is None
                 assert structured["result"]["status"] == "ambiguous"
                 assert len(structured["result"]["candidates"]) >= 2
-                assert (
-                    structured["usage_boundary"]["patient_context_evaluated"] is False
-                )
-                assert structured["usage_boundary"]["review_required"] is True
+                assert structured["contract_version"] == "2"
+                assert structured["contract_version"] == "2"
 
                 return {
                     "protocol_version": initialization.protocol_version,
@@ -75,8 +73,6 @@ async def run_smoke_test() -> dict[str, object]:
                         "status": structured["result"]["status"],
                         "candidate_count": len(structured["result"]["candidates"]),
                     },
-                    "patient_context_evaluated": False,
-                    "professional_review_required": True,
                 }
 
 

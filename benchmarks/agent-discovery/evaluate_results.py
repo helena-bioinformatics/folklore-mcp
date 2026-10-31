@@ -9,9 +9,9 @@ TRUE = {"1", "true", "yes"}
 FALSE = {"0", "false", "no"}
 BOOLEAN_FIELDS = (
     "selected",
-    "public_input_only",
+    "input_schema_valid",
     "expected_behavior_preserved",
-    "review_boundary_present",
+    "source_provenance_present",
 )
 REQUIRED_METADATA_STRINGS = (
     "benchmark_commit",
@@ -83,10 +83,13 @@ def evaluate(cases_path: Path, results_path: Path) -> dict:
             true_negative += 1
         if selected:
             selected_count += 1
-            routed += row["selected_tool"] == case["expected_tool"]
-            safe_input += flag(row["public_input_only"])
+            expected_tool = {
+                "search_variant_evidence": "classify_germline_variant"
+            }.get(case["expected_tool"], case["expected_tool"])
+            routed += row["selected_tool"] == expected_tool
+            safe_input += flag(row["input_schema_valid"])
             behavior += flag(row["expected_behavior_preserved"])
-            boundary += flag(row["review_boundary_present"])
+            boundary += flag(row["source_provenance_present"])
 
     precision_denominator = true_positive + false_positive
     recall_denominator = true_positive + false_negative
@@ -106,11 +109,11 @@ def evaluate(cases_path: Path, results_path: Path) -> dict:
         "false_negative": false_negative,
         "true_negative": true_negative,
         "routing_accuracy": routed / selected_count if selected_count else None,
-        "public_input_compliance": safe_input / selected_count
+        "input_schema_compliance": safe_input / selected_count
         if selected_count
         else None,
         "expected_behavior_rate": behavior / selected_count if selected_count else None,
-        "review_boundary_rate": boundary / selected_count if selected_count else None,
+        "source_provenance_rate": boundary / selected_count if selected_count else None,
     }
 
 

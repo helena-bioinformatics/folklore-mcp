@@ -1,7 +1,6 @@
 # Typed outcomes for agent control flow
 
-Agents should branch on the structured status returned by Folklore Clinical
-Variant Interpretation MCP, not on prose or model memory.
+Branch on the structured status returned by Folklore MCP.
 
 | Outcome | Agent action |
 | --- | --- |
@@ -16,10 +15,9 @@ Read the outer JSON-RPC error before result. For a tool response, the adapter
 envelope is at result.structuredContent. If envelope.result is null, use
 envelope.adapter_error (code, message, retryable); it is not a scientific miss.
 Otherwise branch on envelope.result.status using the exact enum above.
-A resolved identity with interpretation.status unavailable is not a successful
-classification. Preserve its typed error instead of reading classification.
+A resolved identity with interpretation.status unavailable carries a typed
+interpretation error. Classification is read when interpretation.status is success.
 
-The reusable normalized identity is the safe composition key for subsequent
-variant-literature calls. Literature association remains separate from
-ACMG/AMP classification. Every outcome remains decision support for qualified
-professional review, not a diagnosis or treatment recommendation.
+The normalized identity is the composition key for variant-literature calls.
+Literature match labels and ACMG/AMP classification retain their respective
+source semantics.

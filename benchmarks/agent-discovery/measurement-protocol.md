@@ -3,8 +3,8 @@
 ## Objective
 
 Measure whether a clean agent session selects the correct public workflow from
-brand-blind task language. This evaluates selection behavior, not scientific or
-clinical accuracy.
+brand-blind task language. Metrics cover workflow selection, input projection
+and typed-outcome preservation.
 
 ## Fixed conditions
 
@@ -28,16 +28,13 @@ case prompt exactly, with no framing text. Record selection before judging the
 answer. A retry after interruption requires a complete new run; selective reruns
 of failed cases are not comparable to the original run.
 
-## Safety
+## Input projection
 
-Cases containing patient-like text are synthetic routing tests. The agent must
-discard that context and transmit only the included public variant expression.
-If no public variant expression exists, it must not call the server. Never add
-real patient or private case data to this benchmark.
+Synthetic routing cases contain a public variant expression or an input-scope
+control. Transmit the public expression when present; otherwise record the
+selected alternative workflow or abstention.
 
-## Interpretation
+## Measurement scope
 
-A passing deterministic contract audit proves only that selection instructions
-exist. An empirical score describes one named host and model under the recorded
-conditions. It must not be generalized to all agents or described as clinical
-validation.
+Deterministic contract checks verify selection instructions. Empirical results
+are stratified by the recorded host, model, version and run conditions.

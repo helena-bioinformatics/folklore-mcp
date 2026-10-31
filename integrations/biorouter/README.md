@@ -5,13 +5,11 @@ Interpretation MCP. Helena Bioinformatics publishes Folklore Clinical Variant
 Interpretation MCP.
 
 The extension is a local stdio bridge to the hosted, read-only Streamable HTTP
-endpoint. It does not copy or reimplement variant resolution, annotation,
-evidence aggregation or ACMG/AMP logic. No account, API key or environment
-variable is required.
+endpoint. Access is anonymous. Scientific results come from the hosted service.
 
 ## Tools
 
-- `search_variant_evidence`
+- `classify_germline_variant`
 - `search_variant_literature`
 - `get_publication_details`
 - `search_literature_corpus`
@@ -23,8 +21,7 @@ variable is required.
 - `get_gene_section`
 - `search_gene_literature`
 
-Tool schemas and structured results are retrieved from the hosted endpoint. The
-bridge does not rename tools, alter inputs or reinterpret scientific results.
+The bridge relays published tool schemas and structured results.
 
 ## Build
 
@@ -43,14 +40,6 @@ integrations/biorouter/dist/folklore-clinical-variant-interpretation-mcp.brxt
 The build is reproducible and also writes a SHA-256 checksum beside the bundle.
 Dependencies are locked in `uv.lock`, which is included in the archive and used
 by Biorouter's `uv sync` installer.
-
-## Download
-
-The immutable release bundle is available at:
-
-```text
-https://github.com/helena-bioinformatics/folklore-mcp/releases/download/folklore-biorouter-v1.6.0/folklore-clinical-variant-interpretation-mcp.brxt
-```
 
 ## Install in Biorouter
 
@@ -81,38 +70,30 @@ pip install -e integrations/biorouter
 python integrations/biorouter/smoke_test.py
 ```
 
-The smoke test discovers all eleven tools after the 1.6.0 hosted rollout and submits the public variant-level
+The smoke test checks eleven tools and submits the public variant-level
 query `rs80357914`. The expected outcome is `ambiguous` with multiple candidates.
-The test fails if a candidate is selected automatically or if the machine-readable
-professional-review boundary is missing.
+The test checks that the ambiguous outcome and returned candidates are preserved.
 
 If the public endpoint returns HTTP 429, do not retry in a loop. Wait for the
 public rate-limit window to reset, then run the smoke test once more.
 
-## Safety boundary
+## Inputs and gene profiles
 
-Folklore Clinical Variant Interpretation MCP accepts public variant, gene and
-disease identifiers and public scientific literature questions. Do not provide
-patient records, phenotype narratives, family, segregation or private case data.
-Ambiguous candidates are never selected automatically. Results support qualified
-professional review and are not a diagnosis or treatment recommendation.
+Folklore MCP accepts public variant, gene and disease identifiers and scientific
+literature questions. Ambiguous candidates require an explicit selection.
 
 For gene profiles, resolve the identity first and use the selected HGNC gene_id
 with the returned identity_snapshot_id as snapshot_id. Keep section continuation
 bound to that gene and snapshot; restart resolution after a snapshot conflict.
 Preserve each source assertion, coverage and count unit. Live gene literature is
-a separate query-matched capture, not curated gene-disease validity or variant
-classification. See [public gene profiles](../../docs/PUBLIC_GENE_PROFILES.md).
+a separate query-matched capture. See [public gene profiles](../../docs/PUBLIC_GENE_PROFILES.md).
 
 ## License
 
 Apache License 2.0. The bundle includes the public adapter repository's
 `LICENSE` and `NOTICE` files.
 
-The signed Biorouter 1.6.0 release is published. Its governed frozen uv installation and package verification passed. The actual 90341-byte BRXT download has SHA-256 `635a2cd512ae89240ea525ba9805eb8182a60f5f3472e11751d48f9659c0aee7`; the published checksum matches. The bridge passes through gene identity, snapshot, source and pagination boundaries; it performs no biological inference.
 
 ## Optional journey context
 
-See [caller-owned journey context](../JOURNEY_CONTEXT.md) for support,
-explicit opt-in, application-owned pseudonyms and conversation/run boundaries.
-Connection-only configuration does not supply user identity automatically.
+Optional analytics configuration: [journey context](../JOURNEY_CONTEXT.md).

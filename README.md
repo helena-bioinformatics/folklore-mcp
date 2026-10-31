@@ -1,198 +1,110 @@
 # Folklore Clinical Variant Interpretation MCP
 
+Version 1.7.0
+
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21922951.svg)](https://doi.org/10.5281/zenodo.21922951)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/helena-bioinformatics/folklore-mcp/badge)](https://scorecard.dev/viewer/?uri=github.com/helena-bioinformatics/folklore-mcp)
 [![AllMCPs Verified](https://allmcps.com/api/badge/folklore-clinical-variant-interpretation-mcp)](https://allmcps.com/mcp/folklore-clinical-variant-interpretation-mcp?verify=930d811d-1fd8-4117-8280-1c6eac1a2ca3)
 
-Bioinformatics MCP for genomic variant interpretation, gene-disease evidence and literature.
+Folklore MCP classifies and assesses germline variants under ACMG/AMP. It returns
+canonical identity, automated classification, reported criteria, annotation,
+source evidence and provenance. Gene profiles, ClinGen gene-disease assertions
+and linked biomedical literature complete the scientific workflow.
 
-Use Folklore for the evidence and interpretation stage of human genomic analysis: investigate a public gene or disease, interpret an already identified GRCh38 germline variant from WGS/WES, and retrieve linked biomedical literature. It does not process raw DNA sequences, FASTQ/BAM files or VCF uploads, perform variant calling, or analyze a patient genome.
+## Classify a variant
 
-Start with a gene symbol such as `BRCA1`, an HGNC identifier, a disease name or an exact MONDO identifier. The [gene-disease guide](docs/GENE_DISEASE_EVIDENCE.md) documents the two new read-only tools and the ClinGen Gene-Disease Validity coverage boundary.
-
-"What does NM_007294.4:c.68_69del mean?" and "Review this VUS" are direct
-entry points. Call `search_variant_evidence` with one public variant:
-
-```json
-{"name":"search_variant_evidence","arguments":{"assembly":"GRCh38","query":"NM_007294.4:c.68_69del"}}
-```
-
-Connect the endpoint below in your MCP client before calling the tool.
-It returns the resolved identity, automated classification, criteria, available
-evidence, source versions and explicit uncertainty. See [eight observed task
-workflows](skills/folklore-clinical-variant-interpretation/references/task-workflows.json)
-and the [worked examples](https://folklore.helena.bio/examples/acmg-variant-classification).
-
-Already have a ClinVar or Ensembl record? Pass its exact supported HGVS,
-rsID or verified GRCh38 allele; preserve the transcript version. Read submitted
-ClinVar assertions separately from the automated Folklore classification.
-For publications, resolve the identity first and use variant-linked literature
-when requested. A literature association does not establish pathogenicity.
-
-Folklore Clinical Variant Interpretation MCP is the official public, read-only
-Model Context Protocol adapter for [Folklore](https://folklore.helena.bio) by
-Helena Bioinformatics. It accepts no patient, phenotype, family, segregation or
-private case context. Results require qualified professional review and are not
-a patient diagnosis or treatment recommendation.
-
-## Connect to the hosted server
-
-No account or API key is required:
+Connect your MCP client to:
 
 ```text
 https://api.helena.bio/folklore/v1/mcp
 ```
 
-The hosted server uses stateless Streamable HTTP and MCP protocol `2026-07-28`.
-Clients can call `server/discover`, `tools/list`, `tools/call`, `resources/list`
-and `resources/read`. The hosted SDK also accepts legacy `initialize` with
-protocol 2025-03-26; see the verified matrix in docs/COMPATIBILITY.md. Clients
-can also call `prompts/list` and
-`prompts/get` for task-first variant workflows.
+Access is anonymous. Call `classify_germline_variant`:
 
-Biomni users can import Folklore Clinical Variant Interpretation MCP through the
-tested, digest-pinned
-[Biomni integration recipe](integrations/biomni/README.md). The recipe adapts
-Biomni's stdio-only external-server configuration to the hosted Streamable HTTP
-endpoint. Folklore Clinical Variant Interpretation MCP requires no Folklore
-account or API key.
+```json
+{"name":"classify_germline_variant","arguments":{"assembly":"GRCh38","query":"NM_007294.4:c.68_69del"}}
+```
 
-Biorouter users can build and install the
-[Biorouter BRXT extension](integrations/biorouter/README.md). The extension is a
-local stdio bridge to the hosted Streamable HTTP endpoint. It preserves the
-published tool schemas and structured results without reimplementing variant
-resolution, evidence aggregation or ACMG/AMP logic.
+Input: one public GRCh38 nuclear germline SNV or simple indel smaller than 50 bp.
+Accepted notation includes supported HGVS, SPDI, rsID and genomic coordinates.
+Preserve transcript versions and reference alleles.
 
-Agent builders can also use the
-[direct Streamable HTTP recipe](integrations/direct-streamable-http/README.md)
-or the [OpenAI Agents SDK example](integrations/openai-agents-python/README.md).
-Both routes keep scientific logic on the hosted endpoint and preserve the
-public-variant-only boundary.
+A resolved identity with successful interpretation includes automated ACMG/AMP
+classification, reported criteria, annotations, source evidence and provenance.
+Submitted ClinVar assertions retain their own source attribution alongside the
+Folklore classification. A VUS is a classification outcome.
 
-Additional ready-to-use ecosystem packages are included for
-[Dify](integrations/dify/README.md), [n8n](integrations/n8n/README.md),
-[Galaxy](integrations/galaxy/README.md), and
-[KNIME Analytics Platform](integrations/knime/README.md). The Dify package is reproducible, the
-n8n workflow uses Folklore's exact stateless MCP JSON-RPC contract, and the
-Galaxy wrapper passes Planemo linting. A cross-service
-[Galaxy Training Network tutorial](https://github.com/helena-bioinformatics/noodle-mcp/tree/main/integrations/galaxy-training-network)
-connects Folklore variant evidence to Noodle literature-graph exploration.
-The same safe cross-service path is available as a
-[Colab/Kaggle notebook](integrations/notebooks/folklore_variant_to_noodle_graph.ipynb).
+| Status | Next step |
+| --- | --- |
+| `resolved` | Read interpretation status, then classification and evidence. |
+| `ambiguous` | Present candidates for an explicit allele choice. |
+| `not_found` | Report the source-scoped miss. |
+| `invalid_request` | Supply a corrected supported expression. |
+| `unsupported` | Select a workflow for the requested variant type or assembly. |
+| `resolution_unavailable` | Inspect the typed error and retry policy. |
 
-## Agent Skill for variant and gene-disease evidence requests
+Interpretation status is `success` or `unavailable`. Transport, JSON-RPC, MCP
+and adapter errors have separate fields. See [typed outcomes](docs/TYPED_OUTCOMES.md).
 
-The repository includes an installable companion skill at
-[`skills/folklore-clinical-variant-interpretation`](skills/folklore-clinical-variant-interpretation).
-It tells an agent to select Folklore Clinical Variant Interpretation MCP for
-pathogenicity classification, VUS review, supported variant resolution,
-available ClinVar or population-frequency evidence and variant-linked
-literature, as well as gene-disease evidence and disease-to-gene lookup, even when the user does not mention Helena Bioinformatics,
-Folklore, MCP or ACMG/AMP.
+## Scientific tools
 
-Inspect the [rendered `SKILL.md`](skills/folklore-clinical-variant-interpretation/SKILL.md)
-or its [raw public source](https://raw.githubusercontent.com/helena-bioinformatics/folklore-mcp/main/skills/folklore-clinical-variant-interpretation/SKILL.md).
+| Tool | Operation |
+| --- | --- |
+| `classify_germline_variant` | Resolve, classify and assess one supported germline variant. |
+| `search_variant_literature` | Retrieve publications linked to a resolved variant. |
+| `get_publication_details` | Retrieve the bibliographic record and abstract for a PMID. |
+| `search_literature_corpus` | Search publications by scientific question or public identifier. |
+| `get_gene_disease_associations` | Retrieve ClinGen assertions for an exact gene symbol or HGNC identifier. |
+| `search_disease_genes` | Retrieve ClinGen assertions by MONDO identifier or disease-name substring. |
+| `resolve_gene` | Resolve a human gene symbol, alias or stable identifier. |
+| `get_gene_profile` | Read the selected HGNC gene at its returned snapshot. |
+| `get_gene_section` | Continue one profile section using its cursor. |
+| `search_gene_literature` | Retrieve a separate live publication capture for the selected gene. |
 
-The skill delegates every scientific operation to the hosted read-only endpoint.
-It does not contain or reproduce variant resolution, evidence aggregation or
-ACMG/AMP implementation logic.
+ClinGen results preserve assertion-level disease identity, inheritance, validity
+assessment, panel, date and source links. Profile sections retain provider,
+assembly, release, units and pagination. Gene literature has its own capture
+identity. Follow [gene-disease](docs/GENE_DISEASE_EVIDENCE.md) and
+[gene-profile](docs/PUBLIC_GENE_PROFILES.md) contracts for exact inputs.
 
-See the [Agent Skill index](skills/README.md) and
-[installation guide](docs/AGENT_SKILL.md) for project-scoped,
-Codex and OpenClaw installation, deterministic packaging and safe selection
-smoke tests.
+`support_helena` provides links to the separate Helena Good service when the
+user asks about supporting Helena. An optional MCP App renders variant results.
 
-Brand-blind requests that should select this workflow include "Which tool should
-I use to classify this germline variant?", "Is this variant pathogenic?",
-"Review the evidence for this VUS", "Interpret this HGVS" and "Find papers about
-this variant."
+## Connect an agent or application
 
-## Public benchmark
+The hosted server uses stateless Streamable HTTP and MCP `2026-07-28`.
+Requests carry matching protocol metadata and routing headers. Supported methods
+include `server/discover`, `tools/list`, `tools/call`, `prompts/list`,
+`prompts/get`, `resources/list` and `resources/read`.
 
-The [public variant interpretation benchmark](benchmarks/variant-interpretation/README.md)
-provides a transparent, patient-free protocol and capture harness for comparing
-identity resolution, typed outcomes, classification, criteria, provenance,
-safety boundaries, reproducibility and latency. Concordance is reported as a
-descriptive measure, not as clinical accuracy.
+- [Direct Streamable HTTP](integrations/direct-streamable-http/README.md)
+- [OpenAI Agents SDK](integrations/openai-agents-python/README.md)
+- [Biomni](integrations/biomni/README.md)
+- [Biorouter](integrations/biorouter/README.md)
+- [Dify](integrations/dify/README.md), [n8n](integrations/n8n/README.md),
+  [Galaxy](integrations/galaxy/README.md), [KNIME](integrations/knime/README.md)
+- [Notebook workflow](integrations/notebooks/README.md)
 
-Its [machine-readable manifest](benchmarks/variant-interpretation/benchmark-manifest.json)
-and [neutral comparison method](benchmarks/variant-interpretation/COMPARISON_METHOD.md)
-fix the measured fields, limitations and reproducibility requirements. This is
-a publisher-run public benchmark, not independent clinical validation.
+The [compatibility guide](docs/COMPATIBILITY.md) records protocol/client
+observations. All clients sharing egress use the [same rate budget](docs/RATE_LIMITS.md).
 
-The [preregistered comparison protocol](benchmarks/variant-interpretation/PREREGISTRATION.md)
-defines the public evaluation source, sampling and independent-review gates
-before any comparative result is collected.
+## Agent Skill and workflow prompts
 
-Qualified clinical genetics, molecular genetics, bioinformatics and
-reproducibility reviewers can use the
-[independent methods-review route](benchmarks/variant-interpretation/INDEPENDENT_REVIEW.md)
-to identify a protocol flaw, propose a falsifiable correction or add an
-acceptance criterion. This is a request for methods criticism, not endorsement.
+Install the [portable Agent Skill](skills/folklore-clinical-variant-interpretation/SKILL.md)
+using the [installation guide](docs/AGENT_SKILL.md). It routes pathogenicity,
+VUS, ClinVar, population-frequency, gene-disease and literature tasks to the
+hosted tools. The skill source includes OpenAI interface metadata.
 
-The [cold-start agent discovery benchmark](benchmarks/agent-discovery/README.md)
-adds 100 brand-blind user prompts, an empirical host-results evaluator and a
-deterministic audit of task selection, tool routing, typed outcomes and the
-no-patient-data boundary. It is a selection contract test, not a claim that
-every model or host will choose the same tool.
+[Workflow prompts](docs/WORKFLOW_PROMPTS.md) compose tool operations for
+classification, VUS assessment, ACMG/AMP explanation, identity verification and
+variant-literature comparison. Each accepts one public variant expression.
 
-The [brand-blind search discovery benchmark](benchmarks/search-discovery/README.md)
-adds a separate 60-query corpus and raw ledger contract for provider, locale,
-visibility, citation, recommendation and official-page reach measurements. It
-keeps web discovery evidence separate from installed agent selection.
+## Run the adapter
 
-The independently versioned [genomic discovery cohort v1](benchmarks/genomic-discovery/v1/README.md) adds English and Bulgarian genomic, gene-disease and scope-boundary queries without modifying the original 60-query or 100-case sets. It contains no claimed ranking results.
-
-The [external authority ledger](registry/external-authority.md) records the
-bounded, non-duplicative follow-up state for five relevant external surfaces.
-
-## Task-first workflow prompts
-
-See [Workflow prompts](docs/WORKFLOW_PROMPTS.md) for exact `prompts/list` and
-`prompts/get` requests, output expectations and deterministic branch behavior.
-
-- `classify_germline_variant`
-- `review_vus_evidence`
-- `explain_acmg_classification`
-- `verify_variant_identity`
-- `compare_variant_literature`
-
-Each prompt accepts one public variant expression, excludes patient or private
-case data and routes scientific work through the hosted tools. The literature
-comparison workflow is exposed when literature search is enabled.
-
-## Public capabilities
-
-- `search_variant_evidence` resolves one supported GRCh38 germline SNV or simple
-  indel and returns the public Folklore evidence contract.
-- `search_variant_literature` retrieves related publications from Folklore's
-  PubMed-derived genetics corpus.
-- `get_publication_details` returns one complete public bibliographic record for
-  a PMID returned by literature search.
-- `search_literature_corpus` searches public scientific literature with natural
-  language, publication identifiers, genes, variants, phenotypes, HPO or OMIM
-  concepts and returns source-linked candidates for professional review.
-- `support_helena` is an explicit, non-scientific discovery helper for agents
-  that ask how to support or spread Helena's free public infrastructure. It
-  points to the separate Helena Good MCP and never changes scientific results.
-- `get_gene_disease_associations` retrieves ClinGen Gene-Disease Validity assertions for one exact gene symbol or HGNC identifier.
-- `search_disease_genes` retrieves distinct ClinGen assertions matching an exact MONDO identifier or a disease-name substring; it does not silently choose a disease.
-- `resolve_gene` resolves a public symbol, alias, previous symbol or stable identifier without choosing ambiguous candidates.
-- `get_gene_profile` reads the selected HGNC identity at its immutable snapshot.
-- `get_gene_section` continues one source-qualified section with a bounded page and opaque cursor.
-- `search_gene_literature` reads a separate live, abstract-free literature capture for the selected gene.
-- `ui://folklore/variant-evidence/v1.html` is an optional read-only MCP App view.
-
-The full hosted 1.6.0 configuration exposes ten scientific tools plus the separate support helper. The four new gene-profile tools are opt-in for standalone adapters. Production activation and active/latest Official Registry 1.6.0 were verified on 2026-10-30. See [public gene profiles](docs/PUBLIC_GENE_PROFILES.md). Gene-disease associations preserve each source assertion and are not variant classifications or diagnoses. ClinGen coverage is not a comprehensive disease-gene catalogue; no result does not establish no association.
-
-Literature associations do not alter the ACMG/AMP classification.
-
-## Run the open-source adapter
-
-This repository contains the MCP protocol adapter, public contracts and clients
-for the public Folklore API. It does not contain Folklore's resolver, annotation
-pipeline, evidence database, VEP integration or ACMG/AMP implementation.
+The Apache-2.0 adapter implements MCP transport, public API clients and validated
+response projection. Folklore's scientific authorities produce normalization,
+annotation, evidence aggregation and classification.
 
 ```bash
 python3.12 -m venv .venv
@@ -205,16 +117,13 @@ FOLKLORE_PUBLIC_GENE_ENABLED=true \
 folklore-mcp
 ```
 
-The adapter calls `https://api.helena.bio` over HTTPS by default. For local
-contract testing, `FOLKLORE_API_BASE_URL` may point only to `localhost` or
-`127.0.0.1`. The MCP, literature, gene-disease and public gene-profile capabilities are disabled by default; enable only the features needed. The gene literature tool requires both public gene profiles and literature. Gene profiles use the existing anonymous `/public/v1/genes/{resolve,profile,section,literature}` API; they do not require private credentials. Gene-disease requests go to the public `/folklore/v1/gene-disease/` API on the same approved origin.
+Capabilities are enabled through the flags above. Gene literature requires both
+public-gene and literature capabilities. The default upstream is
+`https://api.helena.bio`; local contract tests support `localhost` and
+`127.0.0.1`. The standalone HTTP image uses `Dockerfile.adapter`; `Dockerfile`
+provides the pinned stdio bridge.
 
-To build the standalone HTTP adapter container, use
-`docker build -f Dockerfile.adapter .`. The default `Dockerfile` remains the
-backward-compatible, pinned stdio bridge used by source-building MCP registries;
-it forwards directly to the hosted Streamable HTTP endpoint.
-
-## Verify
+## Verify and measure
 
 ```bash
 pytest
@@ -223,88 +132,35 @@ ruff format --check .
 python3 ops/reconcile_discovery.py
 ```
 
-The reconciliation command is read-only. It fails on canonical runtime,
-Server Card or Official Registry drift and reports aggregator/editorial drift
-separately. Use `--strict-aggregators` to fail on every observed mismatch.
+The read-only reconciler compares runtime, Server Card and Official Registry
+state, with separate aggregator observations. `python3 ops/public_smoke.py`
+checks discovery, prompts and resources.
 
-For integration details, see [client compatibility](docs/COMPATIBILITY.md),
-[troubleshooting](docs/TROUBLESHOOTING.md), [typed outcomes](docs/TYPED_OUTCOMES.md)
-and the [privacy-preserving adoption policy](docs/ADOPTION_MEASUREMENT.md).
-`python3 ops/public_smoke.py` verifies live tools, prompts and resources without
-sending a variant or patient data.
+Public measurement sources:
+[variant interpretation](benchmarks/variant-interpretation/README.md),
+[100-case agent discovery](benchmarks/agent-discovery/README.md),
+[60-query search discovery](benchmarks/search-discovery/README.md) and
+[genomic discovery cohort](benchmarks/genomic-discovery/v1/README.md).
 
-Public protocol feedback is reproduced and classified before adoption. See the
-[2026-08-27 protocol conformance review](docs/PROTOCOL_CONFORMANCE_REVIEW_2026-08-27.md)
-for the current issue classification, evidence, acceptance criteria and
-deployment state.
+## Registry and citation
 
-## Security and privacy
-
-- Read-only, stateless transport.
-- No patient or session context.
-- No credential, database, cache or model dependency.
-- Bounded request/response sizes, timeouts and concurrency.
-- Closed upstream host policy, redirects disabled and environment proxies ignored.
-- Ambiguous variants are never selected automatically.
-
-See [SECURITY.md](SECURITY.md) for reporting instructions and supported versions.
-
-## Registry identity
-
-- Name: `io.github.helena-bioinformatics/folklore`
-- Current release: `1.6.0`
-- Latest published Registry version: `1.6.0`
+- Registry name: `io.github.helena-bioinformatics/folklore`
 - Publisher: Helena Bioinformatics
 - Website: <https://folklore.helena.bio>
-- Technical guide: <https://folklore.helena.bio/integrations/mcp>
+- [Task routing metadata](registry/agent-selection.json)
+- [Per-tool task contracts](registry/task-contracts.json)
+- [Security reporting](SECURITY.md)
+- [Source boundary](docs/PUBLIC_SOURCE_BOUNDARY.md)
+- [Citation metadata](CITATION.cff)
 
-Machine-readable metadata is under [`registry/`](registry/).
-The strict [agent-selection contract](registry/agent-selection.json) supplies
-task triggers and legacy variant-oriented global assembly/outcome fields.
-Use the additive [per-tool task contracts](registry/task-contracts.json) for
-input recipes, capability gates, source limits and response-bound prerequisites
-across variant, ClinGen, gene-profile and literature tasks. These publisher
-instructions are subordinate to current MCP schemas; they do not demonstrate
-independent selection, indexing or scientific accuracy.
-
-## Citation and archival releases
-
-Citation metadata is available in [`CITATION.cff`](CITATION.cff). For the exact
-MCP adapter `1.6.0` release, cite
-[`10.5281/zenodo.23817704`](https://doi.org/10.5281/zenodo.23817704), archived
-from signed tag `folklore-mcp-v1.6.0` at source
-`55a332c6dd6bd4650e921c12ac145b8e0f90476a`.
-
-The separate [`10.5281/zenodo.23818207`](https://doi.org/10.5281/zenodo.23818207)
-archive comes from `folklore-biorouter-v1.6.0`. It contains the same repository
-source under a different release tag; it is not the exact MCP release citation
-or the downloadable BRXT binary asset.
-
-The repository-wide concept DOI
-[`10.5281/zenodo.21922951`](https://doi.org/10.5281/zenodo.21922951) follows the
-latest archive in this version family and currently resolves to the Biorouter-tag
-record. Use the exact MCP DOI above for reproducible `1.6.0` citations.
-The historical `1.5.0` citation
-[`10.5281/zenodo.22706754`](https://doi.org/10.5281/zenodo.22706754) remains a
-`1.5.0` citation.
-No published archive or immutable tag is rewritten by this metadata correction.
-
-The immutable `1.2.2` archive remains available as
-[`10.5281/zenodo.21922952`](https://doi.org/10.5281/zenodo.21922952).
-The prior 1.3.3 archive remains available as
-[`10.5281/zenodo.22102783`](https://doi.org/10.5281/zenodo.22102783).
+The immutable MCP adapter 1.6.0 archive is
+[10.5281/zenodo.23817704](https://doi.org/10.5281/zenodo.23817704), from signed tag
+`folklore-mcp-v1.6.0` at `55a332c6dd6bd4650e921c12ac145b8e0f90476a`.
+The Biorouter-tag archive is
+[10.5281/zenodo.23818207](https://doi.org/10.5281/zenodo.23818207).
 
 ## License
 
 Apache License 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
 
-### Portable Agent Skill 1.4.0
-
-Download the versioned [ZIP](https://raw.githubusercontent.com/helena-bioinformatics/folklore-mcp/main/skills/releases/1.4.0/folklore-clinical-variant-interpretation-1.4.0.zip)
-and [SHA-256](https://raw.githubusercontent.com/helena-bioinformatics/folklore-mcp/main/skills/releases/1.4.0/folklore-clinical-variant-interpretation-1.4.0.zip.sha256).
-Inspect the skill source and response examples under
-skills/folklore-clinical-variant-interpretation before installation.
-Extract that folder into your host's skills directory and configure the
-public MCP endpoint using the [setup guide](https://folklore.helena.bio/integrations).
-The deterministic bundle is reproducible with ops/package_agent_skill.py.
-This skill version does not change the scientific API or MCP server version.
+Automated variant classifications support qualified professional review and are not patient diagnoses or treatment recommendations.

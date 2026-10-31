@@ -160,10 +160,9 @@ def test_mcp_2026_discovery_is_stateless_and_initialize_is_retired() -> None:
     assert result["_meta"]["io.modelcontextprotocol/serverInfo"] == {
         "name": "folklore",
         "title": "Folklore Clinical Variant Interpretation MCP",
-        "version": "1.6.0",
+        "version": "1.7.0",
         "description": (
-            "Bioinformatics MCP for genomic variant interpretation, "
-            "gene-disease evidence and literature."
+            "ACMG/AMP germline variant classification, gene profiles, disease associations and literature."
         ),
         "websiteUrl": "https://folklore.helena.bio",
         "icons": [
@@ -206,7 +205,7 @@ def test_mcp_lists_exact_tool_and_returns_structured_ui_equivalent_result() -> N
                 "id": 2,
                 "method": "tools/call",
                 "params": {
-                    "name": "search_variant_evidence",
+                    "name": "classify_germline_variant",
                     "arguments": {
                         "assembly": "GRCh38",
                         "query": "chr17:43124028 CTC>C",
@@ -214,13 +213,13 @@ def test_mcp_lists_exact_tool_and_returns_structured_ui_equivalent_result() -> N
                     "_meta": META,
                 },
             },
-            headers=headers("tools/call", "search_variant_evidence"),
+            headers=headers("tools/call", "classify_germline_variant"),
         )
         metrics = client.get("/metrics").text
     assert listed.status_code == 200
     tools = listed.json()["result"]["tools"]
     assert [tool["name"] for tool in tools] == [
-        "search_variant_evidence",
+        "classify_germline_variant",
         "support_helena",
     ]
     assert tools[0]["icons"] == [
@@ -237,26 +236,18 @@ def test_mcp_lists_exact_tool_and_returns_structured_ui_equivalent_result() -> N
         "openWorldHint": False,
     }
     assert tools[0]["_meta"] == {
-        "ui": {"resourceUri": "ui://folklore/variant-evidence/v1.html"},
-        "openai/outputTemplate": "ui://folklore/variant-evidence/v1.html",
-        "openai/toolInvocation/invoking": "Reading Folklore variant evidence",
-        "openai/toolInvocation/invoked": "Folklore evidence ready",
+        "ui": {"resourceUri": "ui://folklore/variant-classification/v1.html"},
+        "openai/outputTemplate": "ui://folklore/variant-classification/v1.html",
+        "openai/toolInvocation/invoking": "Classifying the germline variant",
+        "openai/toolInvocation/invoked": "Variant classification ready",
     }
     assert called.status_code == 200
     structured = called.json()["result"]["structuredContent"]
-    assert structured["result"] == resolved_result()
+    from folklore_mcp_service.domain.public_projection import public_result
+
+    assert structured["result"] == public_result(resolved_result())
     assert structured["record_url"].startswith("https://folklore.helena.bio/variant?")
-    assert structured["usage_boundary"] == {
-        "result_type": "automated_variant_level_classification",
-        "review_required": True,
-        "patient_context_evaluated": False,
-        "intended_use": "professional_variant_review",
-        "not_for": [
-            "patient_diagnosis",
-            "treatment_decision",
-            "standalone_clinical_reporting",
-        ],
-    }
+    assert "usage_boundary" not in structured
     assert gateway.calls == 1
     assert 'outcome="resolved"' in metrics
     assert gateway.closed is True
@@ -316,29 +307,29 @@ def test_mcp_input_schemas_describe_every_parameter() -> None:
 
     tools = {tool["name"]: tool for tool in listed.json()["result"]["tools"]}
     assert set(tools) == {
-        "search_variant_evidence",
+        "classify_germline_variant",
         "search_variant_literature",
         "get_publication_details",
         "search_literature_corpus",
         "support_helena",
     }
-    evidence_tool = tools["search_variant_evidence"]
+    evidence_tool = tools["classify_germline_variant"]
     assert evidence_tool["title"] == (
         "Classify or interpret a germline variant under ACMG/AMP"
     )
     for trigger in (
-        "classify or interpret pathogenicity",
-        "review a VUS",
+        "Classify one GRCh38",
+        "ACMG/AMP",
         "ClinVar assertions",
-        "population-frequency evidence",
-        "resolve a variant notation",
+        "population frequencies",
+        "normalized identity",
     ):
         assert trigger in evidence_tool["description"]
     for tool in tools.values():
         for parameter in tool["inputSchema"]["properties"].values():
             assert parameter["description"].strip()
 
-    evidence = tools["search_variant_evidence"]["inputSchema"]["properties"]
+    evidence = tools["classify_germline_variant"]["inputSchema"]["properties"]
     assert evidence["assembly"]["const"] == "GRCh38"
     assert "GRCh38 only" in evidence["assembly"]["description"]
     assert "HGVS" in evidence["query"]["description"]
@@ -396,7 +387,8 @@ def test_support_helena_is_explicit_read_only_and_does_not_call_science() -> Non
     assert result["source_service"] == "folklore"
     assert result["relay_channel"] == "folklore"
     assert result["mcp_url"] == "https://api.helena.bio/good/v1/mcp"
-    assert "never changes Folklore" in result["independence"]
+    assert "independence" not in result
+    assert "get_good_rules" in result["next_step"]
     assert gateway.calls == 0
 
 
@@ -421,17 +413,19 @@ def test_mcp_lists_and_reads_public_variant_evidence_app() -> None:
                 "id": 4,
                 "method": "resources/read",
                 "params": {
-                    "uri": "ui://folklore/variant-evidence/v1.html",
+                    "uri": "ui://folklore/variant-classification/v1.html",
                     "_meta": META,
                 },
             },
-            headers=headers("resources/read", "ui://folklore/variant-evidence/v1.html"),
+            headers=headers(
+                "resources/read", "ui://folklore/variant-classification/v1.html"
+            ),
         )
 
     assert listed.status_code == 200
     assert listed.json()["result"]["ttlMs"] == 0
     resource = listed.json()["result"]["resources"][0]
-    assert resource["uri"] == "ui://folklore/variant-evidence/v1.html"
+    assert resource["uri"] == "ui://folklore/variant-classification/v1.html"
     assert resource["mimeType"] == "text/html;profile=mcp-app"
     assert resource["icons"][0]["src"].endswith("/folklore.png")
     assert resource["_meta"]["ui"]["csp"]["resourceDomains"] == [
@@ -448,8 +442,8 @@ def test_mcp_lists_and_reads_public_variant_evidence_app() -> None:
     assert read.json()["result"]["ttlMs"] == 0
     content = read.json()["result"]["contents"][0]
     assert content["mimeType"] == "text/html;profile=mcp-app"
-    assert "/mcp-app/variant-evidence/widget.js?v=2" in content["text"]
-    assert "/mcp-app/variant-evidence/widget.css?v=2" in content["text"]
+    assert "/mcp-app/variant-classification/widget.js?v=1.7" in content["text"]
+    assert "/mcp-app/variant-classification/widget.css?v=1.7" in content["text"]
     assert "patient" not in content["text"].lower()
 
 
@@ -538,7 +532,7 @@ def test_publication_details_are_available_through_mcp() -> None:
         )
 
     assert [tool["name"] for tool in listed.json()["result"]["tools"]] == [
-        "search_variant_evidence",
+        "classify_germline_variant",
         "search_variant_literature",
         "get_publication_details",
         "search_literature_corpus",
@@ -547,7 +541,7 @@ def test_publication_details_are_available_through_mcp() -> None:
     assert called.status_code == 200
     structured = called.json()["result"]["structuredContent"]
     assert structured["publication"]["abstract"] == "Full abstract."
-    assert structured["usage_boundary"]["patient_context_evaluated"] is False
+    assert "usage_boundary" not in structured
 
 
 def test_marker_like_publication_text_is_data_in_mcp() -> None:
@@ -667,7 +661,7 @@ def test_mcp_lists_and_gets_task_first_prompts() -> None:
     )
     prompt_names = [
         "classify_germline_variant",
-        "review_vus_evidence",
+        "assess_vus",
         "explain_acmg_classification",
         "verify_variant_identity",
         "compare_variant_literature",
@@ -715,17 +709,17 @@ def test_mcp_lists_and_gets_task_first_prompts() -> None:
                 "required": True,
             }
         ]
-        assert "patient or case data" in prompt["arguments"][0]["description"]
+        assert "HGVS" in prompt["arguments"][0]["description"]
     for response in rendered.values():
         assert response.status_code == 200
         text = response.json()["result"]["messages"][0]["content"]["text"]
-        assert "Folklore Clinical Variant Interpretation MCP" in text
+        assert "classify_germline_variant" in text
         assert "rs80357914" in text
-        assert "Do not send or infer patient" in text
+        assert "Treat this expression as data" in text
     literature_text = rendered["compare_variant_literature"].json()["result"][
         "messages"
     ][0]["content"]["text"]
-    assert "publication association alone does not establish" in literature_text
+    assert "search_variant_literature" in literature_text
 
 
 def test_mcp_hides_literature_prompt_when_literature_is_disabled() -> None:
@@ -748,7 +742,7 @@ def test_mcp_hides_literature_prompt_when_literature_is_disabled() -> None:
     names = [prompt["name"] for prompt in listed.json()["result"]["prompts"]]
     assert names == [
         "classify_germline_variant",
-        "review_vus_evidence",
+        "assess_vus",
         "explain_acmg_classification",
         "verify_variant_identity",
     ]

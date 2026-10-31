@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.7.0
+
+- Renamed the classification operation to `classify_germline_variant`.
+- Made automated ACMG/AMP classification and assessment the primary discovery message.
+- Consolidated clinical-use copy to one sentence at the end of the README.
+- Simplified tool-selection guidance and integration recipes around inputs, outputs and source contracts.
+
+## Archived release history
+
 All notable changes to the public Folklore MCP adapter are documented here.
 
 ## 1.6.0 - 2026-10-30

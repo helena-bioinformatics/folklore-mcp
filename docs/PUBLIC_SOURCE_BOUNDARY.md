@@ -1,47 +1,33 @@
-# Public source boundary
+# Public adapter source
 
-This repository contains only the public Folklore MCP adapter. It is a thin,
-one-way interface to the public Folklore APIs and does not contain the Folklore
-clinical interpretation backend.
+This repository implements the Folklore MCP protocol layer and public API
+clients. Folklore API services perform normalization, annotation, evidence
+aggregation and ACMG/AMP classification.
 
-## Included
+## Distribution contents
 
-- MCP discovery and JSON-RPC request handling
-- Input validation and bounded public API clients
-- The fully enabled 1.6.0 surface: ten scientific tools, a separate optional
-  support discovery helper, five workflow prompts and one optional MCP resource
-- Capability gates for self-hosted deployments; discovery reports enabled tools
-- Health, readiness, and metrics endpoints
-- Tests, container packaging, CI, and public documentation
+- MCP discovery, JSON-RPC handling, input validation and bounded API clients
+- Adapter 1.7.0: ten scientific tools, an optional support helper, five workflow
+  prompts and an optional MCP resource
+- Self-hosted capability gates and enabled-tool discovery metadata
+- Health, readiness and metrics endpoints
+- Tests, container packaging, CI and documentation
 
-## Intentionally excluded
+Private authority implementations, datasets, caches, models, service credentials,
+production configuration and unrelated platform source remain in their owning
+repositories. Discovery metadata describes the enabled hosted surface.
 
-- Variant normalization, resolution, annotation, evidence aggregation, and ACMG logic
-- Private datasets, caches, models, patient data, or case data
-- Internal hostnames, network topology, service authentication, or credentials
-- Production deployment manifests and operational configuration
-- Private repository history and unrelated platform code
+## Data flow
 
-The hosted service may evolve independently of this adapter. Consumers should
-use discovery metadata rather than relying on undocumented behavior.
+Tool schemas define variant, gene, disease and literature arguments. Literature
+queries include public phenotype, HPO and OMIM terms. API clients send those
+arguments to the public Folklore endpoints. Self-hosted operators configure
+logging and retention for their own instances.
 
-## Data handling
+## Release checks
 
-The adapter accepts bounded public variant, gene, disease and literature
-queries through the documented tool schemas. Public phenotype, HPO and OMIM
-terms remain reference-literature queries where the published schema permits.
-It accepts no patient-specific histories or phenotype narratives, family or
-segregation context, private case data, sequencing uploads, names,
-medical-record identifiers, full patient records or other direct identifiers.
-Self-hosted instances send tool inputs to the public Folklore API described in
-the README; operators remain responsible for their own logs and retention.
-
-## Release review
-
-Before each public release, maintainers should:
-
-1. run the full test and lint suite;
-2. scan the tracked tree and commit range for credentials and internal markers;
-3. verify that example payloads are synthetic and contain no patient context;
-4. confirm the public API and discovery contracts; and
-5. publish from a clean repository without importing private Git history.
+1. Run the test and lint suite.
+2. Scan tracked source and the commit range for credentials and internal markers.
+3. Validate example payloads against the public schemas and reference fixtures.
+4. Verify API and discovery contracts.
+5. Publish the clean public adapter source and its required license notices.

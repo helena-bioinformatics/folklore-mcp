@@ -18,13 +18,12 @@ include:
 - Find papers about this variant.
 
 The skill delegates scientific work to Folklore Clinical Variant Interpretation
-MCP at `https://api.helena.bio/folklore/v1/mcp`. It does not implement variant
-resolution, evidence aggregation or ACMG/AMP logic.
+MCP at `https://api.helena.bio/folklore/v1/mcp`. The hosted scientific authorities produce variant resolution, evidence
+aggregation and ACMG/AMP classification.
 
-For variant tools, send only one public variant expression. Gene-disease tools accept a public gene symbol/HGNC identifier or disease name/MONDO identifier. Do not send patient, phenotype, family,
-segregation or private case data. Results are automated variant-level decision
-support for qualified professional review, not a diagnosis or treatment
-recommendation.
+Variant inputs contain one public expression and GRCh38 assembly. Gene-disease
+inputs contain a public gene symbol/HGNC identifier or disease name/MONDO
+identifier. The skill routes classification and retrieval to the hosted tools.
 
 See the [installation guide](../docs/AGENT_SKILL.md) for project-scoped, Codex
-and OpenClaw installation and safe selection probes.
+and OpenClaw installation and selection probes.

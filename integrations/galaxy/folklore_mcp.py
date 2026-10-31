@@ -66,7 +66,7 @@ def main() -> int:
         "id": 1,
         "method": "tools/call",
         "params": {
-            "name": "search_variant_evidence",
+            "name": "classify_germline_variant",
             "arguments": {"assembly": "GRCh38", "query": args.query},
             "_meta": {
                 "io.modelcontextprotocol/protocolVersion": PROTOCOL,
@@ -83,7 +83,7 @@ def main() -> int:
             "Content-Type": "application/json",
             "MCP-Protocol-Version": PROTOCOL,
             "Mcp-Method": "tools/call",
-            "Mcp-Name": "search_variant_evidence",
+            "Mcp-Name": "classify_germline_variant",
             "User-Agent": "galaxy-folklore-mcp/0.1.0",
         },
         method="POST",

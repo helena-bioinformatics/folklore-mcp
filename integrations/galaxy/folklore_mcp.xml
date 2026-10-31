@@ -1,5 +1,5 @@
-<tool id="folklore_clinical_variant_interpretation" name="Folklore Clinical Variant Interpretation" version="0.1.0+galaxy0" profile="24.0">
-  <description>retrieve public evidence for one GRCh38 germline variant</description>
+<tool id="folklore_clinical_variant_interpretation" name="Folklore Clinical Variant Interpretation" version="0.2.0+galaxy0" profile="24.0">
+  <description>classify a GRCh38 germline variant under ACMG/AMP</description>
   <requirements />
   <command detect_errors="exit_code"><![CDATA[
 python '$__tool_directory__/folklore_mcp.py' --query '$query' --output '$output'
@@ -28,17 +28,16 @@ python '$__tool_directory__/folklore_mcp.py' --query '$query' --output '$output'
       </when>
     </conditional>
   </inputs>
-  <outputs><data name="output" format="json" label="Folklore variant evidence" /></outputs>
+  <outputs><data name="output" format="json" label="Folklore variant classification" /></outputs>
   <tests>
     <test expect_num_outputs="1">
       <param name="query" value="chr17:43124028 CTC&gt;C" />
-      <output name="output"><assert_contents><has_text text="contract_version" /><has_text text="review_required" /></assert_contents></output>
+      <output name="output"><assert_contents><has_text text="contract_version" /><has_text text="automated_class" /></assert_contents></output>
     </test>
   </tests>
   <help><![CDATA[
-Returns the canonical public Folklore result for professional variant review.
-It does not evaluate patient context and is not diagnosis, treatment advice, or
-a standalone clinical report. Do not submit patient or private data.
+Returns normalized variant identity, automated ACMG/AMP classification, criteria,
+annotations and source provenance.
 
 Documentation: https://folklore.helena.bio/integrations
   ]]></help>

@@ -1,90 +1,48 @@
-# Folklore Clinical Variant Interpretation MCP distribution
+# Folklore MCP distribution
 
-Canonical public server title: `Folklore Clinical Variant Interpretation MCP`
+Title: `Folklore Clinical Variant Interpretation MCP`
 
-Canonical Registry description: `Bioinformatics MCP for genomic variant interpretation, gene-disease evidence and literature.`
+Description: `ACMG/AMP germline variant classification, gene profiles, disease associations and literature.`
 
-Canonical identity: `io.github.helena-bioinformatics/folklore`
+Registry name: `io.github.helena-bioinformatics/folklore`
 
-Canonical endpoint: `https://api.helena.bio/folklore/v1/mcp`
+Endpoint: `https://api.helena.bio/folklore/v1/mcp`
 
-The 1.6.0 source supports eleven read-only tools when all capabilities are enabled. Gene profiles are opt-in; source preparation does not establish live activation or Registry publication. The existing seven tools are: `search_variant_evidence`,
-`search_variant_literature`, `get_publication_details` and
-`search_literature_corpus`, the explicit opt-in `support_helena` tool,
-`get_gene_disease_associations` and `search_disease_genes`. The
-first three return public Folklore evidence and
-related literature for one supported GRCh38 germline nuclear SNV or simple
-indel. The corpus tool performs semantic-first scientific-literature retrieval;
-PMID, DOI and PMCID values embedded in the question become exact publication
-anchors. The server does not accept patient context and does not provide a
-diagnosis.
+The 1.7.0 source defines ten scientific tools and the separate `support_helena`
+helper. `classify_germline_variant` resolves and assesses one supported public
+GRCh38 nuclear germline SNV or simple indel smaller than 50 bp. The response
+includes automated ACMG/AMP classification, reported criteria and source evidence.
 
-`support_helena` returns the separate Helena Good campaign, rules, manifest,
-and MCP links. It does not call the scientific gateway, initiate payment,
-create outreach proof, or alter Folklore evidence and rankings.
+Gene-disease tools return ClinGen assertion identities, validity assessments,
+inheritance and pagination. Gene profiles use selected HGNC identities and
+immutable snapshots. Gene literature returns a separate live capture.
 
-Version 1.1 adds an MCP Apps resource for hosts that support inline UI. The
-resource renders the same public Variant Evidence component used by
-`folklore.helena.bio`; text-only MCP clients continue to receive the same
-structured result and summary. The app is read-only and cannot call tools.
+## Distribution files
 
-Reusable directory copy is in `directory-submission.md`, exact client
-configurations are in `platforms/client-configs.json`, and the metadata-only
-MCP package is in `packages/folklore`. These artifacts expose only the public
-endpoint and contain no service source, credentials or private data.
+- `server.json`: Official Registry record.
+- `discovery-contract.json`: desired runtime, Server Card and Registry state.
+- `agent-selection.json`: task triggers, input scope and tool routes.
+- `task-contracts.json`: per-tool inputs, response binding and source definitions.
+- `directory-submission.md`: reusable catalogue copy.
+- `platforms/client-configs.json`: connection recipes.
 
-The separate public repository at
-`https://github.com/helena-bioinformatics/folklore-mcp` contains the approved
-standalone MCP protocol adapter, public contracts and API clients, tests, CI,
-packaging and distribution metadata. It is not metadata-only, and it is not the
-Folklore interpretation backend. Public releases must exclude scientific
-implementation, private data and datasets, credentials, internal routing and
-deployment material, unrelated platform code and private Git history. The full
-boundary and release review are documented in the canonical publication
-contract and the public repository's `docs/PUBLIC_SOURCE_BOUNDARY.md`.
+Current MCP schemas define executable arguments. Response-bound recipes use
+identity, snapshot and cursor values selected from their source response.
 
-`discovery-contract.json` is the machine-readable desired state shared by
-distribution tests and the read-only operator reconciler. Run from the repository
-root:
+## Reconcile and publish
 
 ```bash
 python3 ops/reconcile_discovery.py
 ```
 
-The canonical gate uses the Official Registry `version=latest` filter and
-compares production `server/discover`, `tools/list`, `resources/list` and the
-domain Server Card. Aggregator and editorial drift is visible but non-blocking
-unless `--strict-aggregators` is selected. The reconciler performs no writes.
+The read-only reconciler compares runtime discovery, tools, prompts, resources,
+Server Card and Official Registry latest state. Aggregator observations are
+reported separately; `--strict-aggregators` includes them in the failure gate.
 
-`agent-selection.json` is the machine-readable task-selection companion. It
-defines positive and negative intents, brand-blind example requests, accepted
-public input forms, the scientific tool routes, typed outcomes and the
-clinical boundary. `agent-selection.schema.json` provides its strict JSON
-Schema. These files describe the user job rather than only the server name; they do
-not prove indexing or universal model selection. Their unchanged v1 global
-GRCh38 assembly and six outcomes describe the variant workflow, not every tool.
-
-The additive [task-contracts.json](task-contracts.json) companion provides ten
-scientific task routes, capability gates, literal inputs or explicitly
-nonexecutable response-bound recipes, output checks and source/coverage limits.
-Its [strict schema](task-contracts.schema.json) is separate from the legacy
-selection schema. These are source-derived input recipes, not newly observed
-results. The [integration brief](../docs/INTEGRATION_BRIEF.md) explains how to
-choose a suitable route or a primary source instead. Current MCP tool schemas
-and scientific source contracts remain authoritative.
-
-MCP protocol `2026-07-28` is stateless. It uses `server/discover` as the optional
-preflight. The hosted SDK also accepts legacy `initialize` with protocol
-`2025-03-26`; see the observed matrix in ../docs/COMPATIBILITY.md.
-
-Registry publication must happen only after production activation, live
-`tools/list`/`tools/call` verification and Vladimir's final submission approval.
-
-The official Registry version is published only from the signed source state
-tagged `folklore-mcp-v<server.json version>`. The GitHub workflow validates the
-record with a pinned publisher, authenticates through short-lived GitHub OIDC
-and publishes the immutable version without repository secrets.
-
-Gene-disease tools expose ClinGen Gene-Disease Validity assertions with distinct disease identities, source provenance and pagination. They are separate from variant pathogenicity classification; no match does not establish no association. See [gene-disease usage](../docs/GENE_DISEASE_EVIDENCE.md).
-
-Version 1.6.0 adds `resolve_gene`, `get_gene_profile`, `get_gene_section` and `search_gene_literature`. Preserve ambiguous identity candidates, immutable snapshot identity, source assertions, coverage and pagination. Live gene literature is a separate query-matched capture, not a curated validity assertion or variant classification. See [public gene profiles](../docs/PUBLIC_GENE_PROFILES.md).
+Registry publication uses the signed tag `folklore-mcp-v<server.json version>`,
+the pinned publisher and GitHub OIDC authentication.
+The public adapter contains transport, API clients, schemas, tests and packaging.
+Folklore scientific authorities own resolution, annotation and classification.
+See [source boundary](../docs/PUBLIC_SOURCE_BOUNDARY.md),
+[client compatibility](../docs/COMPATIBILITY.md) and
+[integration guide](../docs/INTEGRATION_BRIEF.md).

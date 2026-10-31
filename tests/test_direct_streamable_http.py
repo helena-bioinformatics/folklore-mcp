@@ -15,7 +15,6 @@ from test_contracts import resolved_result
 from test_public_gene import FakePublicGeneGateway, resolution
 
 from folklore_mcp_service.config.settings import Settings
-from folklore_mcp_service.domain.public_gene_contracts import public_gene_boundary
 from folklore_mcp_service.main import create_app
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -34,10 +33,9 @@ def fixture_message():
         "result": {
             "isError": False,
             "structuredContent": {
-                "contract_version": "1",
+                "contract_version": "2",
                 "adapter_error": None,
                 "record_url": "https://folklore.helena.bio/gene/BRCA1",
-                "usage_boundary": public_gene_boundary(),
                 "result": resolution({"query": "BRCA1", "request_id": "synthetic"}),
             },
         },
@@ -139,21 +137,7 @@ def test_single_send_has_no_hidden_preflight_or_retry():
             ),
             "",
         ),
-        (
-            (
-                "result",
-                "structuredContent",
-                "usage_boundary",
-                "patient_context_evaluated",
-            ),
-            True,
-        ),
-        (("result", "structuredContent", "usage_boundary", "review_required"), False),
-        (("result", "structuredContent", "usage_boundary", "not_for"), []),
-        (
-            ("result", "structuredContent", "usage_boundary", "not_for"),
-            ["patient_diagnosis", "treatment_decision"],
-        ),
+        (("result", "structuredContent", "contract_version"), "1"),
     ],
 )
 def test_http200_cannot_turn_missing_or_conflicting_evidence_into_success(path, value):
@@ -195,14 +179,9 @@ def test_redirect_policy_never_replays_the_post():
     )
 
 
-def test_missing_exclusions_fail_and_order_is_not_scientific_meaning():
+def test_current_identity_contract_has_no_retired_boundary():
     message = fixture_message()
-    boundary = message["result"]["structuredContent"]["usage_boundary"]
-    boundary["not_for"].reverse()
-    assert smoke.check_identity(message)
-    del boundary["not_for"]
-    with pytest.raises(smoke.SmokeFailure):
-        smoke.check_identity(message)
+    assert "usage_boundary" not in smoke.check_identity(message)
 
 
 def test_http429_main_exits_without_retry(monkeypatch, capsys):

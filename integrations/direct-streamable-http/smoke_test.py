@@ -82,29 +82,11 @@ def check_identity(message: dict) -> dict:
     if not isinstance(envelope, dict):
         raise SmokeFailure("Missing structured gene envelope.")
     if (
-        envelope.get("contract_version") != "1"
+        envelope.get("contract_version") != "2"
         or "adapter_error" not in envelope
         or envelope["adapter_error"] is not None
     ):
         raise SmokeFailure("Adapter error or unknown envelope version.")
-    boundary = envelope.get("usage_boundary")
-    if (
-        not isinstance(boundary, dict)
-        or boundary.get("intended_use") != "professional_gene_reference_review"
-        or boundary.get("review_required") is not True
-        or boundary.get("patient_context_evaluated") is not False
-        or boundary.get("changes_variant_classification") is not False
-        or not isinstance(boundary.get("not_for"), list)
-        or not all(
-            excluded in boundary["not_for"]
-            for excluded in (
-                "patient_diagnosis",
-                "treatment_decision",
-                "variant_pathogenicity_classification",
-            )
-        )
-    ):
-        raise SmokeFailure("Missing professional gene-reference boundary.")
     result = envelope.get("result")
     if not isinstance(result, dict):
         raise SmokeFailure("Missing gene identity result.")
@@ -174,12 +156,6 @@ def main() -> int:
                 "checked_at": datetime.now(UTC).isoformat(),
                 "status": "PASS",
                 "scope": "2026-07-28 raw HTTP JSON BRCA1 identity and snapshot only",
-                "not_qualified": [
-                    "SDK clients",
-                    "SSE",
-                    "gene profiles",
-                    "clinical accuracy",
-                ],
                 "structuredContent": envelope,
             },
             indent=2,

@@ -9,7 +9,7 @@ def test_proxy_preserves_tool_schema_and_structured_result() -> None:
         backend = FastMCP("Public contract fixture")
 
         @backend.tool
-        def search_variant_evidence(query: str, assembly: str = "GRCh38") -> dict:
+        def classify_germline_variant(query: str, assembly: str = "GRCh38") -> dict:
             """Return a deterministic public ambiguity fixture."""
             return {
                 "query": query,
@@ -18,10 +18,7 @@ def test_proxy_preserves_tool_schema_and_structured_result() -> None:
                     "status": "ambiguous",
                     "candidates": ["candidate-1", "candidate-2"],
                 },
-                "usage_boundary": {
-                    "patient_context_evaluated": False,
-                    "review_required": True,
-                },
+                "contract_version": "2",
             }
 
         proxy = create_server(backend)
@@ -29,23 +26,20 @@ def test_proxy_preserves_tool_schema_and_structured_result() -> None:
 
         async with Client(proxy, name="Biorouter bridge unit test") as client:
             tools = await client.list_tools()
-            assert [tool.name for tool in tools] == ["search_variant_evidence"]
+            assert [tool.name for tool in tools] == ["classify_germline_variant"]
             schema = tools[0].inputSchema
             assert schema["required"] == ["query"]
             assert set(schema["properties"]) == {"assembly", "query"}
 
             result = await client.call_tool(
-                "search_variant_evidence",
+                "classify_germline_variant",
                 {"assembly": "GRCh38", "query": "rs80357914"},
             )
             structured = result.structured_content
             assert structured is not None
             assert structured["result"]["status"] == "ambiguous"
             assert len(structured["result"]["candidates"]) == 2
-            assert structured["usage_boundary"] == {
-                "patient_context_evaluated": False,
-                "review_required": True,
-            }
+            assert structured["contract_version"] == "2"
 
     asyncio.run(exercise())
 
@@ -56,7 +50,7 @@ def test_proxy_forwards_request_context_without_inventing_identity() -> None:
         received = []
 
         @backend.tool
-        def search_variant_evidence(query: str, ctx: Context) -> dict:
+        def classify_germline_variant(query: str, ctx: Context) -> dict:
             received.append(dict(ctx.request_context.meta or {}))
             return {"query": query, "status": "ambiguous"}
 
@@ -69,13 +63,13 @@ def test_proxy_forwards_request_context_without_inventing_identity() -> None:
         }
         async with Client(proxy) as client:
             await client.call_tool(
-                "search_variant_evidence",
+                "classify_germline_variant",
                 {"query": "rs80357914"},
                 meta={"io.helena/analytics": context},
             )
-            await client.call_tool("search_variant_evidence", {"query": "rs80357914"})
+            await client.call_tool("classify_germline_variant", {"query": "rs80357914"})
             await client.call_tool(
-                "search_variant_evidence",
+                "classify_germline_variant",
                 {"query": "rs80357914"},
                 meta={"io.helena/analytics": {"opt_in": False}},
             )

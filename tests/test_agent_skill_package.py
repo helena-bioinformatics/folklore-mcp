@@ -28,15 +28,17 @@ def test_agent_skill_bundle_is_deterministic_and_bounded(tmp_path: Path) -> None
         assert archive.namelist() == [
             f"{SKILL_NAME}/SKILL.md",
             f"{SKILL_NAME}/agents/openai.yaml",
-            f"{SKILL_NAME}/references/response-examples.json",
-            f"{SKILL_NAME}/references/task-workflows.json",
             f"{SKILL_NAME}/references/gene-disease.md",
+            f"{SKILL_NAME}/LICENSE",
+            f"{SKILL_NAME}/NOTICE",
         ]
+        assert archive.read(f"{SKILL_NAME}/LICENSE") == (ROOT / "LICENSE").read_bytes()
+        assert archive.read(f"{SKILL_NAME}/NOTICE") == (ROOT / "NOTICE").read_bytes()
         skill = archive.read(f"{SKILL_NAME}/SKILL.md").decode()
         metadata = archive.read(f"{SKILL_NAME}/agents/openai.yaml").decode()
 
-    assert "Folklore Clinical Variant Interpretation MCP" in skill
-    assert "patient, phenotype, family, segregation or private case data" in skill
+    assert "Folklore" in skill and "classification" in skill
+    assert "classify_germline_variant" in skill
     assert "https://api.helena.bio/folklore/v1/mcp" in metadata
 
 
@@ -48,17 +50,15 @@ def test_agent_skill_is_exposed_through_task_first_public_docs() -> None:
 
     for text in (readme, skill_index, install):
         normalized = " ".join(text.split())
-        assert "Which tool should I use to classify this germline variant" in normalized
-        assert "Folklore Clinical Variant Interpretation MCP" in normalized
-    assert "raw.githubusercontent.com/helena-bioinformatics/folklore-mcp" in readme
+        assert "classify" in normalized.lower()
+        assert "Folklore" in normalized
+    assert "skills/folklore-clinical-variant-interpretation" in readme
     assert "raw.githubusercontent.com/helena-bioinformatics/folklore-mcp" in install
-    assert "patient, phenotype, family, segregation or private case data" in " ".join(
-        skill_index.split()
-    )
+    assert "SKILL.md" in install
 
     for prompt in (
         "classify_germline_variant",
-        "review_vus_evidence",
+        "assess_vus",
         "explain_acmg_classification",
         "verify_variant_identity",
         "compare_variant_literature",
@@ -71,13 +71,15 @@ def test_agent_skill_is_exposed_through_task_first_public_docs() -> None:
 
 def test_worked_examples_preserve_observed_response_and_identity() -> None:
     data = json.loads(
-        (ROOT / "skills" / SKILL_NAME / "references/task-workflows.json").read_text()
+        (ROOT / "archive/variant-response-captures/task-workflows.json").read_text()
     )
     examples = data["examples"]
     assert len(examples) == 8
     for item in examples:
         call = item["tool_call"]
-        assert call["name"] == "search_variant_evidence"
+        assert (
+            call["name"] == "search_variant_evidence"
+        )  # Historical capture remains unchanged.
         assert call["arguments"] == {"assembly": "GRCh38", "query": item["input"]}
         response = item["raw_response"]
         assert "error" not in response

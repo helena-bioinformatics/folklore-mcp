@@ -3,8 +3,8 @@ mcp_servers:
     enabled: true
     description: >-
       Folklore Clinical Variant Interpretation MCP by Helena Bioinformatics:
-      genomic variant interpretation, ClinGen gene-disease evidence and literature;
-      public read-only queries without patient or private case data
+      automated germline variant classification and ACMG/AMP assessment,
+      gene profiles, ClinGen associations and literature
     command:
       - docker
       - run

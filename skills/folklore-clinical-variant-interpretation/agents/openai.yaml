@@ -1,12 +1,12 @@
 interface:
   display_name: "Folklore Clinical Variant Interpretation"
-  short_description: "Interpret genomic variants and gene-disease evidence"
+  short_description: "Classify germline variants and assess genomic evidence"
   default_prompt: "Use $folklore-clinical-variant-interpretation to classify this germline variant under ACMG/AMP and summarize the source-linked evidence."
 dependencies:
   tools:
     - type: "mcp"
       value: "folklore-clinical-variant-interpretation"
-      description: "Public read-only genomic variant and gene-disease evidence"
+      description: "Germline classification, gene profiles and literature"
       transport: "streamable_http"
       url: "https://api.helena.bio/folklore/v1/mcp"
 policy:

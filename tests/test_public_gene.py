@@ -404,10 +404,7 @@ async def test_ambiguous_and_empty_gene_outcomes_remain_results_and_text_is_full
     assert len(result.structured_content["result"]["candidates"]) == 2
     assert result.structured_content["record_url"] is None
     assert json.loads(result.content[0].text) == result.structured_content
-    assert (
-        result.structured_content["usage_boundary"]["changes_variant_classification"]
-        is False
-    )
+    assert "usage_boundary" not in result.structured_content
 
 
 @pytest.mark.asyncio
@@ -513,7 +510,7 @@ def test_real_dispatcher_gates_public_genes_and_preserves_original_tool_order(
         FOLKLORE_GENE_DISEASE_ENABLED=True,
         FOLKLORE_LITERATURE_ENABLED=literature_enabled,
     )
-    original = ["search_variant_evidence"]
+    original = ["classify_germline_variant"]
     if literature_enabled:
         original += [
             "search_variant_literature",
@@ -632,12 +629,7 @@ def test_real_dispatcher_routes_all_four_operations_with_full_structured_text_pa
             assert (
                 json.loads(result["content"][0]["text"]) == result["structuredContent"]
             )
-            assert (
-                result["structuredContent"]["usage_boundary"][
-                    "patient_context_evaluated"
-                ]
-                is False
-            )
+            assert "usage_boundary" not in result["structuredContent"]
         assert [operation for operation, _ in genes.calls] == [
             "resolve",
             "profile",
@@ -1045,7 +1037,7 @@ def test_real_dispatcher_preserves_gene_outcomes_without_false_internal_failure(
         result = response.json()["result"]
         structured = result["structuredContent"]
         assert json.loads(result["content"][0]["text"]) == structured
-        assert structured["usage_boundary"]["changes_variant_classification"] is False
+        assert "usage_boundary" not in structured
         if outcome == "withdrawn":
             assert result["isError"] is False
             assert structured["result"]["status"] == "withdrawn"

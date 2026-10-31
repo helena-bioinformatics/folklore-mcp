@@ -8,9 +8,9 @@ RESULT_FIELDS = [
     "case_id",
     "selected",
     "selected_tool",
-    "public_input_only",
+    "input_schema_valid",
     "expected_behavior_preserved",
-    "review_boundary_present",
+    "source_provenance_present",
     "notes",
 ]
 

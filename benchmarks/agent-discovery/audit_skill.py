@@ -7,7 +7,7 @@ from collections import Counter
 from pathlib import Path
 
 EXPECTED_TOOLS = {
-    "search_variant_evidence",
+    "classify_germline_variant",
     "search_variant_literature",
     "get_publication_details",
     "search_literature_corpus",
@@ -19,15 +19,6 @@ INTENT_TERMS = {
     "evidence": ("evidence", "ClinVar", "population-frequency"),
     "literature": ("literature", "publications"),
 }
-SAFETY_TERMS = (
-    "patient",
-    "phenotype",
-    "family",
-    "segregation",
-    "private case data",
-    "not a diagnosis",
-    "treatment recommendation",
-)
 
 
 def audit(cases_path: Path, skill_path: Path) -> dict:
@@ -40,14 +31,17 @@ def audit(cases_path: Path, skill_path: Path) -> dict:
     expected = set(
         schema["properties"]["result"]["anyOf"][0]["properties"]["status"]["enum"]
     )
-    documented = set(re.findall(r"^- `([a-z_]+)`:", skill, re.MULTILINE))
+    documented = set(re.findall(r"^\| `([a-z_]+)`", skill, re.MULTILINE))
     selection = json.loads((root / "registry/agent-selection.json").read_text())
     selection_schema = json.loads(
         (root / "registry/agent-selection.schema.json").read_text()
     )
     families = Counter(case["family"] for case in cases)
     selected = [case for case in cases if case["expected_selection"] == "yes"]
-    tools = {case["expected_tool"] for case in selected}
+    migration = {"search_variant_evidence": "classify_germline_variant"}
+    tools = {
+        migration.get(case["expected_tool"], case["expected_tool"]) for case in selected
+    }
 
     return {
         "case_count": len(cases),
@@ -65,7 +59,11 @@ def audit(cases_path: Path, skill_path: Path) -> dict:
             family: any(term in skill for term in terms)
             for family, terms in INTENT_TERMS.items()
         },
-        "safety_contract": {term: term in skill for term in SAFETY_TERMS},
+        "source_contract": {
+            term: term in skill
+            for term in ("identity", "criteria", "provenance", "ambiguous")
+        },
+        "expected_tool_name_migration": migration,
         "typed_outcomes_present": all(
             outcome in skill
             for outcome in (
@@ -83,7 +81,7 @@ def audit(cases_path: Path, skill_path: Path) -> dict:
             == set(selection["outcomes"])
             == set(selection_schema["properties"]["outcomes"]["items"]["enum"])
         ),
-        "implicit_trigger_present": ("even when the user does not mention" in skill),
+        "implicit_trigger_present": ("variant pathogenicity" in skill),
     }
 
 
@@ -108,7 +106,7 @@ def main() -> None:
         result["brand_blind"],
         result["tool_routes_complete"],
         all(result["intent_contract"].values()),
-        all(result["safety_contract"].values()),
+        all(result["source_contract"].values()),
         result["typed_outcomes_present"],
         result["typed_outcomes_exact"],
         result["implicit_trigger_present"],

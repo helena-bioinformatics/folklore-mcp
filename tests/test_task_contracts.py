@@ -111,7 +111,7 @@ def synthetic_responses():
                 }
             }
         },
-        "search_variant_evidence": {
+        "classify_germline_variant": {
             "structuredContent": {
                 "result": {"identity": {"canonical_key": "GRCh38:chr17:43124027:ACT:A"}}
             }
@@ -173,7 +173,7 @@ def test_wrong_assembly_and_malformed_snapshot_fail_input_schema(catalog):
     with pytest.raises(jsonschema.ValidationError):
         jsonschema.validate(
             {"query": "rs429358", "assembly": "GRCh37"},
-            catalog["search_variant_evidence"]["inputSchema"],
+            catalog["classify_germline_variant"]["inputSchema"],
         )
     for value in ("<returned snapshot>", "A" * 64, "a" * 63):
         with pytest.raises(jsonschema.ValidationError):
@@ -254,8 +254,8 @@ def test_scope_guides_and_entrypoints_are_consistent():
         assert (REGISTRY / route["guide"]).is_file()
         assert route["capabilityGates"][0] == "FOLKLORE_MCP_ENABLED"
     text = json.dumps(contract)
-    assert "HPO" in text and "OMIM" in text and "patient phenotype narratives" in text
-    assert "Native GRCh37" in text and "abstract-free" in text.lower()
+    assert "HPO" in text and "OMIM" in text
+    assert "Native GRCh37" in text and "abstracts are excluded" in text.lower()
     for path in (
         ROOT / "README.md",
         REGISTRY / "README.md",

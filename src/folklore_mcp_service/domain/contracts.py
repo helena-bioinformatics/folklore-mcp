@@ -5,6 +5,8 @@ from urllib.parse import urlencode
 
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
 
+from folklore_mcp_service.domain.public_projection import public_result, public_schema
+
 VariantQuery = Annotated[
     str,
     StringConstraints(strip_whitespace=True, min_length=1, max_length=512),
@@ -246,10 +248,9 @@ def record_url(result: dict[str, Any]) -> str | None:
 
 def tool_result(result: dict[str, Any]) -> dict[str, Any]:
     return {
-        "contract_version": "1",
+        "contract_version": "2",
         "record_url": record_url(result),
-        "result": result,
-        "usage_boundary": usage_boundary(),
+        "result": public_result(result),
         "adapter_error": None,
     }
 
@@ -266,13 +267,11 @@ def text_summary(result: dict[str, Any]) -> str:
         display = interpretation["display"]
         annotation = interpretation["annotation"]
         classification = interpretation["classification"]
-        limitations = interpretation["limitations"]
         url = record_url(result)
         return (
             f"Folklore resolved {display['label']} in {annotation['gene_symbol']}. "
             f"Automated ACMG/AMP class: {classification['automated_class']}; "
             f"criteria: {classification['criteria'] or 'none reported'}. "
-            f"{limitations['diagnostic_use']} {limitations['unavailable_context']} "
             f"Record: {url}"
         )
     if status == "ambiguous":
@@ -289,93 +288,95 @@ def mcp_input_schema() -> dict[str, Any]:
 
 
 def mcp_output_schema() -> dict[str, Any]:
-    return {
-        "type": "object",
-        "additionalProperties": False,
-        "required": [
-            "contract_version",
-            "record_url",
-            "result",
-            "usage_boundary",
-            "adapter_error",
-        ],
-        "properties": {
-            "contract_version": {"type": "string", "const": "1"},
-            "record_url": {"type": ["string", "null"], "format": "uri"},
-            "result": {
-                "anyOf": [
-                    {
-                        "type": "object",
-                        "required": ["search_contract_version", "status"],
-                        "properties": {
-                            "search_contract_version": {
-                                "type": "string",
-                                "const": "1.0",
+    return public_schema(
+        {
+            "type": "object",
+            "additionalProperties": False,
+            "required": [
+                "contract_version",
+                "record_url",
+                "result",
+                "usage_boundary",
+                "adapter_error",
+            ],
+            "properties": {
+                "contract_version": {"type": "string", "const": "1"},
+                "record_url": {"type": ["string", "null"], "format": "uri"},
+                "result": {
+                    "anyOf": [
+                        {
+                            "type": "object",
+                            "required": ["search_contract_version", "status"],
+                            "properties": {
+                                "search_contract_version": {
+                                    "type": "string",
+                                    "const": "1.0",
+                                },
+                                "status": {
+                                    "type": "string",
+                                    "enum": list(_TOP_LEVEL_KEYS),
+                                },
                             },
-                            "status": {
-                                "type": "string",
-                                "enum": list(_TOP_LEVEL_KEYS),
-                            },
+                            "additionalProperties": True,
                         },
-                        "additionalProperties": True,
-                    },
-                    {"type": "null"},
-                ]
-            },
-            "usage_boundary": {
-                "type": "object",
-                "additionalProperties": False,
-                "required": [
-                    "result_type",
-                    "review_required",
-                    "patient_context_evaluated",
-                    "intended_use",
-                    "not_for",
-                ],
-                "properties": {
-                    "result_type": {
-                        "type": "string",
-                        "const": "automated_variant_level_classification",
-                    },
-                    "review_required": {"type": "boolean", "const": True},
-                    "patient_context_evaluated": {
-                        "type": "boolean",
-                        "const": False,
-                    },
-                    "intended_use": {
-                        "type": "string",
-                        "const": "professional_variant_review",
-                    },
-                    "not_for": {
-                        "type": "array",
-                        "items": {
+                        {"type": "null"},
+                    ]
+                },
+                "usage_boundary": {
+                    "type": "object",
+                    "additionalProperties": False,
+                    "required": [
+                        "result_type",
+                        "review_required",
+                        "patient_context_evaluated",
+                        "intended_use",
+                        "not_for",
+                    ],
+                    "properties": {
+                        "result_type": {
                             "type": "string",
-                            "enum": [
-                                "patient_diagnosis",
-                                "treatment_decision",
-                                "standalone_clinical_reporting",
-                            ],
+                            "const": "automated_variant_level_classification",
                         },
-                        "minItems": 3,
-                        "maxItems": 3,
-                        "uniqueItems": True,
+                        "review_required": {"type": "boolean", "const": True},
+                        "patient_context_evaluated": {
+                            "type": "boolean",
+                            "const": False,
+                        },
+                        "intended_use": {
+                            "type": "string",
+                            "const": "professional_variant_review",
+                        },
+                        "not_for": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "patient_diagnosis",
+                                    "treatment_decision",
+                                    "standalone_clinical_reporting",
+                                ],
+                            },
+                            "minItems": 3,
+                            "maxItems": 3,
+                            "uniqueItems": True,
+                        },
                     },
                 },
-            },
-            "adapter_error": {
-                "anyOf": [
-                    {
-                        "type": "object",
-                        "additionalProperties": False,
-                        "required": ["code", "message", "retryable"],
-                        "properties": {
-                            "code": {"type": "string", "minLength": 1},
-                            "message": {"type": "string", "minLength": 1},
-                            "retryable": {"type": "boolean"},
+                "adapter_error": {
+                    "anyOf": [
+                        {
+                            "type": "object",
+                            "additionalProperties": False,
+                            "required": ["code", "message", "retryable"],
+                            "properties": {
+                                "code": {"type": "string", "minLength": 1},
+                                "message": {"type": "string", "minLength": 1},
+                                "retryable": {"type": "boolean"},
+                            },
                         },
-                    },
-                    {"type": "null"},
-                ]
+                        {"type": "null"},
+                    ]
+                },
             },
-        },
-    }
+        }
+    )

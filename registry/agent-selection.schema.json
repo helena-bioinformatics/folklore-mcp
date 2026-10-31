@@ -10,15 +10,14 @@
     "selection",
     "inputScope",
     "routing",
-    "outcomes",
-    "clinicalBoundary"
+    "outcomes"
   ],
   "properties": {
     "$schema": {
       "type": "string"
     },
     "schemaVersion": {
-      "const": "1"
+      "const": "2"
     },
     "identity": {
       "type": "object",
@@ -56,8 +55,7 @@
       "required": [
         "implicit",
         "positiveIntents",
-        "exampleRequests",
-        "negativeIntents"
+        "exampleRequests"
       ],
       "properties": {
         "implicit": {
@@ -78,14 +76,6 @@
           "minItems": 8,
           "type": "array",
           "uniqueItems": true
-        },
-        "negativeIntents": {
-          "items": {
-            "type": "string"
-          },
-          "minItems": 4,
-          "type": "array",
-          "uniqueItems": true
         }
       }
     },
@@ -93,14 +83,11 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "assembly",
+        "variantAssembly",
         "accepted",
-        "excluded"
+        "variantExcluded"
       ],
       "properties": {
-        "assembly": {
-          "const": "GRCh38"
-        },
         "accepted": {
           "items": {
             "type": "string"
@@ -109,11 +96,14 @@
           "type": "array",
           "uniqueItems": true
         },
-        "excluded": {
+        "variantAssembly": {
+          "const": "GRCh38"
+        },
+        "variantExcluded": {
           "items": {
             "type": "string"
           },
-          "minItems": 5,
+          "minItems": 1,
           "type": "array",
           "uniqueItems": true
         }
@@ -134,7 +124,7 @@
           },
           "tool": {
             "enum": [
-              "search_variant_evidence",
+              "classify_germline_variant",
               "search_variant_literature",
               "get_publication_details",
               "search_literature_corpus",
@@ -165,35 +155,6 @@
       "maxItems": 6,
       "type": "array",
       "uniqueItems": true
-    },
-    "clinicalBoundary": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "review",
-        "notDiagnosis",
-        "notTreatment",
-        "neverSend"
-      ],
-      "properties": {
-        "review": {
-          "type": "string"
-        },
-        "notDiagnosis": {
-          "const": true
-        },
-        "notTreatment": {
-          "const": true
-        },
-        "neverSend": {
-          "items": {
-            "type": "string"
-          },
-          "minItems": 5,
-          "type": "array",
-          "uniqueItems": true
-        }
-      }
     }
   }
 }

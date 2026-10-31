@@ -130,7 +130,9 @@ def test_dify_actual_http_builder_keeps_science_separate():
     with patch.object(client.urllib.request, "urlopen", send):
         for analytics in [None, SETTINGS, {**SETTINGS, "analytics_opt_in": False}]:
             assert client.call_tool(
-                "search_variant_evidence", {"query": "rs80357914"}, analytics=analytics
+                "classify_germline_variant",
+                {"query": "rs80357914"},
+                analytics=analytics,
             ) == {"status": "ambiguous"}
     assert all(x["params"]["arguments"] == {"query": "rs80357914"} for x in requests)
     assert "io.helena/analytics" not in requests[0]["params"]["_meta"]
@@ -190,7 +192,7 @@ def test_notebook_only_attaches_context_to_folklore():
         for endpoint in [scope["FOLKLORE"], scope["NOODLE"]]:
             scope["call_tool"](
                 endpoint,
-                "search_variant_evidence",
+                "classify_germline_variant",
                 {"query": "rs80357914"},
                 analytics=SETTINGS,
             )
@@ -237,7 +239,7 @@ def test_sdk_runtime_resolver_uses_application_context(monkeypatch):
 @pytest.mark.parametrize(
     "file,cls",
     [
-        ("search_variant_evidence", "SearchVariantEvidenceTool"),
+        ("classify_germline_variant", "ClassifyGermlineVariantTool"),
         ("search_variant_literature", "SearchVariantLiteratureTool"),
         ("search_literature_corpus", "SearchLiteratureCorpusTool"),
         ("get_publication_details", "GetPublicationDetailsTool"),

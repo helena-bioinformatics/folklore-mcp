@@ -29,7 +29,7 @@ def test_all_documented_status_sets_equal_output_schema():
         schema["properties"]["result"]["anyOf"][0]["properties"]["status"]["enum"]
     )
     assert (
-        set(re.findall(r"^- `([a-z_]+)`:", (SKILL / "SKILL.md").read_text(), re.M))
+        set(re.findall(r"^\| `([a-z_]+)`", (SKILL / "SKILL.md").read_text(), re.M))
         == expected
     )
     assert (
@@ -67,7 +67,7 @@ def test_audit_rejects_stale_status_even_when_other_words_match(tmp_path, old, n
     audit = load_module("benchmarks/agent-discovery/audit_skill.py")
     skill = tmp_path / "SKILL.md"
     skill.write_text(
-        (SKILL / "SKILL.md").read_text().replace(f"- `{old}`:", f"- `{new}`:")
+        (SKILL / "SKILL.md").read_text().replace(f"| `{old}`", f"| `{new}`")
     )
     assert not audit.audit(ROOT / "benchmarks/agent-discovery/cases.csv", skill)[
         "typed_outcomes_exact"
@@ -75,7 +75,9 @@ def test_audit_rejects_stale_status_even_when_other_words_match(tmp_path, old, n
 
 
 def test_packaged_failure_examples_validate_against_scientific_contract():
-    examples = json.loads((SKILL / "references/response-examples.json").read_text())
+    examples = json.loads(
+        (ROOT / "archive/variant-response-captures/response-examples.json").read_text()
+    )
     assert {entry["name"] for entry in examples["scientific_failures"]} == {
         "not_found",
         "invalid_request",

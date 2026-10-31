@@ -1,8 +1,8 @@
 # Folklore for KNIME Analytics Platform
 
 This integration turns a table of supported public GRCh38 germline variants
-into structured Folklore evidence results. It delegates all resolution,
-evidence aggregation and ACMG/AMP logic to the canonical public service.
+into automated ACMG/AMP classifications, reported criteria and source evidence.
+The node calls the hosted classifier for each row.
 
 ## Build the workflow
 
@@ -14,15 +14,11 @@ evidence aggregation and ACMG/AMP logic to the canonical public service.
 4. Paste `knime_node.py` into the node and execute it.
 5. Expand or parse the `folklore_result_json` output column downstream.
 
-No account or API key is required. Do not submit patient, phenotype, family or
-private case data. Results require qualified professional review and are not a
-diagnosis or treatment recommendation.
+Access is anonymous. Input is one public GRCh38 variant expression and assembly.
 
 The script uses MCP protocol `2026-07-28` and
 `https://api.helena.bio/folklore/v1/mcp`.
 
 ## Optional journey context
 
-See [caller-owned journey context](../JOURNEY_CONTEXT.md) for support,
-explicit opt-in, application-owned pseudonyms and conversation/run boundaries.
-Connection-only configuration does not supply user identity automatically.
+Optional analytics configuration: [journey context](../JOURNEY_CONTEXT.md).

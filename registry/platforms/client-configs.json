@@ -6,7 +6,7 @@
   "transport": "streamable-http",
   "authentication": "none",
   "tools": [
-    "search_variant_evidence",
+    "classify_germline_variant",
     "search_variant_literature",
     "get_publication_details",
     "search_literature_corpus",

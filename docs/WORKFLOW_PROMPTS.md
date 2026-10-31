@@ -3,8 +3,8 @@
 Folklore Clinical Variant Interpretation MCP publishes five task-first prompts:
 
 - `classify_germline_variant`: resolve one public variant, retrieve current
-  evidence and report automated ACMG/AMP decision support.
-- `review_vus_evidence`: review uncertainty and available evidence without
+  evidence and report automated ACMG/AMP classification.
+- `assess_vus`: review uncertainty and available evidence without
   treating a VUS as pathogenic or benign.
 - `explain_acmg_classification`: explain returned criteria and evidence without
   reconstructing unpublished logic.
@@ -14,8 +14,7 @@ Folklore Clinical Variant Interpretation MCP publishes five task-first prompts:
   pathogenicity.
 
 Each prompt accepts one required `variant` argument containing a public HGVS,
-SPDI, rsID or genomic-coordinate expression. Do not include patient, phenotype,
-family, segregation or private case data.
+SPDI, rsID or genomic-coordinate expression.
 
 ## List the prompts
 
@@ -51,10 +50,8 @@ curl --fail-with-body --silent --show-error \
 
 - Continue only when variant identity is `resolved`.
 - For `ambiguous`, show the candidates and ask the user to choose.
-- For `not_found`, `invalid`, `unsupported` or temporary unavailability, report
+- For `not_found`, `invalid_request`, `unsupported` or temporary unavailability, report
   the state directly and do not substitute a nearby variant or model-memory
   classification.
 - Preserve the returned identity, applied criteria, source-linked evidence,
   provenance, data versions and limitations.
-- End with the qualified-professional-review boundary. The output is not a
-  diagnosis or treatment recommendation.

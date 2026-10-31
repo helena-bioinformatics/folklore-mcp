@@ -7,7 +7,7 @@ from dify_plugin.entities.tool import ToolInvokeMessage
 from tools.mcp_client import call_tool
 
 
-class SearchVariantEvidenceTool(Tool):
+class ClassifyGermlineVariantTool(Tool):
     def _invoke(
         self, tool_parameters: dict[str, Any]
     ) -> Generator[ToolInvokeMessage, None, None]:
@@ -17,7 +17,7 @@ class SearchVariantEvidenceTool(Tool):
         }
         yield self.create_text_message(
             json.dumps(
-                call_tool("search_variant_evidence", args, analytics=tool_parameters),
+                call_tool("classify_germline_variant", args, analytics=tool_parameters),
                 ensure_ascii=False,
             )
         )

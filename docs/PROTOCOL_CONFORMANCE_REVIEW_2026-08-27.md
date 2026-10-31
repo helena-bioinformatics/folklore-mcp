@@ -2,8 +2,7 @@
 
 This note records Helena Bioinformatics' reproduction and classification of
 [public issue 1](https://github.com/helena-bioinformatics/folklore-mcp/issues/1).
-It is a protocol review of Folklore Clinical Variant Interpretation MCP, not a
-scientific-performance, clinical-accuracy, diagnosis or treatment claim.
+The review records protocol behavior and reproducible fixtures.
 
 ## Reproduction boundary
 

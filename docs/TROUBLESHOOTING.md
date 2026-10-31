@@ -17,20 +17,13 @@ copyable requests.
 Show the returned candidates and ask the user to choose. Do not select by rank,
 gene expectation or model memory.
 
-## A result is `invalid`, `unsupported` or `not_found`
+## A result is `invalid_request`, `unsupported` or `not_found`
 
 Preserve the typed outcome. Request a corrected public expression for
-`invalid`, explain the published scope for `unsupported`, and do not substitute
+`invalid_request`, explain the published scope for `unsupported`, and do not substitute
 a nearby variant for `not_found`.
 
 ## Evidence is unavailable
 
 Unavailable is not negative evidence. Report the limitation and provenance
 returned by the tool. Do not invent a classification from model memory.
-
-## Patient context is present
-
-Exclude patient, phenotype, family, segregation and private case details from
-the call. Send only the public variant expression and assembly. Results require
-qualified professional review and are not a diagnosis or treatment
-recommendation.
