@@ -7,9 +7,9 @@ type: software
 authors:
   - name: Helena Bioinformatics
     website: https://helena.bio
-version: 1.6.0
-date-released: 2026-10-30
-doi: 10.5281/zenodo.23817704
+version: 1.7.0
+date-released: 2026-10-31
+doi: 10.5281/zenodo.23849196
 url: https://folklore.helena.bio
 repository-code: https://github.com/helena-bioinformatics/folklore-mcp
 license: Apache-2.0
@@ -21,14 +21,12 @@ keywords:
   - Model Context Protocol
   - germline variants
 abstract: >-
-  The official public, read-only Model Context Protocol adapter for Folklore.
-  It gives AI clients structured access to public germline variant evidence,
-  automated ACMG/AMP decision support, provenance, variant literature, and
-  semantic search across a public scientific Literature Corpus.
-  Public gene tools resolve identities and return source-qualified immutable
-  gene profiles and separate live literature captures.
-  The adapter accepts no patient, phenotype, family, or case context. Folklore's
-  proprietary interpretation backend and evidence database are not included.
+  The official public Model Context Protocol adapter for Folklore by Helena
+  Bioinformatics. It provides automated ACMG/AMP germline variant classification
+  and assessment, criterion-level evidence, source provenance, gene profiles,
+  ClinGen gene-disease associations and literature. Public API clients support
+  variant identity resolution, immutable gene profile snapshots and separate
+  live literature captures.
 references:
   - type: generic
     title: Public germline variant interpretation contract benchmark

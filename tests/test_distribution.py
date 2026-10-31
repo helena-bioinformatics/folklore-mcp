@@ -209,13 +209,41 @@ def test_release_candidate_versions_and_dois_are_consistent() -> None:
     assert (
         package["project"]["version"] == MCP_ADAPTER_VERSION == __version__ == "1.7.0"
     )
-    # Existing DOI/citation describes the actually published 1.6 archive.
     zenodo = json.loads((REPOSITORY / ".zenodo.json").read_text())
     citation = yaml.safe_load((REPOSITORY / "CITATION.cff").read_text())
-    assert zenodo["version"] == MCP_ADAPTER_VERSION == "1.7.0"
-    assert citation["version"] == "1.6.0"  # Last actually archived citation.
-    assert citation["doi"] == "10.5281/zenodo.23817704"
-    assert "1.6.0" in json.dumps(published)
+    assert (
+        zenodo["version"]
+        == citation["version"]
+        == published["version"]
+        == MCP_ADAPTER_VERSION
+    )
+    assert published["sourceCommit"] == "5eb6d77bce88a140418872ec19739459ec50cf8f"
+    assert published["tagObject"] == "64dbbc7382f83f900647af46f6a82e4ef088009c"
+    assert published["officialWorkflowRun"] == 41252550340
+    assert published["notes"] == "release-publication/1.7.0.md"
+    asset = REPOSITORY / published["asset"]
+    assert hashlib.sha256(asset.read_bytes()).hexdigest() == published["assetSha256"]
+    assert (
+        published["assetSha256"]
+        == "22e1d9ce2cb323344a99f68f26af8e65bcf136813961b6d4d5a8f3233fa0f4b9"
+    )
+    assert citation["doi"] == "10.5281/zenodo.23849196"
+    assert (
+        str(citation["date-released"]) == "2026-10-31"
+    )  # Actual GitHub release UTC date.
+    old_citation_bytes = (
+        REPOSITORY / "archive/citations/CITATION-1.6.0.cff"
+    ).read_bytes()
+    assert (
+        hashlib.sha256(old_citation_bytes).hexdigest()
+        == "18942410e8d6349367e9b4fe18a3ca66d72cd81ed23251538d7ee0dc4daa35e0"
+    )
+    archived = yaml.safe_load(old_citation_bytes)
+    previous = json.loads(
+        (REPOSITORY / "archive/publication-records/current-1.6.0.json").read_text()
+    )
+    assert archived["version"] == previous["version"] == "1.6.0"
+    assert archived["doi"] == "10.5281/zenodo.23817704"
     assert "1.7.0" in (REPOSITORY / "README.md").read_text()
 
 
