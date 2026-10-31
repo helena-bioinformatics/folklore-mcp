@@ -1,0 +1,356 @@
+{
+  "$schema": "./task-contracts.schema.json",
+  "schemaVersion": "1",
+  "purpose": "Publisher-authored declarative input recipes for choosing an appropriate scientific tool. Subordinate to current MCP schemas and source response contracts; not an executor.",
+  "evidenceStatus": "Source-derived local adapter 1.6.0 input contracts, not newly observed tool results, a live catalog capture or measured agent selection.",
+  "pointerRoot": "MCP CallToolResult; excludes the outer JSON-RPC envelope",
+  "beforeBinding": [
+    "Check HTTP/transport and JSON-RPC errors before reading the MCP result.",
+    "Check MCP isError and the route-specific domain status before taking values; check non-null adapter_error where supplied by that route contract.",
+    "Verify completeness, selected identity and snapshot consistency. Missing pointers or identity/snapshot mismatches stop the recipe; do not substitute values.",
+    "Bindings in one responseGroup come from the same successful source-tool response and explicit selected member. Never mix responses or invent snapshot/cursor values.",
+    "Response-bound recipes are not executable arguments. Obtain real values before forming a call; no candidate is automatically selected."
+  ],
+  "globalExclusions": [
+    "Patient histories, patient phenotype narratives, family/segregation or private case data.",
+    "Sequencing-file/VCF uploads, variant calling, whole-genome or batch processing.",
+    "Patient diagnosis, treatment recommendations or autonomous clinical reporting."
+  ],
+  "routes": [
+    {
+      "id": "variant-evidence",
+      "task": "Interpret one already identified public GRCh38 germline variant",
+      "tool": "search_variant_evidence",
+      "capabilityGates": [
+        "FOLKLORE_MCP_ENABLED"
+      ],
+      "inputRecipe": {
+        "kind": "literal",
+        "arguments": {
+          "assembly": "GRCh38",
+          "query": "NM_007294.4:c.68_69del"
+        }
+      },
+      "inspectOutput": [
+        "Check result.status before result.identity or result.interpretation; ambiguity requires an exact allele choice.",
+        "Preserve canonical identity, transcript versions, automated classification/criteria, separate ClinVar assertions, evidence availability and provenance."
+      ],
+      "sourceScope": "Automated variant-level evidence for one supported nuclear SNV or simple indel smaller than 50 bp. Returned reference releases may differ by source; not a complete or latest ClinVar/gnomAD claim.",
+      "stopOrUseAlternative": [
+        "Stop on transport/RPC/MCP errors or a non-null adapter_error where supplied by the route contract; preserve the typed outcome without invented evidence.",
+        "Do not substitute transcript versions, choose ambiguous alleles or turn not_found into benign evidence.",
+        "Use an appropriate upstream workflow for GRCh37, somatic interpretation, structural/mitochondrial variants, sequencing files or batch analysis. Verify the current primary source when its latest assertion is required."
+      ],
+      "guide": "../docs/TYPED_OUTCOMES.md"
+    },
+    {
+      "id": "variant-literature",
+      "task": "Find publications linked to a resolved public variant",
+      "tool": "search_variant_literature",
+      "capabilityGates": [
+        "FOLKLORE_MCP_ENABLED",
+        "FOLKLORE_LITERATURE_ENABLED"
+      ],
+      "inputRecipe": {
+        "kind": "response_bound",
+        "fixedArguments": {
+          "assembly": "GRCh38",
+          "limit": 10
+        },
+        "bindings": [
+          {
+            "argument": "query",
+            "fromTool": "search_variant_evidence",
+            "responseField": "/structuredContent/result/identity/canonical_key",
+            "responseGroup": "resolved_variant",
+            "selectionRule": "Use only after result.status=resolved and verified identity; do not bind from an ambiguous or unavailable result."
+          }
+        ]
+      },
+      "inspectOutput": [
+        "Check structuredContent.status and variant_result before reading literature.",
+        "Preserve match_type, exact_variant versus variant_alias versus gene_association, publication links, corpus provenance and limitations."
+      ],
+      "sourceScope": "PubMed-derived genetics corpus linked to a supported variant; a gene-associated paper is not exact-variant evidence. Literature does not change automated classification.",
+      "stopOrUseAlternative": [
+        "Stop on transport/RPC/MCP errors or a non-null adapter_error where supplied by the route contract; preserve the typed outcome without invented evidence.",
+        "A missing or unavailable literature result is not proof that no publication exists. Use a primary publication database for broader or freshest coverage.",
+        "Do not infer pathogenicity from a match or silently substitute a different allele."
+      ],
+      "guide": "../docs/WORKFLOW_PROMPTS.md"
+    },
+    {
+      "id": "publication-details",
+      "task": "Review the bibliographic record for a selected returned publication",
+      "tool": "get_publication_details",
+      "capabilityGates": [
+        "FOLKLORE_MCP_ENABLED",
+        "FOLKLORE_LITERATURE_ENABLED"
+      ],
+      "inputRecipe": {
+        "kind": "response_bound",
+        "fixedArguments": {},
+        "bindings": [
+          {
+            "argument": "pmid",
+            "fromTool": "search_variant_literature",
+            "responseField": "/structuredContent/literature/publications",
+            "responseGroup": "selected_publication",
+            "selectionRule": "Select a returned publication after checking variant/literature outcomes; use its digit-only PMID.",
+            "selectedMemberPointer": "/pmid"
+          }
+        ]
+      },
+      "inspectOutput": [
+        "Preserve publication identity, source URL, date, retraction flag and available abstract/full_text_url fields.",
+        "An absent abstract or full_text_url remains unavailable; this call does not fetch publisher full text."
+      ],
+      "sourceScope": "One record in the current PubMed-derived genetics corpus, not a guarantee of every PMID or current publisher content. An independently verified public PMID is also accepted by the tool schema.",
+      "stopOrUseAlternative": [
+        "Stop on transport/RPC/MCP errors or a non-null adapter_error where supplied by the route contract; preserve the typed outcome without invented evidence.",
+        "On publication_not_found, report the corpus miss and consult the primary record if needed; never fabricate a record or abstract."
+      ],
+      "guide": "../docs/INTEGRATION_BRIEF.md"
+    },
+    {
+      "id": "corpus-search",
+      "task": "Find biomedical papers using a public question or publication identifier",
+      "tool": "search_literature_corpus",
+      "capabilityGates": [
+        "FOLKLORE_MCP_ENABLED",
+        "FOLKLORE_LITERATURE_ENABLED"
+      ],
+      "inputRecipe": {
+        "kind": "literal",
+        "arguments": {
+          "query": "BRCA1 DNA repair",
+          "limit": 20,
+          "sort": "relevance"
+        }
+      },
+      "inspectOutput": [
+        "Preserve match types, publication/source identifiers, ranking and semantic degradation flags.",
+        "Check has_more/next_cursor; continue only the same query and sort. A single page is not exhaustive."
+      ],
+      "sourceScope": "PubMed-derived genetics corpus; public PMID, DOI, PMCID, gene, variant, phenotype, HPO and OMIM concepts may be queried. Public concepts are distinct from patient phenotype narratives.",
+      "stopOrUseAlternative": [
+        "Stop on transport/RPC/MCP errors or a non-null adapter_error where supplied by the route contract; preserve the typed outcome without invented evidence.",
+        "Use the primary publication database when broader coverage or the latest publication state is essential.",
+        "Semantic relevance or a literature association does not establish causality, curated validity or pathogenicity."
+      ],
+      "guide": "../docs/INTEGRATION_BRIEF.md"
+    },
+    {
+      "id": "gene-disease",
+      "task": "Retrieve curated disease assertions for an exact public gene",
+      "tool": "get_gene_disease_associations",
+      "capabilityGates": [
+        "FOLKLORE_MCP_ENABLED",
+        "FOLKLORE_GENE_DISEASE_ENABLED"
+      ],
+      "inputRecipe": {
+        "kind": "literal",
+        "arguments": {
+          "gene": "FBN1",
+          "limit": 20,
+          "offset": 0
+        }
+      },
+      "inspectOutput": [
+        "Check status=ok/not_found; preserve each association's disease identity, classification, inheritance, report URL and date.",
+        "Preserve source snapshot/version and pagination.total/nextOffset; do not merge distinct assertions."
+      ],
+      "sourceScope": "ClinGen Gene-Disease Validity snapshot only for this tool; no comprehensive disease catalogue or GenCC/Orphanet/Gene2Phenotype coverage claim.",
+      "stopOrUseAlternative": [
+        "Stop on transport/RPC/MCP errors or a non-null adapter_error where supplied by the route contract; preserve the typed outcome without invented evidence.",
+        "Use an exact approved symbol or HGNC ID, not an unresolved alias. Resolve aliases separately without treating the two tools as one evidence source.",
+        "A snapshot miss does not establish no association; consult ClinGen or another appropriate primary source for newer or broader assertions."
+      ],
+      "guide": "../docs/GENE_DISEASE_EVIDENCE.md"
+    },
+    {
+      "id": "disease-genes",
+      "task": "Find curated genes for a public disease identifier or name",
+      "tool": "search_disease_genes",
+      "capabilityGates": [
+        "FOLKLORE_MCP_ENABLED",
+        "FOLKLORE_GENE_DISEASE_ENABLED"
+      ],
+      "inputRecipe": {
+        "kind": "literal",
+        "arguments": {
+          "disease": "Marfan syndrome",
+          "limit": 20,
+          "offset": 0
+        }
+      },
+      "inspectOutput": [
+        "Keep distinct disease identities from name_contains matches; use an exact returned MONDO identifier when appropriate.",
+        "Retain separate source assertions, assessments, inheritance, source dates and pagination."
+      ],
+      "sourceScope": "ClinGen Gene-Disease Validity snapshot queried by exact MONDO or disease-name substring, not a patient diagnosis or a comprehensive disease-gene catalogue.",
+      "stopOrUseAlternative": [
+        "Stop on transport/RPC/MCP errors or a non-null adapter_error where supplied by the route contract; preserve the typed outcome without invented evidence.",
+        "Do not silently select one disease from a substring match. A no-match snapshot query is not proof of biological absence.",
+        "Use current primary disease resources when broader source coverage is required."
+      ],
+      "guide": "../docs/GENE_DISEASE_EVIDENCE.md"
+    },
+    {
+      "id": "gene-identity",
+      "task": "Resolve a public human gene symbol, alias or stable identifier",
+      "tool": "resolve_gene",
+      "capabilityGates": [
+        "FOLKLORE_MCP_ENABLED",
+        "FOLKLORE_PUBLIC_GENE_ENABLED"
+      ],
+      "inputRecipe": {
+        "kind": "literal",
+        "arguments": {
+          "query": "RNF53"
+        }
+      },
+      "inspectOutput": [
+        "Inspect exact/alias/ambiguous/not_found/withdrawn, candidate_total, complete and every candidate's identity/status.",
+        "Retain identity_snapshot_id with the explicitly selected HGNC identity for subsequent reads."
+      ],
+      "sourceScope": "Public immutable human gene identity snapshot. Alias and previous-symbol matching are identity resolution, not gene-disease validity.",
+      "stopOrUseAlternative": [
+        "Stop on transport/RPC/MCP errors or a non-null adapter_error where supplied by the route contract; preserve the typed outcome without invented evidence.",
+        "For ambiguity require an explicit candidate choice; do not select a familiar gene or the first candidate.",
+        "For withdrawn/missing identities preserve the status and verify the primary nomenclature source; never silently adopt a replacement."
+      ],
+      "guide": "../docs/PUBLIC_GENE_PROFILES.md"
+    },
+    {
+      "id": "gene-profile",
+      "task": "Read a source-qualified profile for the selected public gene",
+      "tool": "get_gene_profile",
+      "capabilityGates": [
+        "FOLKLORE_MCP_ENABLED",
+        "FOLKLORE_PUBLIC_GENE_ENABLED"
+      ],
+      "inputRecipe": {
+        "kind": "response_bound",
+        "fixedArguments": {},
+        "bindings": [
+          {
+            "argument": "gene_id",
+            "fromTool": "resolve_gene",
+            "responseField": "/structuredContent/result/candidates",
+            "responseGroup": "resolved_gene_identity",
+            "selectionRule": "Use an exact/alias single approved candidate only after verifying identity, or an explicitly chosen candidate when ambiguous; never choose the first by default.",
+            "selectedMemberPointer": "/identity/gene_id"
+          },
+          {
+            "argument": "snapshot_id",
+            "fromTool": "resolve_gene",
+            "responseField": "/structuredContent/result/identity_snapshot_id",
+            "responseGroup": "resolved_gene_identity",
+            "selectionRule": "Use the snapshot from the same successful resolution response as the selected gene; missing or unavailable snapshots require fresh resolution."
+          }
+        ]
+      },
+      "inspectOutput": [
+        "Verify echoed gene_id/snapshot_id against the selected identity; preserve sources and each section's status, coverage, freshness and limitations.",
+        "Preserve native assemblies, count units, nulls and unavailable/not_integrated versus no_record states."
+      ],
+      "sourceScope": "Snapshot-bound projections from explicitly labelled providers. Native GRCh37 transcript evidence does not expand GRCh38 variant interpretation input scope.",
+      "stopOrUseAlternative": [
+        "Stop on transport/RPC/MCP errors or a non-null adapter_error where supplied by the route contract; preserve the typed outcome without invented evidence.",
+        "On snapshot_unavailable restart resolution and reload the profile; do not combine snapshots or silently substitute the available one.",
+        "Use each provider's primary record for a latest-source requirement. Gene evidence is not variant classification or diagnosis."
+      ],
+      "guide": "../docs/PUBLIC_GENE_PROFILES.md"
+    },
+    {
+      "id": "gene-section",
+      "task": "Read or continue one source-qualified gene evidence section",
+      "tool": "get_gene_section",
+      "capabilityGates": [
+        "FOLKLORE_MCP_ENABLED",
+        "FOLKLORE_PUBLIC_GENE_ENABLED"
+      ],
+      "inputRecipe": {
+        "kind": "response_bound",
+        "fixedArguments": {
+          "section": "constraint",
+          "limit": 20
+        },
+        "bindings": [
+          {
+            "argument": "gene_id",
+            "fromTool": "resolve_gene",
+            "responseField": "/structuredContent/result/candidates",
+            "responseGroup": "resolved_gene_identity",
+            "selectionRule": "Use an exact/alias single approved candidate only after verifying identity, or an explicitly chosen candidate when ambiguous; never choose the first by default.",
+            "selectedMemberPointer": "/identity/gene_id"
+          },
+          {
+            "argument": "snapshot_id",
+            "fromTool": "resolve_gene",
+            "responseField": "/structuredContent/result/identity_snapshot_id",
+            "responseGroup": "resolved_gene_identity",
+            "selectionRule": "Use the snapshot from the same successful resolution response as the selected gene; missing or unavailable snapshots require fresh resolution."
+          }
+        ]
+      },
+      "inspectOutput": [
+        "Verify gene_id/snapshot_id/section; preserve source release, coverage, pagination and count units.",
+        "For continuation pass only the returned opaque cursor for the same gene/snapshot/section; omit it for the first page."
+      ],
+      "sourceScope": "One bounded section of the same immutable profile. Constraint, dosage, expression, GWAS and validity are distinct evidence types; overlapping counts must not be summed as independent support.",
+      "stopOrUseAlternative": [
+        "Stop on transport/RPC/MCP errors or a non-null adapter_error where supplied by the route contract; preserve the typed outcome without invented evidence.",
+        "Stop on invalid cursor or identity/snapshot mismatch. Re-resolve after snapshot_unavailable; never invent a cursor.",
+        "Unavailable or unintegrated evidence is not a negative finding; consult the named primary source if required."
+      ],
+      "guide": "../docs/PUBLIC_GENE_PROFILES.md"
+    },
+    {
+      "id": "gene-literature",
+      "task": "Find a separate live literature capture for the selected gene",
+      "tool": "search_gene_literature",
+      "capabilityGates": [
+        "FOLKLORE_MCP_ENABLED",
+        "FOLKLORE_PUBLIC_GENE_ENABLED",
+        "FOLKLORE_LITERATURE_ENABLED"
+      ],
+      "inputRecipe": {
+        "kind": "response_bound",
+        "fixedArguments": {
+          "limit": 20,
+          "sort": "relevance"
+        },
+        "bindings": [
+          {
+            "argument": "gene_id",
+            "fromTool": "resolve_gene",
+            "responseField": "/structuredContent/result/candidates",
+            "responseGroup": "resolved_gene_identity",
+            "selectionRule": "Use an exact/alias single approved candidate only after verifying identity, or an explicitly chosen candidate when ambiguous; never choose the first by default.",
+            "selectedMemberPointer": "/identity/gene_id"
+          },
+          {
+            "argument": "snapshot_id",
+            "fromTool": "resolve_gene",
+            "responseField": "/structuredContent/result/identity_snapshot_id",
+            "responseGroup": "resolved_gene_identity",
+            "selectionRule": "Use the snapshot from the same successful resolution response as the selected gene; missing or unavailable snapshots require fresh resolution."
+          }
+        ]
+      },
+      "inspectOutput": [
+        "Verify selected gene/snapshot; preserve captured_at/capture_sha256, match labels, degradation and pagination.",
+        "Continue only the returned cursor for the same gene/snapshot/sort capture. Keep this live capture distinct from the profile literature section."
+      ],
+      "sourceScope": "Abstract-free, query-matched live discovery through the literature service, not guaranteed exact-gene filtering, full text or curated gene-disease validity.",
+      "stopOrUseAlternative": [
+        "Stop on transport/RPC/MCP errors or a non-null adapter_error where supplied by the route contract; preserve the typed outcome without invented evidence.",
+        "A query match does not establish a gene-disease assertion or variant pathogenicity; inspect linked primary publications.",
+        "On missing snapshot, invalid cursor or unavailable service retain the typed failure; no model-generated replacement evidence."
+      ],
+      "guide": "../docs/PUBLIC_GENE_PROFILES.md"
+    }
+  ]
+}

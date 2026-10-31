@@ -60,9 +60,18 @@ unless `--strict-aggregators` is selected. The reconciler performs no writes.
 defines positive and negative intents, brand-blind example requests, accepted
 public input forms, the scientific tool routes, typed outcomes and the
 clinical boundary. `agent-selection.schema.json` provides its strict JSON
-Schema. These files help agent catalogs index the user job rather than only the
-server name; they do not replace the MCP tool schemas or claim universal model
-selection.
+Schema. These files describe the user job rather than only the server name; they do
+not prove indexing or universal model selection. Their unchanged v1 global
+GRCh38 assembly and six outcomes describe the variant workflow, not every tool.
+
+The additive [task-contracts.json](task-contracts.json) companion provides ten
+scientific task routes, capability gates, literal inputs or explicitly
+nonexecutable response-bound recipes, output checks and source/coverage limits.
+Its [strict schema](task-contracts.schema.json) is separate from the legacy
+selection schema. These are source-derived input recipes, not newly observed
+results. The [integration brief](../docs/INTEGRATION_BRIEF.md) explains how to
+choose a suitable route or a primary source instead. Current MCP tool schemas
+and scientific source contracts remain authoritative.
 
 MCP protocol `2026-07-28` is stateless. It uses `server/discover` as the optional
 preflight. The hosted SDK also accepts legacy `initialize` with protocol

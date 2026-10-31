@@ -259,9 +259,13 @@ See [SECURITY.md](SECURITY.md) for reporting instructions and supported versions
 - Technical guide: <https://folklore.helena.bio/integrations/mcp>
 
 Machine-readable metadata is under [`registry/`](registry/).
-The strict [agent-selection contract](registry/agent-selection.json) makes
-task triggers, exclusions, tool routing, typed outcomes and clinical limits
-available to agent catalogs without requiring brand-name queries.
+The strict [agent-selection contract](registry/agent-selection.json) supplies
+task triggers and legacy variant-oriented global assembly/outcome fields.
+Use the additive [per-tool task contracts](registry/task-contracts.json) for
+input recipes, capability gates, source limits and response-bound prerequisites
+across variant, ClinGen, gene-profile and literature tasks. These publisher
+instructions are subordinate to current MCP schemas; they do not demonstrate
+independent selection, indexing or scientific accuracy.
 
 ## Citation and archival releases
 

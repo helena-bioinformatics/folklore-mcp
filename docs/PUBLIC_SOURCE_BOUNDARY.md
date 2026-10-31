@@ -8,7 +8,9 @@ clinical interpretation backend.
 
 - MCP discovery and JSON-RPC request handling
 - Input validation and bounded public API clients
-- The four documented MCP tools and one MCP resource
+- The fully enabled 1.6.0 surface: ten scientific tools, a separate optional
+  support discovery helper, five workflow prompts and one optional MCP resource
+- Capability gates for self-hosted deployments; discovery reports enabled tools
 - Health, readiness, and metrics endpoints
 - Tests, container packaging, CI, and public documentation
 
@@ -25,8 +27,12 @@ use discovery metadata rather than relying on undocumented behavior.
 
 ## Data handling
 
-The adapter accepts variant-level queries. It must not be used to submit names,
-medical-record identifiers, full patient records, or other direct identifiers.
+The adapter accepts bounded public variant, gene, disease and literature
+queries through the documented tool schemas. Public phenotype, HPO and OMIM
+terms remain reference-literature queries where the published schema permits.
+It accepts no patient-specific histories or phenotype narratives, family or
+segregation context, private case data, sequencing uploads, names,
+medical-record identifiers, full patient records or other direct identifiers.
 Self-hosted instances send tool inputs to the public Folklore API described in
 the README; operators remain responsible for their own logs and retention.
 

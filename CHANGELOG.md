@@ -24,6 +24,13 @@ All notable changes to the public Folklore MCP adapter are documented here.
 
 ## Unreleased
 
+- Add source-qualified per-tool task recipes with explicit prerequisites, response-bound inputs and coverage/alternative-source limits. Preserve the legacy selection contract and dated variant examples; these are declarative guidance, not measured agent-selection results.
+- Refresh the integration brief for the fully enabled 1.6.0 surface and link the per-task companion without changing scientific tools or runtime behavior.
+
+- Add complete modern HTTP request examples and a bounded, one-call public gene identity smoke. Preserve dated legacy observations and state JSON-response and SDK qualification limits explicitly.
+- Add request-budget guidance and a shared-instance admission helper for the discovery smoke, with latched 429 cooldown and no automatic replay.
+- Reconcile current fully enabled tool counts and public identifier inputs without changing scientific schemas, runtime behavior or security limits.
+
 - Add optional, explicitly enabled caller pseudonyms, conversation/run IDs and
   closed intent categories to the Dify, Galaxy, KNIME, n8n, notebook and OpenAI
   Agents Python source integrations. Defaults remain anonymous; malformed or

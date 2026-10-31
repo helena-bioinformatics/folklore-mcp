@@ -275,7 +275,20 @@ def test_public_dx_and_adoption_docs_preserve_safety_boundaries() -> None:
     smoke = REPOSITORY / "ops" / "public_smoke.py"
 
     assert "server/discover" in compatibility
-    assert "patient, phenotype, family, segregation" in compatibility
+    normalized_compatibility = " ".join(compatibility.split())
+    assert (
+        "Do not forward patient-specific histories or phenotype narratives, family "
+        "or segregation context, or private case data."
+    ) in normalized_compatibility
+    assert (
+        "Public phenotype/HPO/OMIM reference-literature queries remain allowed "
+        "by their published schema."
+    ) in normalized_compatibility
+    assert "Never auto-select an ambiguous candidate." in normalized_compatibility
+    assert (
+        "Results require qualified professional review and are not a diagnosis "
+        "or treatment recommendation."
+    ) in normalized_compatibility
     assert "Do not select" in troubleshooting
     for status in (
         "resolved",

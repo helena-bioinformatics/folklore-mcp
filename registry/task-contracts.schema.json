@@ -1,0 +1,376 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Declarative scientific task recipes, not executable calls",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "purpose",
+    "evidenceStatus",
+    "pointerRoot",
+    "beforeBinding",
+    "globalExclusions",
+    "routes"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "./task-contracts.schema.json"
+    },
+    "schemaVersion": {
+      "const": "1"
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 80
+    },
+    "evidenceStatus": {
+      "type": "string",
+      "minLength": 80
+    },
+    "pointerRoot": {
+      "const": "MCP CallToolResult; excludes the outer JSON-RPC envelope"
+    },
+    "beforeBinding": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 3
+      }
+    },
+    "globalExclusions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 3
+      }
+    },
+    "routes": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "task",
+          "tool",
+          "capabilityGates",
+          "inputRecipe",
+          "inspectOutput",
+          "sourceScope",
+          "stopOrUseAlternative",
+          "guide"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z-]+$"
+          },
+          "task": {
+            "type": "string",
+            "minLength": 15
+          },
+          "tool": {
+            "enum": [
+              "search_variant_evidence",
+              "search_variant_literature",
+              "get_publication_details",
+              "search_literature_corpus",
+              "get_gene_disease_associations",
+              "search_disease_genes",
+              "resolve_gene",
+              "get_gene_profile",
+              "get_gene_section",
+              "search_gene_literature"
+            ]
+          },
+          "capabilityGates": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "FOLKLORE_MCP_ENABLED",
+                "FOLKLORE_LITERATURE_ENABLED",
+                "FOLKLORE_GENE_DISEASE_ENABLED",
+                "FOLKLORE_PUBLIC_GENE_ENABLED"
+              ]
+            }
+          },
+          "inputRecipe": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "arguments"
+                ],
+                "properties": {
+                  "kind": {
+                    "const": "literal"
+                  },
+                  "arguments": {
+                    "type": "object"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "fixedArguments",
+                  "bindings"
+                ],
+                "properties": {
+                  "kind": {
+                    "const": "response_bound"
+                  },
+                  "fixedArguments": {
+                    "type": "object"
+                  },
+                  "bindings": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "argument",
+                        "fromTool",
+                        "responseField",
+                        "responseGroup",
+                        "selectionRule"
+                      ],
+                      "properties": {
+                        "argument": {
+                          "type": "string",
+                          "pattern": "^[a-z_]+$"
+                        },
+                        "fromTool": {
+                          "enum": [
+                            "search_variant_evidence",
+                            "search_variant_literature",
+                            "get_publication_details",
+                            "search_literature_corpus",
+                            "get_gene_disease_associations",
+                            "search_disease_genes",
+                            "resolve_gene",
+                            "get_gene_profile",
+                            "get_gene_section",
+                            "search_gene_literature"
+                          ]
+                        },
+                        "responseField": {
+                          "type": "string",
+                          "pattern": "^/structuredContent(?:/(?:[^~]|~[01])*)+$"
+                        },
+                        "responseGroup": {
+                          "type": "string",
+                          "minLength": 3
+                        },
+                        "selectionRule": {
+                          "type": "string",
+                          "minLength": 20
+                        },
+                        "selectedMemberPointer": {
+                          "type": "string",
+                          "pattern": "^/(?:[^~]|~[01])+$"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "inspectOutput": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 3
+            }
+          },
+          "sourceScope": {
+            "type": "string",
+            "minLength": 40
+          },
+          "stopOrUseAlternative": {
+            "type": "array",
+            "minItems": 2,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 3
+            }
+          },
+          "guide": {
+            "type": "string",
+            "pattern": "^\\.\\./docs/[A-Z_]+\\.md$"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "tool"
+            ],
+            "properties": {
+              "tool": {
+                "const": "search_variant_evidence"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "tool"
+            ],
+            "properties": {
+              "tool": {
+                "const": "search_variant_literature"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "tool"
+            ],
+            "properties": {
+              "tool": {
+                "const": "get_publication_details"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "tool"
+            ],
+            "properties": {
+              "tool": {
+                "const": "search_literature_corpus"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "tool"
+            ],
+            "properties": {
+              "tool": {
+                "const": "get_gene_disease_associations"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "tool"
+            ],
+            "properties": {
+              "tool": {
+                "const": "search_disease_genes"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "tool"
+            ],
+            "properties": {
+              "tool": {
+                "const": "resolve_gene"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "tool"
+            ],
+            "properties": {
+              "tool": {
+                "const": "get_gene_profile"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "tool"
+            ],
+            "properties": {
+              "tool": {
+                "const": "get_gene_section"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "tool"
+            ],
+            "properties": {
+              "tool": {
+                "const": "search_gene_literature"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ]
+    }
+  }
+}
