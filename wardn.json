@@ -1,0 +1,12 @@
+{
+  "$schema": "https://wardn.ai/schemas/wardn.json",
+  "servers": {
+    "io.github.helena-bioinformatics/folklore": {
+      "owners": [
+        {
+          "userId": "030d18df-9c6e-4222-ab6a-476d74d4d7fe"
+        }
+      ]
+    }
+  }
+}
