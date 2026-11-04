@@ -3,6 +3,12 @@ name: Publish Biorouter BRXT
 on:
   push:
     tags: ["folklore-biorouter-v*"]
+  workflow_dispatch:
+    inputs:
+      signed_tag_object:
+        description: Base64 of the publisher-signed annotated tag object for this exact main commit
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -12,9 +18,49 @@ jobs:
     name: Build, verify and publish the immutable BRXT
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      BRXT_TAG: ${{ github.ref_name }}
     steps:
       - name: Check out the public adapter
         uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 0
+
+      - name: Publish the supplied signed tag for this exact checkout
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          SIGNED_TAG_OBJECT: ${{ inputs.signed_tag_object }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import base64
+          import json
+          import os
+          import pathlib
+          import subprocess
+          import tempfile
+
+          def git(*args, **kwargs):
+              return subprocess.check_output(["git", *args], **kwargs).decode().strip()
+
+          raw = base64.b64decode(os.environ["SIGNED_TAG_OBJECT"], validate=True)
+          if len(raw) > 16384:
+              raise ValueError("Tag object exceeds the publication bound")
+          headers = dict(line.split(" ", 1) for line in raw.decode().split("\n\n", 1)[0].splitlines())
+          version = json.loads(pathlib.Path("integrations/biorouter/manifest.json").read_text())["version"]
+          tag = f"folklore-biorouter-v{version}"
+          if headers.get("object") != git("rev-parse", "HEAD") or headers.get("type") != "commit" or headers.get("tag") != tag:
+              raise ValueError("Signed tag must name this exact checkout and manifest version")
+          object_id = git("mktag", input=raw)
+          with tempfile.TemporaryDirectory() as directory:
+              signers = pathlib.Path(directory) / "allowed-signers"
+              signers.write_text("vladimir@helena.bio ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHCokAptr7ZzGP6H2r6Biwwb+vFban7nuvr//nQurtKt\n")
+              git("-c", "gpg.format=ssh", "-c", f"gpg.ssh.allowedSignersFile={signers}", "verify-tag", object_id)
+          git("push", "origin", f"{object_id}:refs/tags/{tag}")
+          with open(os.environ["GITHUB_ENV"], "a") as output:
+              output.write(f"BRXT_TAG={tag}\n")
+          PY
 
       - name: Set up Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
@@ -26,7 +72,7 @@ jobs:
         run: |
           set -euo pipefail
           declared_version=$(python3 -c "import json; print(json.load(open('integrations/biorouter/manifest.json'))['version'])")
-          test "${GITHUB_REF_NAME}" = "folklore-biorouter-v${declared_version}"
+          test "${BRXT_TAG}" = "folklore-biorouter-v${declared_version}"
 
       - name: Build and verify the locked install
         shell: bash
@@ -44,9 +90,9 @@ jobs:
           set -euo pipefail
           bundle="integrations/biorouter/dist/folklore-clinical-variant-interpretation-mcp.brxt"
           checksum="${bundle}.sha256"
-          gh release create "${GITHUB_REF_NAME}" \
+          gh release create "${BRXT_TAG}" \
             "${bundle}#folklore-clinical-variant-interpretation-mcp.brxt" \
             "${checksum}#folklore-clinical-variant-interpretation-mcp.brxt.sha256" \
             --verify-tag \
-            --title "Folklore Clinical Variant Interpretation MCP Biorouter extension ${GITHUB_REF_NAME#folklore-biorouter-v}" \
+            --title "Folklore Clinical Variant Interpretation MCP Biorouter extension ${BRXT_TAG#folklore-biorouter-v}" \
             --notes "Biorouter BRXT extension published by Helena Bioinformatics. The extension connects Biorouter to Folklore germline variant classification, ACMG/AMP assessment and literature tools."

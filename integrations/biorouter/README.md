@@ -97,3 +97,13 @@ Apache License 2.0. The bundle includes the public adapter repository's
 ## Optional journey context
 
 Optional analytics configuration: [journey context](../JOURNEY_CONTEXT.md).
+
+## Shared request budget
+
+Metadata and scientific POSTs share a six-request burst, refilling one request
+per 10.1 seconds within each bridge process. This keeps discovery within
+Biorouter's ten-second tool-list timeout while bounding subsequent requests.
+A 429 stops later POSTs in that process without automatic replay. Honor
+Retry-After before an explicit later reconnect. Separate processes behind the
+same egress IP must coordinate their shared allowance. Tool calls can wait
+for refill; a limiter is not a guarantee of upstream admission.
