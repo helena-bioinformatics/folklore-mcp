@@ -21,13 +21,14 @@ INSTRUCTIONS = (
 
 
 class PublicPostBudget:
-    """Space metadata and tool POSTs together; stop this bridge after a 429."""
+    """Share the six-request burst and refill across metadata and tool POSTs."""
 
     def __init__(self, clock=time.monotonic, sleep=asyncio.sleep):
         self.clock = clock
         self.sleep = sleep
         self.lock = asyncio.Lock()
-        self.next_at = 0.0
+        self.tokens = 6.0
+        self.updated_at = self.clock()
         self.blocked = False
 
     async def before_request(self, request: httpx.Request) -> None:
@@ -36,12 +37,17 @@ class PublicPostBudget:
         async with self.lock:
             if self.blocked:
                 raise RuntimeError("Upstream rate limit: stop and reconnect later.")
-            delay = self.next_at - self.clock()
-            if delay > 0:
-                await self.sleep(delay)
+            now = self.clock()
+            self.tokens = min(6.0, self.tokens + (now - self.updated_at) / 10.1)
+            self.updated_at = now
+            if self.tokens < 1:
+                await self.sleep((1 - self.tokens) * 10.1)
+                now = self.clock()
+                self.tokens = min(6.0, self.tokens + (now - self.updated_at) / 10.1)
+                self.updated_at = now
             if self.blocked:
                 raise RuntimeError("Upstream rate limit: stop and reconnect later.")
-            self.next_at = self.clock() + 10.1
+            self.tokens = max(0.0, self.tokens - 1)
 
     async def after_response(self, response: httpx.Response) -> None:
         if response.status_code == 429:
