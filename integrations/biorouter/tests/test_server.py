@@ -80,7 +80,7 @@ def test_proxy_forwards_request_context_without_inventing_identity() -> None:
     asyncio.run(exercise())
 
 
-def test_upstream_posts_share_spacing_without_changing_content() -> None:
+def test_upstream_posts_share_burst_and_refill_without_changing_content() -> None:
     import httpx
     from folklore_biorouter.server import PublicPostBudget
 
@@ -97,11 +97,10 @@ def test_upstream_posts_share_spacing_without_changing_content() -> None:
 
         budget = PublicPostBudget(clock=lambda: now[0], sleep=sleep)
         async with budget.http_client(transport=httpx.MockTransport(respond)) as client:
-            for body in [b'{"method":"tools/list"}', b'{"method":"tools/call"}']:
+            for body in [b'{"method":"tools/list"}'] * 6 + [b'{"method":"tools/call"}']:
                 response = await client.post("https://example.test/mcp", content=body)
                 assert response.json()["result"]["status"] == "ambiguous"
-        assert sent == [
-            (0.0, b'{"method":"tools/list"}'),
+        assert sent == [(0.0, b'{"method":"tools/list"}')] * 6 + [
             (10.1, b'{"method":"tools/call"}'),
         ]
 
