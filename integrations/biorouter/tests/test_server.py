@@ -78,3 +78,62 @@ def test_proxy_forwards_request_context_without_inventing_identity() -> None:
         assert received[2]["io.helena/analytics"] == {"opt_in": False}
 
     asyncio.run(exercise())
+
+
+def test_upstream_posts_share_spacing_without_changing_content() -> None:
+    import httpx
+    from folklore_biorouter.server import PublicPostBudget
+
+    async def exercise() -> None:
+        now = [0.0]
+        sent = []
+
+        async def sleep(seconds):
+            now[0] += seconds
+
+        async def respond(request):
+            sent.append((now[0], request.content))
+            return httpx.Response(200, json={"result": {"status": "ambiguous"}})
+
+        budget = PublicPostBudget(clock=lambda: now[0], sleep=sleep)
+        async with budget.http_client(transport=httpx.MockTransport(respond)) as client:
+            for body in [b'{"method":"tools/list"}', b'{"method":"tools/call"}']:
+                response = await client.post("https://example.test/mcp", content=body)
+                assert response.json()["result"]["status"] == "ambiguous"
+        assert sent == [
+            (0.0, b'{"method":"tools/list"}'),
+            (10.1, b'{"method":"tools/call"}'),
+        ]
+
+    asyncio.run(exercise())
+
+
+def test_upstream_429_stops_later_posts_without_retry() -> None:
+    import httpx
+    import pytest
+    from folklore_biorouter.server import PublicPostBudget
+
+    async def exercise() -> None:
+        sent = []
+
+        async def respond(request):
+            sent.append(request)
+            return httpx.Response(
+                429, headers={"Retry-After": "10"}, json={"error": {"code": -32029}}
+            )
+
+        budget = PublicPostBudget()
+        async with budget.http_client(transport=httpx.MockTransport(respond)) as client:
+            response = await client.post(
+                "https://example.test/mcp", json={"method": "tools/list"}
+            )
+            assert response.status_code == 429
+            assert response.headers["Retry-After"] == "10"
+            assert response.json()["error"]["code"] == -32029
+            with pytest.raises(RuntimeError, match="rate limit"):
+                await client.post(
+                    "https://example.test/mcp", json={"method": "tools/call"}
+                )
+        assert len(sent) == 1
+
+    asyncio.run(exercise())
