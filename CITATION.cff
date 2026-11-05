@@ -8,6 +8,8 @@ authors:
   - name: Helena Bioinformatics
     website: https://helena.bio
 version: 2.0.0
+date-released: 2026-11-05
+doi: 10.5281/zenodo.23991190
 url: https://folklore.helena.bio
 repository-code: https://github.com/helena-bioinformatics/folklore-mcp
 license: Apache-2.0
@@ -25,6 +27,8 @@ abstract: >-
   ClinGen gene-disease associations and literature. Public API clients support
   variant identity resolution, immutable gene profile snapshots and separate
   live literature captures.
+  Authenticated case tools submit analyses, browse admitted sources and query
+  original JSON exports.
 references:
   - type: generic
     title: Public germline variant interpretation contract benchmark

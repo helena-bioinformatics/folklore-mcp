@@ -222,7 +222,9 @@ def test_release_candidate_versions_and_dois_are_consistent() -> None:
         published["assetSha256"]
         == "22e1d9ce2cb323344a99f68f26af8e65bcf136813961b6d4d5a8f3233fa0f4b9"
     )
-    assert "doi" not in citation
+    assert citation["doi"] == "10.5281/zenodo.23991190"
+    assert str(citation["date-released"]) == "2026-11-05"
+    assert citation["doi"] in (REPOSITORY / "README.md").read_text()
     historical = yaml.safe_load(
         (REPOSITORY / "archive/citations/CITATION-1.7.0.cff").read_text()
     )
