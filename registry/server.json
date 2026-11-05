@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.helena-bioinformatics/folklore",
   "title": "Folklore Clinical Variant Interpretation MCP",
-  "description": "ACMG/AMP germline variant classification, gene profiles, disease associations and literature.",
-  "version": "1.7.0",
+  "description": "Germline ACMG/AMP classification, genes, disease associations, literature and API-key case analysis.",
+  "version": "2.0.0",
   "websiteUrl": "https://folklore.helena.bio",
   "repository": {
     "url": "https://github.com/helena-bioinformatics/folklore-mcp",

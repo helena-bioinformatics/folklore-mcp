@@ -51,6 +51,7 @@ def create_app(
     gene_disease_gateway: GeneDiseaseGateway | None = None,
     public_gene_gateway: PublicGeneGateway | None = None,
     metrics_registry: CollectorRegistry | None = None,
+    case_manager: object | None = None,
 ) -> FastAPI:
     application_settings = settings or get_settings()
     _configure_logging(application_settings)
@@ -124,6 +125,7 @@ def create_app(
             public_gene_gateway=gene_gateway,
             settings=application_settings,
             observe=observe,
+            case_manager=case_manager,
         )
 
     @asynccontextmanager

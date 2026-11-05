@@ -2,7 +2,7 @@
   "$schema": "./task-contracts.schema.json",
   "schemaVersion": "2",
   "purpose": "Select scientific tools using task descriptions, accepted input recipes and response-bound output identities.",
-  "evidenceStatus": "Folklore MCP adapter version 1.7.0; public contract definitions for ten scientific operations.",
+  "evidenceStatus": "Folklore MCP 2.0.0: these ten scientific recipes cover the anonymous branch. Authenticated case, source and result schemas are defined in authenticated-tools.json.",
   "pointerRoot": "MCP CallToolResult; excludes the outer JSON-RPC envelope",
   "beforeBinding": [
     "Check HTTP/transport and JSON-RPC errors before reading the MCP result.",

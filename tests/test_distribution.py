@@ -31,7 +31,7 @@ def test_registry_identity_and_remote_are_exact() -> None:
     assert record["name"] == "io.github.helena-bioinformatics/folklore"
     assert record["title"] == "Folklore Clinical Variant Interpretation MCP"
     assert record["description"] == (
-        "ACMG/AMP germline variant classification, gene profiles, disease associations and literature."
+        "Germline ACMG/AMP classification, genes, disease associations, literature and API-key case analysis."
     )
     assert record["remotes"] == [
         {
@@ -48,7 +48,7 @@ def test_registry_identity_and_remote_are_exact() -> None:
     assert contract["title"] == record["title"]
     assert contract["description"] == record["description"]
     assert contract["serverCardDescription"] == (
-        "ACMG/AMP germline variant classification, gene profiles, disease associations and literature."
+        "Germline ACMG/AMP classification, genes, disease associations, literature and API-key case analysis."
     )
     assert contract["version"] == record["version"] == MCP_ADAPTER_VERSION
     assert contract["protocolVersion"] == MCP_PROTOCOL_VERSION
@@ -158,10 +158,10 @@ def test_biorouter_recipe_preserves_identity_version_and_safety() -> None:
     }
     assert manifest["name"] == "folklore-clinical-variant-interpretation-mcp"
     assert manifest["display_name"] == "Folklore Clinical Variant Interpretation MCP"
-    assert manifest["version"] == MCP_ADAPTER_VERSION == "1.7.0"
+    assert manifest["version"] == "1.7.0"
     assert manifest["tools_count"] == 11
     assert manifest["env_vars"] == []
-    assert project["project"]["version"] == MCP_ADAPTER_VERSION
+    assert project["project"]["version"] == manifest["version"]
     assert project["project"]["dependencies"] == ["fastmcp==3.4.2"]
     assert "Ambiguous candidates are never selected automatically" in skill
     assert "classify_germline_variant" in skill
@@ -207,16 +207,11 @@ def test_release_candidate_versions_and_dois_are_consistent() -> None:
         (REPOSITORY / "release-publication/current.json").read_text()
     )
     assert (
-        package["project"]["version"] == MCP_ADAPTER_VERSION == __version__ == "1.7.0"
+        package["project"]["version"] == MCP_ADAPTER_VERSION == __version__ == "2.0.0"
     )
     zenodo = json.loads((REPOSITORY / ".zenodo.json").read_text())
     citation = yaml.safe_load((REPOSITORY / "CITATION.cff").read_text())
-    assert (
-        zenodo["version"]
-        == citation["version"]
-        == published["version"]
-        == MCP_ADAPTER_VERSION
-    )
+    assert zenodo["version"] == citation["version"] == MCP_ADAPTER_VERSION
     assert published["sourceCommit"] == "5eb6d77bce88a140418872ec19739459ec50cf8f"
     assert published["tagObject"] == "64dbbc7382f83f900647af46f6a82e4ef088009c"
     assert published["officialWorkflowRun"] == 41252550340
@@ -227,9 +222,13 @@ def test_release_candidate_versions_and_dois_are_consistent() -> None:
         published["assetSha256"]
         == "22e1d9ce2cb323344a99f68f26af8e65bcf136813961b6d4d5a8f3233fa0f4b9"
     )
-    assert citation["doi"] == "10.5281/zenodo.23849196"
+    assert "doi" not in citation
+    historical = yaml.safe_load(
+        (REPOSITORY / "archive/citations/CITATION-1.7.0.cff").read_text()
+    )
+    assert historical["doi"] == "10.5281/zenodo.23849196"
     assert (
-        str(citation["date-released"]) == "2026-10-31"
+        str(historical["date-released"]) == "2026-10-31"
     )  # Actual GitHub release UTC date.
     old_citation_bytes = (
         REPOSITORY / "archive/citations/CITATION-1.6.0.cff"
@@ -244,7 +243,10 @@ def test_release_candidate_versions_and_dois_are_consistent() -> None:
     )
     assert archived["version"] == previous["version"] == "1.6.0"
     assert archived["doi"] == "10.5281/zenodo.23817704"
-    assert "1.7.0" in (REPOSITORY / "README.md").read_text()
+    assert "2.0.0" in (REPOSITORY / "README.md").read_text()
+    assert (
+        published["version"] == "1.7.0"
+    )  # Actual historical publication, not the prepared source.
 
 
 def test_public_benchmark_manifest_is_bounded_and_citable() -> None:

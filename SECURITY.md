@@ -18,3 +18,7 @@ Do not open a public issue for an unpatched vulnerability.
 Scientific titles, abstracts, scientific limitations and error messages are
 opaque payload strings. Transport integrity is evaluated using transport
 metadata and the response contract.
+
+## Hosted 2.0 adapter
+
+Send API keys only in Authorization Bearer headers to the canonical endpoint. Do not publish keys, clinical records, exported cases or adapter state. Private tools use current API admission and credential-isolated encrypted journals. Report suspected cross-credential disclosure through the existing security contact.

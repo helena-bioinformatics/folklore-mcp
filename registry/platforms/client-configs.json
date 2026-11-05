@@ -4,7 +4,7 @@
   "registry_name": "io.github.helena-bioinformatics/folklore",
   "endpoint": "https://api.helena.bio/folklore/v1/mcp",
   "transport": "streamable-http",
-  "authentication": "none",
+  "authentication": "Optional Folklore API key in Authorization: Bearer for 18 additional tools; anonymous recipes retain 11 public tools",
   "tools": [
     "classify_germline_variant",
     "search_variant_literature",
@@ -92,5 +92,13 @@
         }
       }
     }
+  },
+  "authenticatedCatalog": "../authenticated-tools.json",
+  "authenticatedClient": {
+    "transport": "streamable-http",
+    "url": "https://api.helena.bio/folklore/v1/mcp",
+    "headerName": "Authorization",
+    "headerValueSource": "Bearer plus the Folklore API key stored in the client's secret store",
+    "catalog": "29 tools after current API admission; existing anonymous recipes expose 11"
   }
 }

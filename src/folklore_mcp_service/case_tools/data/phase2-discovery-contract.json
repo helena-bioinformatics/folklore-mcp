@@ -1,0 +1,413 @@
+{
+  "contract_sha256": "dfb6d4e9316fb33246b3c770eef1fc992a716819b9defad0a8194f6a34af29ce",
+  "wire_contract_version": "1.0.0",
+  "software_version": "1.1.0",
+  "input_schemas": {
+    "list_cases": {
+      "type": "object",
+      "properties": {
+        "context_binding_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 25
+        },
+        "cursor": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        }
+      },
+      "required": [
+        "context_binding_id"
+      ],
+      "additionalProperties": false
+    },
+    "get_case": {
+      "type": "object",
+      "properties": {
+        "context_binding_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "case_id": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "required": [
+        "context_binding_id",
+        "case_id"
+      ],
+      "additionalProperties": false
+    },
+    "list_case_analyses": {
+      "type": "object",
+      "properties": {
+        "context_binding_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "case_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 25
+        },
+        "cursor": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        }
+      },
+      "required": [
+        "context_binding_id",
+        "case_id"
+      ],
+      "additionalProperties": false
+    },
+    "list_source_connections": {
+      "type": "object",
+      "properties": {
+        "context_binding_id": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "required": [
+        "context_binding_id"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "api_result_schemas": {
+    "list_cases": {
+      "type": "object",
+      "properties": {
+        "context_binding_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "records": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/$defs/CaseRecord"
+          }
+        },
+        "returned_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "has_more": {
+          "type": "boolean"
+        },
+        "next_cursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 4096
+        }
+      },
+      "required": [
+        "context_binding_id",
+        "records",
+        "returned_count",
+        "has_more",
+        "next_cursor"
+      ],
+      "additionalProperties": false
+    },
+    "get_case": {
+      "type": "object",
+      "properties": {
+        "context_binding_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "case": {
+          "$ref": "#/$defs/CaseRecord"
+        }
+      },
+      "required": [
+        "context_binding_id",
+        "case"
+      ],
+      "additionalProperties": false
+    },
+    "list_case_analyses": {
+      "type": "object",
+      "properties": {
+        "context_binding_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "case_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "history_kind": {
+          "const": "partner_commands"
+        },
+        "records": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/$defs/AnalysisSummary"
+          }
+        },
+        "returned_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "has_more": {
+          "type": "boolean"
+        },
+        "next_cursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 4096
+        }
+      },
+      "required": [
+        "context_binding_id",
+        "case_id",
+        "history_kind",
+        "records",
+        "returned_count",
+        "has_more",
+        "next_cursor"
+      ],
+      "additionalProperties": false
+    },
+    "list_source_connections": {
+      "type": "object",
+      "properties": {
+        "context_binding_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "source_kind": {
+          "const": "admitted_s3_root_grants"
+        },
+        "records": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {
+            "$ref": "#/$defs/SourceGrantRecord"
+          }
+        },
+        "returned_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 64
+        }
+      },
+      "required": [
+        "context_binding_id",
+        "source_kind",
+        "records",
+        "returned_count"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "CaseRecord": {
+      "type": "object",
+      "properties": {
+        "case_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "case_name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 200
+        },
+        "analysis_type": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "case_status": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "latest_analysis": {
+          "type": "object",
+          "properties": {
+            "analysis_id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "queued",
+                "running",
+                "succeeded",
+                "failed"
+              ]
+            },
+            "stage": {
+              "type": "string",
+              "enum": [
+                "import",
+                "secondary_analysis",
+                "review_required",
+                "validation",
+                "admission",
+                "analysis",
+                "publication",
+                "complete"
+              ]
+            },
+            "created_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updated_at": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "required": [
+            "analysis_id",
+            "status",
+            "stage",
+            "created_at",
+            "updated_at"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "case_id",
+        "case_name",
+        "analysis_type",
+        "case_status",
+        "created_at",
+        "updated_at",
+        "latest_analysis"
+      ],
+      "additionalProperties": false
+    },
+    "AnalysisSummary": {
+      "type": "object",
+      "properties": {
+        "analysis_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "queued",
+            "running",
+            "succeeded",
+            "failed"
+          ]
+        },
+        "stage": {
+          "type": "string",
+          "enum": [
+            "import",
+            "secondary_analysis",
+            "review_required",
+            "validation",
+            "admission",
+            "analysis",
+            "publication",
+            "complete"
+          ]
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "analysis_id",
+        "status",
+        "stage",
+        "created_at",
+        "updated_at"
+      ],
+      "additionalProperties": false
+    },
+    "SourceGrantRecord": {
+      "type": "object",
+      "properties": {
+        "connection_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "bucket": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 255
+        },
+        "key_prefix": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        }
+      },
+      "required": [
+        "connection_id",
+        "bucket",
+        "key_prefix"
+      ],
+      "additionalProperties": false
+    },
+    "UUID": {
+      "type": "string",
+      "format": "uuid"
+    }
+  },
+  "limits": {
+    "new_case_api_page_bytes": 524288,
+    "mcp_complete_response_bytes": 65536,
+    "source_json_bytes": 2097152,
+    "case_read_sql_deadline_seconds": 3,
+    "cursor_ttl_seconds": 300,
+    "case_page_default_records": 25,
+    "case_page_max_records": 100,
+    "grants_max_records": 64,
+    "grant_paging": false,
+    "overflow": "Typed budget/source failure; never truncate strings, collapse duplicates or silently omit records. Existing Phase1 limits unchanged."
+  }
+}

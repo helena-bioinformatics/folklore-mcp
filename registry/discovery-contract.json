@@ -2,10 +2,10 @@
   "schemaVersion": "1",
   "registryName": "io.github.helena-bioinformatics/folklore",
   "title": "Folklore Clinical Variant Interpretation MCP",
-  "description": "ACMG/AMP germline variant classification, gene profiles, disease associations and literature.",
-  "serverCardDescription": "ACMG/AMP germline variant classification, gene profiles, disease associations and literature.",
+  "description": "Germline ACMG/AMP classification, genes, disease associations, literature and API-key case analysis.",
+  "serverCardDescription": "Germline ACMG/AMP classification, genes, disease associations, literature and API-key case analysis.",
   "publisher": "Helena Bioinformatics",
-  "version": "1.7.0",
+  "version": "2.0.0",
   "protocolVersion": "2026-07-28",
   "endpoint": "https://api.helena.bio/folklore/v1/mcp",
   "health": "https://api.helena.bio/folklore/v1/health",
@@ -52,5 +52,10 @@
     "canonicalExactMatch": true,
     "automaticAggregatorRefreshHours": 24,
     "editorialFollowUpHours": 24
+  },
+  "authentication": {
+    "anonymous": "11 public tools",
+    "apiKey": "18 additional tools; Authorization: Bearer with a current Folklore API key",
+    "catalog": "Authentication-dependent; no automatic anonymous fallback for supplied invalid credentials"
   }
 }

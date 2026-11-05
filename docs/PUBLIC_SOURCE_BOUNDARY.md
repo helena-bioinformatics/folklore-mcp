@@ -7,8 +7,8 @@ aggregation and ACMG/AMP classification.
 ## Distribution contents
 
 - MCP discovery, JSON-RPC handling, input validation and bounded API clients
-- Adapter 1.7.0: ten scientific tools, an optional support helper, five workflow
-  prompts and an optional MCP resource
+- Adapter 2.0.0: eleven anonymous tools and eighteen authenticated case, source
+  and result tools, with the existing scientific prompts and App resource
 - Self-hosted capability gates and enabled-tool discovery metadata
 - Health, readiness and metrics endpoints
 - Tests, container packaging, CI and documentation
@@ -19,7 +19,8 @@ repositories. Discovery metadata describes the enabled hosted surface.
 
 ## Data flow
 
-Tool schemas define variant, gene, disease and literature arguments. Literature
+Anonymous tool schemas define variant, gene, disease and literature arguments.
+Authenticated schemas define admitted case/source/result operations. Literature
 queries include public phenotype, HPO and OMIM terms. API clients send those
 arguments to the public Folklore endpoints. Self-hosted operators configure
 logging and retention for their own instances.
@@ -31,3 +32,7 @@ logging and retention for their own instances.
 3. Validate example payloads against the public schemas and reference fixtures.
 4. Verify API and discovery contracts.
 5. Publish the clean public adapter source and its required license notices.
+
+## Hosted 2.0 adapter
+
+The Apache adapter includes hosted authentication, bounded case API clients, schemas, encrypted recovery journals and deterministic frozen-export queries. These are transport/result-access functions, not scientific annotation or classification. Exported packets omit private source paths and operational provenance. Synthetic tests contain no actual clinical records. Private production configuration, datasets, receipts and history remain excluded. No local Folklore server is required.

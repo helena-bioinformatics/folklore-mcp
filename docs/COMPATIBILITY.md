@@ -1,11 +1,17 @@
 # Client compatibility
 
-Folklore Clinical Variant Interpretation MCP uses the hosted endpoint
+Same endpoint: 11 anonymous public tools and 18 additional authenticated tools.
+Supply a Folklore API key in the Authorization Bearer header. No local server
+is required. See [case workflows](CASE_WORKFLOWS.md).
+
+The eleven anonymous scientific tools use
 https://api.helena.bio/folklore/v1/mcp without an account, API key or OAuth.
+The eighteen case, source and result tools require a Folklore API key at that
+same endpoint.
 
-## 1.7.0 source surface
+## Anonymous scientific surface
 
-The fully enabled 1.7.0 configuration exposes ten scientific tools and the
+The fully enabled anonymous configuration exposes ten scientific tools and the
 separate, optional support_helena helper, five workflow prompts and one optional
 MCP App resource. Self-hosted feature gates can reduce that inventory. Read
 tools/list for the actual enabled tools; support discovery is not scientific

@@ -1,14 +1,18 @@
 # Folklore MCP directory copy
 
+Same endpoint: 11 anonymous public tools and 18 additional authenticated tools.
+Supply a Folklore API key in the Authorization Bearer header. No local server
+is required. See [case workflows](../docs/CASE_WORKFLOWS.md).
+
 ## Identity
 
 - Title: Folklore Clinical Variant Interpretation MCP
-- Version: 1.7.0
+- Version: 2.0.0
 - Publisher: Helena Bioinformatics
 - Category: Bioinformatics, genomics, variant classification
 - Tags: ACMG-AMP, germline, variant-classification, gene-disease, literature
 - Endpoint: `https://api.helena.bio/folklore/v1/mcp`
-- Authentication: anonymous
+- Authentication: anonymous for 11 public tools; Folklore API key for 18 additional tools
 - Website: `https://folklore.helena.bio`
 - Source: `https://github.com/helena-bioinformatics/folklore-mcp`
 - Icon: `https://folklore.helena.bio/images/logos/folklore.png`
@@ -33,7 +37,7 @@ assertions with disease identity, inheritance, panel, assessment, date and sourc
 Literature tools retrieve variant-linked papers, complete PMID records and
 query-matched publications.
 
-All eleven tools are read-only: ten scientific operations and `support_helena`,
+The eleven anonymous tools are read-only: ten scientific operations and `support_helena`,
 a separate support-link helper. Stateless Streamable HTTP provides structured
 responses, typed outcomes, workflow prompts and an optional result-viewing app.
 

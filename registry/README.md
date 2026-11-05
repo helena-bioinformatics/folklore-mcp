@@ -1,5 +1,9 @@
 # Folklore MCP distribution
 
+Same endpoint: 11 anonymous public tools and 18 additional authenticated tools.
+Supply a Folklore API key in the Authorization Bearer header. No local server
+is required. See [case workflows](../docs/CASE_WORKFLOWS.md).
+
 Title: `Folklore Clinical Variant Interpretation MCP`
 
 Description: `ACMG/AMP germline variant classification, gene profiles, disease associations and literature.`
@@ -8,7 +12,7 @@ Registry name: `io.github.helena-bioinformatics/folklore`
 
 Endpoint: `https://api.helena.bio/folklore/v1/mcp`
 
-The 1.7.0 source defines ten scientific tools and the separate `support_helena`
+The anonymous catalog defines ten scientific tools and the separate `support_helena`
 helper. `classify_germline_variant` resolves and assesses one supported public
 GRCh38 nuclear germline SNV or simple indel smaller than 50 bp. The response
 includes automated ACMG/AMP classification, reported criteria and source evidence.

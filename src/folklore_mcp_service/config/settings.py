@@ -5,7 +5,15 @@ from functools import lru_cache
 from typing import Annotated, Literal
 from urllib.parse import urlsplit
 
-from pydantic import Field, StrictBool, StrictFloat, StrictInt, field_validator
+from pydantic import (
+    Field,
+    SecretStr,
+    StrictBool,
+    StrictFloat,
+    StrictInt,
+    field_validator,
+    model_validator,
+)
 from pydantic_settings import (
     BaseSettings,
     EnvSettingsSource,
@@ -15,12 +23,14 @@ from pydantic_settings import (
 
 BOOLEAN_SETTING_NAMES = {
     "FOLKLORE_MCP_ENABLED",
+    "FOLKLORE_MCP_CASES_ENABLED",
     "FOLKLORE_LITERATURE_ENABLED",
     "FOLKLORE_GENE_DISEASE_ENABLED",
     "FOLKLORE_PUBLIC_GENE_ENABLED",
 }
 INTEGER_SETTING_NAMES = {
     "PORT",
+    "FOLKLORE_MCP_CASE_MAX_NAMESPACES",
     "FOLKLORE_MCP_MAX_BODY_BYTES",
     "FOLKLORE_MCP_MAX_RESPONSE_BYTES",
     "FOLKLORE_MCP_MAX_CONCURRENT",
@@ -88,6 +98,10 @@ class Settings(BaseSettings):
     PORT: Annotated[StrictInt, Field(ge=1, le=65_535)] = 9017
     LOG_LEVEL: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"
     FOLKLORE_MCP_ENABLED: StrictBool = False
+    FOLKLORE_MCP_CASES_ENABLED: StrictBool = False
+    FOLKLORE_MCP_CASE_MAX_NAMESPACES: Annotated[StrictInt, Field(ge=8, le=8192)] = 1024
+    FOLKLORE_MCP_CASE_STATE_DIR: str = "/var/lib/folklore-mcp/cases"
+    FOLKLORE_MCP_CASE_NAMESPACE_SECRET: SecretStr = SecretStr("")
     FOLKLORE_LITERATURE_ENABLED: StrictBool = False
     FOLKLORE_GENE_DISEASE_ENABLED: StrictBool = False
     FOLKLORE_PUBLIC_GENE_ENABLED: StrictBool = False
@@ -98,8 +112,8 @@ class Settings(BaseSettings):
     FOLKLORE_MCP_CONNECT_TIMEOUT_SECONDS: Annotated[
         StrictFloat, Field(ge=0.1, le=10.0, allow_inf_nan=False)
     ] = 2.0
-    FOLKLORE_MCP_MAX_BODY_BYTES: Annotated[StrictInt, Field(ge=1024, le=65_536)] = (
-        16_384
+    FOLKLORE_MCP_MAX_BODY_BYTES: Annotated[StrictInt, Field(ge=1024, le=1_100_000)] = (
+        1_100_000
     )
     FOLKLORE_MCP_MAX_RESPONSE_BYTES: Annotated[
         StrictInt, Field(ge=65_536, le=4_194_304)
@@ -138,6 +152,28 @@ class Settings(BaseSettings):
             dotenv_settings,
             file_secret_settings,
         )
+
+    @model_validator(mode="after")
+    def validate_hosted_case_settings(self) -> "Settings":
+        if self.FOLKLORE_MCP_CASES_ENABLED:
+            import re
+            from pathlib import PurePosixPath
+
+            if not self.FOLKLORE_MCP_ENABLED:
+                raise ValueError("Hosted case tools require the MCP transport")
+            if not PurePosixPath(self.FOLKLORE_MCP_CASE_STATE_DIR).is_absolute():
+                raise ValueError("Hosted case state must use an absolute path")
+            if (
+                re.fullmatch(
+                    r"[0-9a-f]{64}",
+                    self.FOLKLORE_MCP_CASE_NAMESPACE_SECRET.get_secret_value(),
+                )
+                is None
+            ):
+                raise ValueError(
+                    "Hosted case namespace secret must be 32 random bytes in hex"
+                )
+        return self
 
     @field_validator("HOST")
     @classmethod

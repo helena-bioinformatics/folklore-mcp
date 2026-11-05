@@ -248,3 +248,17 @@ def test_registry_version_mismatch_is_not_retried(transport):
         publisher.validate_registry(body, {"version": "1.5.0"})
     assert opener.call_count == 1
     sleep.assert_not_called()
+
+
+def test_adapter_release_can_attach_independently_versioned_scientific_skill():
+    data = request()
+    data["version"] = "2.0.0"
+    data["notes"] = "release-publication/2.0.0.md"
+    assert publisher.validate_request(data) == "folklore-mcp-v2.0.0"
+    assert data["asset"].startswith("skills/releases/1.7.0/")
+    import hashlib
+
+    assert (
+        hashlib.sha256((ROOT / data["asset"]).read_bytes()).hexdigest()
+        == data["assetSha256"]
+    )

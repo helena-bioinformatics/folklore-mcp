@@ -1,16 +1,29 @@
 # Folklore Clinical Variant Interpretation MCP
 
-Version 1.7.0
+One hosted MCP server for public scientific queries and authenticated case workflows.
+
+Endpoint: https://api.helena.bio/folklore/v1/mcp
+
+Version 2.0.0
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21922951.svg)](https://doi.org/10.5281/zenodo.21922951)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/helena-bioinformatics/folklore-mcp/badge)](https://scorecard.dev/viewer/?uri=github.com/helena-bioinformatics/folklore-mcp)
 [![AllMCPs Verified](https://allmcps.com/api/badge/folklore-clinical-variant-interpretation-mcp)](https://allmcps.com/mcp/folklore-clinical-variant-interpretation-mcp?verify=930d811d-1fd8-4117-8280-1c6eac1a2ca3)
 
-Folklore MCP classifies and assesses germline variants under ACMG/AMP. It returns
-canonical identity, automated classification, reported criteria, annotation,
-source evidence and provenance. Gene profiles, ClinGen gene-disease assertions
-and linked biomedical literature complete the scientific workflow.
+Connect your MCP client directly to this Streamable HTTP endpoint. No local
+Folklore server is required. Anonymous callers receive 11 public tools.
+Send your Folklore API key in the Authorization Bearer header to access 18
+additional case, source and result tools at the same endpoint. Invalid supplied
+credentials fail authentication; they do not select the anonymous catalog.
+
+Create a key in your Folklore account for the selected account and sources.
+Keep it in your client's secret store, never in prompts, tool arguments or URLs.
+The selected account's native subscription capabilities, usage limits and
+eligible credits govern processing. A key does not grant funded compute.
+
+See [case workflows](docs/CASE_WORKFLOWS.md), the
+[18 authenticated tool schemas](registry/authenticated-tools.json) and the
+[public task recipes](registry/task-contracts.json).
 
 ## Classify a variant
 

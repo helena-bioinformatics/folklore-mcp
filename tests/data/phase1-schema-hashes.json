@@ -1,0 +1,57 @@
+{
+  "provenance": "CR024 delivered Phase1 canonical schema serialization before CR025 edits",
+  "tools": {
+    "list_analysis_contexts": {
+      "input": "7cce9970b1299f7789482edd63b456ed5edd6cb79dd6d9be98e076866db957e5",
+      "output": "0a11715ae0e406334eb566912d73e9d32485e2e7b49baedb988c6354d08fd9b5"
+    },
+    "submit_case_analysis": {
+      "input": "f92a2393a420b159139fd07562789f037f05b7741ff8b45632732b3f1a904f1a",
+      "output": "db008434d38f4f8019d5f88e7fd90e046cf1b7452e7e2564ec53d95f9dec3738"
+    },
+    "get_case_analysis_status": {
+      "input": "3bbc9616341e5c515abe43935fac3acb24e9fc6f3f5f8c720fbe31cae47d516b",
+      "output": "620a0ea6082e38a9f99efd42c329dc43779065bbc47a05c3008a343ce0552637"
+    },
+    "acknowledge_sequencing_qc_review": {
+      "input": "6c3acdd5b04032968ae73bc664a7bdad4d0a1d19e1e4a0996c1721cddf356769",
+      "output": "5fa6809bb56a7cdb5ab36b5fe54b7e077d18decb88a204a008f5154500580575"
+    },
+    "request_sequencing_analysis_cancellation": {
+      "input": "3bbc9616341e5c515abe43935fac3acb24e9fc6f3f5f8c720fbe31cae47d516b",
+      "output": "168c9e7908043f453ab75837c5e6db92387655312ebd997a5e767badafc0db1f"
+    },
+    "get_case_analysis_result_manifest": {
+      "input": "3bbc9616341e5c515abe43935fac3acb24e9fc6f3f5f8c720fbe31cae47d516b",
+      "output": "8296305ef1d28304e6570360fb10c210700f7313680df1ff6b0bf4ad9afdcc46"
+    },
+    "download_analysis_result_file": {
+      "input": "4ce1eb5d5d3e32de56f097b842b8433d220e4fbb9a7574b0a945317c97ba70a5",
+      "output": "e353a9c41d55a30fbc48ef0c7906a3ec8b63f3d4b8ee16c3c47325b137e01d16"
+    },
+    "get_analysis_export_summary": {
+      "input": "5eca5da0cb4a05116463ea1adc6bca83209deb3de00d33d647d9bbce01948ec6",
+      "output": "d30e7b68401121a555336077e411a48e86f7bf4a58f52f0256f50e7aef426ff8"
+    },
+    "get_analysis_export_schema": {
+      "input": "0f5bb62b7357612b9e50d18eb770c88689843de62c3fde3dbb1346cc0da9380b",
+      "output": "59f31a80d070b26e14af4e3a016e35a7ee859fabbfbf3d0baf1589deede8a0ac"
+    },
+    "get_analysis_export_provenance": {
+      "input": "631c76ad1ddf1aa6dcf4e16641305841e861c688ec127dae235b9f323855821b",
+      "output": "d5cfddeea908cd57e1bcd82ba871edd713d1bcf7293026a9aac1ec9a78b9e741"
+    },
+    "get_analysis_export_variant": {
+      "input": "594d1348435afc45cd3c4bd87532033324adb6bb74b822e2ffeb64bdba343c62",
+      "output": "44cf64977de361edbe641bf2edbffcd260ddb79d134f74d7b9b8bf5f6b7dc1b9"
+    },
+    "query_analysis_export_records": {
+      "input": "35945efec38db40b8f64bc88db96d8e3f4f01cc44b05d600ffae78b6f5b300ba",
+      "output": "075ae01065a18dcb4bc38ad7a83a3f122df7a998622bd28313fd2d0468bb6f0b"
+    },
+    "get_analysis_export_gene_records": {
+      "input": "7244ad41375d9e63d40f1cc25cbf9dea664b2c25fd6056a36685cbd8ffc57ff6",
+      "output": "87c9318fa79878917214ea166652e3116823b37910e8a49d9b4ee1fecfa23b10"
+    }
+  }
+}

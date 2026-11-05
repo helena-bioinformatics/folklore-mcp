@@ -1,0 +1,162 @@
+{
+  "singleton-germline-v1": {
+    "context_binding_id": "22222222-2222-4222-8222-222222222222",
+    "profile": "singleton-germline-v1",
+    "external_reference": null,
+    "input": {
+      "kind": "s3_object",
+      "connection_id": "44444444-4444-4444-8444-444444444444",
+      "bucket": "fixture-bucket",
+      "key": "case.vcf",
+      "version_id": "immutable-1"
+    },
+    "clinical": {
+      "hpo_ids": [
+        "HP:0001250",
+        "HP:0001263"
+      ],
+      "filtering_preset": "strict",
+      "language": "en"
+    },
+    "outputs": [
+      "json"
+    ],
+    "max_cost_units": 9223372036854775807
+  },
+  "singleton-germline-v2": {
+    "context_binding_id": "22222222-2222-4222-8222-222222222222",
+    "profile": "singleton-germline-v2",
+    "external_reference": null,
+    "input": {
+      "kind": "s3_object",
+      "connection_id": "44444444-4444-4444-8444-444444444444",
+      "bucket": "fixture-bucket",
+      "key": "case.vcf",
+      "version_id": "immutable-1"
+    },
+    "clinical_profile": {
+      "demographics": {
+        "sex": "unknown",
+        "age_years": null,
+        "age_days": null,
+        "age_group": null
+      },
+      "modules": {
+        "enable_screening": true,
+        "enable_literature": false
+      },
+      "ethnicity": null,
+      "clinical_context": null,
+      "reproductive": null,
+      "sample_info": null,
+      "consent": {
+        "secondary_findings": false,
+        "carrier_results": false,
+        "pharmacogenomics": false
+      },
+      "phenotype": {
+        "hpo_ids": [
+          "HP:0001250"
+        ],
+        "clinical_notes": null
+      },
+      "panel_ids": null,
+      "custom_genes": [
+        {
+          "gene_symbol": "TP53",
+          "priority_score": 0.5001,
+          "age_group_relevance": "all",
+          "disease_name": null,
+          "notes": null
+        }
+      ],
+      "language": "en",
+      "filtering_preset": "strict"
+    },
+    "outputs": [
+      "json"
+    ],
+    "max_cost_units": 9223372036854775807
+  },
+  "singleton-sequencing-v1": {
+    "context_binding_id": "22222222-2222-4222-8222-222222222222",
+    "profile": "singleton-sequencing-v1",
+    "external_reference": null,
+    "input": {
+      "kind": "s3_sequencing",
+      "input_type": "FASTQ",
+      "connection_id": "44444444-4444-4444-8444-444444444444",
+      "objects": [
+        {
+          "role": "R1",
+          "bucket": "fixture-bucket",
+          "key": "R1.fq.gz",
+          "version_id": "v1"
+        },
+        {
+          "role": "R2",
+          "bucket": "fixture-bucket",
+          "key": "R2.fq.gz",
+          "version_id": "v1"
+        }
+      ]
+    },
+    "sequencing": {
+      "sample": {
+        "sample_id": "S1",
+        "platform": "ILLUMINA",
+        "assay_type": "WES",
+        "read_length": 150,
+        "library_protocol": "standard",
+        "sequencer": "fixture",
+        "expected_x_ploidy": null
+      },
+      "release_id": "release1",
+      "reference_id": "reference1",
+      "caller_selection": "default"
+    },
+    "clinical_profile": {
+      "demographics": {
+        "sex": "unknown",
+        "age_years": null,
+        "age_days": null,
+        "age_group": null
+      },
+      "modules": {
+        "enable_screening": true,
+        "enable_literature": false
+      },
+      "ethnicity": null,
+      "clinical_context": null,
+      "reproductive": null,
+      "sample_info": null,
+      "consent": {
+        "secondary_findings": false,
+        "carrier_results": false,
+        "pharmacogenomics": false
+      },
+      "phenotype": {
+        "hpo_ids": [
+          "HP:0001250"
+        ],
+        "clinical_notes": null
+      },
+      "panel_ids": null,
+      "custom_genes": [
+        {
+          "gene_symbol": "TP53",
+          "priority_score": 0.5001,
+          "age_group_relevance": "all",
+          "disease_name": null,
+          "notes": null
+        }
+      ],
+      "language": "en",
+      "filtering_preset": "strict"
+    },
+    "outputs": [
+      "json"
+    ],
+    "max_cost_units": 9223372036854775807
+  }
+}

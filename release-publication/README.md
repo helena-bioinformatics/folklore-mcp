@@ -21,3 +21,7 @@ verification and prevent publication.
 Malformed or oversized responses, other HTTP errors and release identity/version
 mismatches fail immediately. GitHub API requests and release creation are not
 retried by this policy. Existing releases and immutable tags remain preserved.
+
+## Independently versioned companion Skill
+
+The adapter release and companion Skill versions need not match. The 2.0 adapter may attach the unchanged 1.7 scientific Skill, which covers the anonymous scientific branch. Keep its 1.7 filename/version and exact checksum; do not describe it as a 2.0 or authenticated-case Skill. The archive must already exist in the adapter's immutable tagged source.

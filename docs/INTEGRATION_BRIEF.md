@@ -1,8 +1,13 @@
 # Integrate Folklore classification into an AI workflow
 
+Same endpoint: 11 anonymous public tools and 18 additional authenticated tools.
+Supply a Folklore API key in the Authorization Bearer header. No local server
+is required. See [case workflows](CASE_WORKFLOWS.md).
+
 Folklore classifies and assesses identified GRCh38 germline variants under ACMG/AMP.
 Gene, disease and literature tools provide source-qualified scientific context.
-It is a hosted, read-only MCP with no account or API key requirement.
+These eleven anonymous tools are hosted and read-only. Authenticated case
+workflows use the same endpoint with a Folklore API key.
 
 Endpoint: `https://api.helena.bio/folklore/v1/mcp`
 
@@ -39,7 +44,7 @@ retain their separate producers and source semantics.
 - [Compatibility and protocol contract](COMPATIBILITY.md)
 - [Schemas and coverage for gene-disease evidence](GENE_DISEASE_EVIDENCE.md)
 
-Discover tools dynamically. With all capabilities enabled, the 1.7.0 source
+Discover tools dynamically. With public capabilities enabled, the anonymous catalog
 exposes ten scientific tools plus `support_helena`, a separate non-scientific
 helper appropriate only when the user explicitly asks about supporting Helena.
 Standalone capabilities use explicit feature gates. See [compatibility](COMPATIBILITY.md) and

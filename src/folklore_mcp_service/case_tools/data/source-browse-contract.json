@@ -1,0 +1,402 @@
+{
+  "$defs": {
+    "FileRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Key",
+          "type": "string"
+        },
+        "kind": {
+          "const": "file",
+          "default": "file",
+          "title": "Kind",
+          "type": "string"
+        },
+        "last_modified": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Modified"
+        },
+        "metadata_state": {
+          "enum": [
+            "versioned",
+            "unversioned",
+            "unavailable"
+          ],
+          "title": "Metadata State",
+          "type": "string"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "versioning_required",
+                "not_found",
+                "access_denied",
+                "timeout",
+                "provider_unavailable",
+                "unsupported_version",
+                "unsupported_input_key"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason"
+        },
+        "selectable": {
+          "title": "Selectable",
+          "type": "boolean"
+        },
+        "selection": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Selection"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "size_bytes": {
+          "anyOf": [
+            {
+              "maximum": 9223372036854775807,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Size Bytes"
+        },
+        "version_id": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Version Id"
+        }
+      },
+      "required": [
+        "key",
+        "metadata_state",
+        "selectable",
+        "selection"
+      ],
+      "title": "FileRecord",
+      "type": "object"
+    },
+    "FolderRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "folder",
+          "title": "Kind",
+          "type": "string"
+        },
+        "parent_handle": {
+          "maxLength": 8192,
+          "minLength": 1,
+          "title": "Parent Handle",
+          "type": "string"
+        },
+        "prefix": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Prefix",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "prefix",
+        "parent_handle"
+      ],
+      "title": "FolderRecord",
+      "type": "object"
+    },
+    "Parent": {
+      "additionalProperties": false,
+      "properties": {
+        "bucket": {
+          "maxLength": 255,
+          "minLength": 3,
+          "title": "Bucket",
+          "type": "string"
+        },
+        "prefix": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Prefix",
+          "type": "string"
+        },
+        "root_index": {
+          "maximum": 63,
+          "minimum": 0,
+          "title": "Root Index",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "root_index",
+        "bucket",
+        "prefix"
+      ],
+      "title": "Parent",
+      "type": "object"
+    },
+    "RootRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "bucket": {
+          "maxLength": 255,
+          "minLength": 3,
+          "title": "Bucket",
+          "type": "string"
+        },
+        "key_prefix": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Key Prefix",
+          "type": "string"
+        },
+        "kind": {
+          "const": "root",
+          "default": "root",
+          "title": "Kind",
+          "type": "string"
+        },
+        "parent_handle": {
+          "maxLength": 8192,
+          "minLength": 1,
+          "title": "Parent Handle",
+          "type": "string"
+        },
+        "root_index": {
+          "maximum": 63,
+          "minimum": 0,
+          "title": "Root Index",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "bucket",
+        "key_prefix",
+        "root_index",
+        "parent_handle"
+      ],
+      "title": "RootRecord",
+      "type": "object"
+    },
+    "Selection": {
+      "additionalProperties": false,
+      "properties": {
+        "bucket": {
+          "maxLength": 255,
+          "minLength": 3,
+          "title": "Bucket",
+          "type": "string"
+        },
+        "connection_id": {
+          "format": "uuid",
+          "title": "Connection Id",
+          "type": "string"
+        },
+        "key": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Key",
+          "type": "string"
+        },
+        "size_bytes": {
+          "maximum": 9223372036854775807,
+          "minimum": 0,
+          "title": "Size Bytes",
+          "type": "integer"
+        },
+        "version_id": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Version Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "connection_id",
+        "bucket",
+        "key",
+        "version_id",
+        "size_bytes"
+      ],
+      "title": "Selection",
+      "type": "object"
+    }
+  },
+  "api_result_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "connection_id": {
+        "format": "uuid",
+        "title": "Connection Id",
+        "type": "string"
+      },
+      "context_binding_id": {
+        "format": "uuid",
+        "title": "Context Binding Id",
+        "type": "string"
+      },
+      "has_more": {
+        "title": "Has More",
+        "type": "boolean"
+      },
+      "next_cursor": {
+        "anyOf": [
+          {
+            "maxLength": 16384,
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Next Cursor"
+      },
+      "parent": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/Parent"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "records": {
+        "items": {
+          "discriminator": {
+            "mapping": {
+              "file": "#/$defs/FileRecord",
+              "folder": "#/$defs/FolderRecord",
+              "root": "#/$defs/RootRecord"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/RootRecord"
+            },
+            {
+              "$ref": "#/$defs/FolderRecord"
+            },
+            {
+              "$ref": "#/$defs/FileRecord"
+            }
+          ]
+        },
+        "maxItems": 25,
+        "title": "Records",
+        "type": "array"
+      },
+      "returned_count": {
+        "maximum": 25,
+        "minimum": 0,
+        "title": "Returned Count",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "context_binding_id",
+      "connection_id",
+      "parent",
+      "records",
+      "returned_count",
+      "has_more"
+    ],
+    "title": "BrowsePage",
+    "type": "object"
+  },
+  "contract_version": "1.0.0",
+  "input_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "connection_id": {
+        "format": "uuid",
+        "title": "Connection Id",
+        "type": "string"
+      },
+      "context_binding_id": {
+        "format": "uuid",
+        "title": "Context Binding Id",
+        "type": "string"
+      },
+      "cursor": {
+        "anyOf": [
+          {
+            "maxLength": 16384,
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Cursor"
+      },
+      "limit": {
+        "default": 10,
+        "maximum": 25,
+        "minimum": 1,
+        "title": "Limit",
+        "type": "integer"
+      },
+      "parent_handle": {
+        "anyOf": [
+          {
+            "maxLength": 8192,
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Parent Handle"
+      }
+    },
+    "required": [
+      "context_binding_id",
+      "connection_id"
+    ],
+    "title": "BrowseRequest",
+    "type": "object"
+  },
+  "tool_name": "browse_source_objects"
+}

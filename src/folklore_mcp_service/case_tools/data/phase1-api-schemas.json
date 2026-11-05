@@ -1,0 +1,2092 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Phase 1 Folklore MCP API schemas and source contracts",
+  "version": "1",
+  "$defs": {
+    "UUID": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "Digest": {
+      "type": "string",
+      "minLength": 64,
+      "maxLength": 64,
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "SafeInteger": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "CostDecimal": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 19,
+      "pattern": "^(0|[1-9][0-9]{0,18})$",
+      "x-semantic-validator": "decimal value <= 9223372036854775807; convert exactly to API StrictInt"
+    },
+    "IdempotencyKey": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "pattern": "^[\\x20-\\x7E]+$"
+    },
+    "HpoId": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 10,
+      "pattern": "^HP:[0-9]{7}$"
+    },
+    "S3ObjectInput": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "s3_object"
+        },
+        "connection_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "bucket": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 255,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]+$"
+        },
+        "key": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "version_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        }
+      },
+      "required": [
+        "kind",
+        "connection_id",
+        "bucket",
+        "key",
+        "version_id"
+      ],
+      "additionalProperties": false
+    },
+    "ClinicalInputs": {
+      "type": "object",
+      "properties": {
+        "hpo_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/HpoId"
+          },
+          "maxItems": 200,
+          "default": []
+        },
+        "filtering_preset": {
+          "type": "string",
+          "enum": [
+            "strict",
+            "balanced",
+            "permissive"
+          ],
+          "default": "strict"
+        },
+        "language": {
+          "const": "en",
+          "default": "en"
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "Demographics": {
+      "type": "object",
+      "properties": {
+        "sex": {
+          "type": "string",
+          "enum": [
+            "male",
+            "female",
+            "unknown"
+          ]
+        },
+        "age_years": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "age_days": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 365
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "age_group": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "sex"
+      ],
+      "additionalProperties": false
+    },
+    "Modules": {
+      "type": "object",
+      "properties": {
+        "enable_screening": {
+          "type": "boolean",
+          "default": false
+        },
+        "enable_literature": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "Ethnicity": {
+      "type": "object",
+      "properties": {
+        "primary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "populations": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 64
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 4000
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "primary"
+      ],
+      "additionalProperties": false
+    },
+    "FamilyHistory": {
+      "type": "object",
+      "properties": {
+        "has_affected_relatives": {
+          "type": "boolean",
+          "default": false
+        },
+        "consanguinity": {
+          "type": "boolean",
+          "default": false
+        },
+        "details": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 10000
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "ClinicalContext": {
+      "type": "object",
+      "properties": {
+        "indication": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 1000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "indication_details": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 10000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "family_history": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FamilyHistory"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "Reproductive": {
+      "type": "object",
+      "properties": {
+        "is_pregnant": {
+          "type": "boolean",
+          "default": false
+        },
+        "gestational_age_weeks": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "family_planning": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "SampleInfo": {
+      "type": "object",
+      "properties": {
+        "sample_type": {
+          "anyOf": [
+            {
+              "const": "singleton"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "has_parental_samples": {
+          "type": "boolean",
+          "default": false
+        },
+        "has_affected_sibling": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "Consent": {
+      "type": "object",
+      "properties": {
+        "secondary_findings": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "carrier_results": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "pharmacogenomics": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "Phenotype": {
+      "type": "object",
+      "properties": {
+        "hpo_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/HpoId"
+          },
+          "maxItems": 200,
+          "default": []
+        },
+        "clinical_notes": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 20000
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "CustomGene": {
+      "type": "object",
+      "properties": {
+        "gene_symbol": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 50,
+          "pattern": "^[A-Za-z0-9._-]+$"
+        },
+        "priority_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.5
+        },
+        "age_group_relevance": {
+          "type": "string",
+          "enum": [
+            "neonatal",
+            "pediatric",
+            "adult",
+            "all"
+          ],
+          "default": "all"
+        },
+        "disease_name": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 1000
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "notes": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 4000
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "gene_symbol"
+      ],
+      "additionalProperties": false
+    },
+    "ClinicalProfile": {
+      "type": "object",
+      "properties": {
+        "demographics": {
+          "$ref": "#/$defs/Demographics"
+        },
+        "modules": {
+          "$ref": "#/$defs/Modules"
+        },
+        "ethnicity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Ethnicity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "clinical_context": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ClinicalContext"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reproductive": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Reproductive"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sample_info": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SampleInfo"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "consent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Consent"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "phenotype": {
+          "$ref": "#/$defs/Phenotype"
+        },
+        "panel_ids": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "maxItems": 64
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "custom_genes": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/CustomGene"
+              },
+              "maxItems": 500
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "language": {
+          "const": "en",
+          "default": "en"
+        },
+        "filtering_preset": {
+          "type": "string",
+          "enum": [
+            "strict",
+            "balanced",
+            "permissive"
+          ],
+          "default": "strict"
+        }
+      },
+      "required": [
+        "demographics"
+      ],
+      "additionalProperties": false
+    },
+    "SequencingObject": {
+      "type": "object",
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": [
+            "R1",
+            "R2",
+            "ALIGNMENT"
+          ]
+        },
+        "bucket": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 255,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]+$"
+        },
+        "key": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "version_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        }
+      },
+      "required": [
+        "role",
+        "bucket",
+        "key",
+        "version_id"
+      ],
+      "additionalProperties": false
+    },
+    "SequencingInput": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "s3_sequencing"
+        },
+        "input_type": {
+          "type": "string",
+          "enum": [
+            "FASTQ",
+            "BAM",
+            "CRAM"
+          ]
+        },
+        "connection_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "objects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SequencingObject"
+          },
+          "maxItems": 2,
+          "minItems": 1
+        }
+      },
+      "required": [
+        "kind",
+        "input_type",
+        "connection_id",
+        "objects"
+      ],
+      "additionalProperties": false
+    },
+    "SequencingSample": {
+      "type": "object",
+      "properties": {
+        "sample_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$"
+        },
+        "platform": {
+          "const": "ILLUMINA"
+        },
+        "assay_type": {
+          "type": "string",
+          "enum": [
+            "WES",
+            "WGS"
+          ]
+        },
+        "read_length": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "library_protocol": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "sequencer": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "expected_x_ploidy": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "sample_id",
+        "platform",
+        "assay_type",
+        "read_length",
+        "library_protocol",
+        "sequencer"
+      ],
+      "additionalProperties": false
+    },
+    "SequencingSettings": {
+      "type": "object",
+      "properties": {
+        "sample": {
+          "$ref": "#/$defs/SequencingSample"
+        },
+        "release_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "reference_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+        },
+        "caller_selection": {
+          "type": "string",
+          "enum": [
+            "default",
+            "deepvariant",
+            "gatk"
+          ],
+          "default": "default"
+        }
+      },
+      "required": [
+        "sample",
+        "release_id",
+        "reference_id"
+      ],
+      "additionalProperties": false
+    },
+    "SubmitV1": {
+      "type": "object",
+      "properties": {
+        "idempotency_key": {
+          "$ref": "#/$defs/IdempotencyKey"
+        },
+        "context_binding_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "external_reference": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "json",
+              "pdf"
+            ]
+          },
+          "maxItems": 2,
+          "minItems": 1,
+          "uniqueItems": true,
+          "default": [
+            "json"
+          ],
+          "contains": {
+            "const": "json"
+          }
+        },
+        "max_cost_units": {
+          "$ref": "#/$defs/CostDecimal"
+        },
+        "profile": {
+          "const": "singleton-germline-v1"
+        },
+        "input": {
+          "$ref": "#/$defs/S3ObjectInput"
+        },
+        "clinical": {
+          "$ref": "#/$defs/ClinicalInputs"
+        }
+      },
+      "required": [
+        "idempotency_key",
+        "context_binding_id",
+        "profile",
+        "input",
+        "max_cost_units"
+      ],
+      "additionalProperties": false
+    },
+    "SubmitV2": {
+      "type": "object",
+      "properties": {
+        "idempotency_key": {
+          "$ref": "#/$defs/IdempotencyKey"
+        },
+        "context_binding_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "external_reference": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "json",
+              "pdf"
+            ]
+          },
+          "maxItems": 2,
+          "minItems": 1,
+          "uniqueItems": true,
+          "default": [
+            "json"
+          ]
+        },
+        "max_cost_units": {
+          "$ref": "#/$defs/CostDecimal"
+        },
+        "profile": {
+          "const": "singleton-germline-v2"
+        },
+        "input": {
+          "$ref": "#/$defs/S3ObjectInput"
+        },
+        "clinical_profile": {
+          "$ref": "#/$defs/ClinicalProfile"
+        }
+      },
+      "required": [
+        "idempotency_key",
+        "context_binding_id",
+        "profile",
+        "input",
+        "max_cost_units",
+        "clinical_profile"
+      ],
+      "additionalProperties": false
+    },
+    "SubmitSequencing": {
+      "type": "object",
+      "properties": {
+        "idempotency_key": {
+          "$ref": "#/$defs/IdempotencyKey"
+        },
+        "context_binding_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "external_reference": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "json",
+              "pdf"
+            ]
+          },
+          "maxItems": 2,
+          "minItems": 1,
+          "uniqueItems": true,
+          "default": [
+            "json"
+          ]
+        },
+        "max_cost_units": {
+          "$ref": "#/$defs/CostDecimal"
+        },
+        "profile": {
+          "const": "singleton-sequencing-v1"
+        },
+        "input": {
+          "$ref": "#/$defs/SequencingInput"
+        },
+        "sequencing": {
+          "$ref": "#/$defs/SequencingSettings"
+        },
+        "clinical_profile": {
+          "$ref": "#/$defs/ClinicalProfile"
+        }
+      },
+      "required": [
+        "idempotency_key",
+        "context_binding_id",
+        "profile",
+        "input",
+        "max_cost_units",
+        "sequencing",
+        "clinical_profile"
+      ],
+      "additionalProperties": false
+    },
+    "ConnectionGrant": {
+      "type": "object",
+      "properties": {
+        "connection_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "bucket": {
+          "type": "string"
+        },
+        "key_prefix": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "connection_id",
+        "bucket",
+        "key_prefix"
+      ],
+      "additionalProperties": false
+    },
+    "PartnerPrice": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "type": "string",
+          "enum": [
+            "singleton-germline-v1",
+            "singleton-germline-v2"
+          ]
+        },
+        "cost_units": {
+          "type": "integer",
+          "minimum": 0,
+          "x-source-maximum-decimal": "9223372036854775807"
+        },
+        "catalog_version": {
+          "type": "string"
+        },
+        "effective_from": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "profile",
+        "cost_units",
+        "catalog_version",
+        "effective_from"
+      ],
+      "additionalProperties": false
+    },
+    "SequencingPriceItem": {
+      "type": "object",
+      "properties": {
+        "operation_key": {
+          "type": "string"
+        },
+        "cost_units": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "operation_key",
+        "cost_units"
+      ],
+      "additionalProperties": false
+    },
+    "SequencingPrice": {
+      "type": "object",
+      "properties": {
+        "assay_type": {
+          "type": "string",
+          "enum": [
+            "WES",
+            "WGS"
+          ]
+        },
+        "input_type": {
+          "type": "string",
+          "enum": [
+            "FASTQ",
+            "BAM",
+            "CRAM"
+          ]
+        },
+        "analysis_unit": {
+          "type": "string",
+          "enum": [
+            "singleton",
+            "trio"
+          ]
+        },
+        "operation_key": {
+          "type": "string"
+        },
+        "cost_units": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "catalog_version": {
+          "type": "string"
+        },
+        "effective_from": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "line_items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SequencingPriceItem"
+          },
+          "maxItems": 1,
+          "minItems": 1
+        }
+      },
+      "required": [
+        "assay_type",
+        "input_type",
+        "analysis_unit",
+        "operation_key",
+        "cost_units",
+        "catalog_version",
+        "effective_from",
+        "line_items"
+      ],
+      "additionalProperties": false
+    },
+    "Billing": {
+      "type": "object",
+      "properties": {
+        "unit": {
+          "const": "credit_unit"
+        },
+        "units_per_credit": {
+          "const": 1000
+        },
+        "payer_organization_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "balance_status": {
+          "type": "string"
+        },
+        "available_units": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reserved_units": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "price_status": {
+          "type": "string",
+          "enum": [
+            "available",
+            "unavailable"
+          ]
+        },
+        "prices": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PartnerPrice"
+          }
+        },
+        "sequencing_prices": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SequencingPrice"
+          }
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "billing_url": {
+          "const": "https://account.helena.bio/billing"
+        }
+      },
+      "required": [
+        "unit",
+        "units_per_credit",
+        "payer_organization_id",
+        "balance_status",
+        "available_units",
+        "reserved_units",
+        "price_status",
+        "prices",
+        "sequencing_prices",
+        "observed_at",
+        "billing_url"
+      ],
+      "additionalProperties": false
+    },
+    "PartnerContext": {
+      "type": "object",
+      "properties": {
+        "installation_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "client_id": {
+          "type": "string"
+        },
+        "actor_kind": {
+          "type": "string",
+          "enum": [
+            "human",
+            "machine"
+          ]
+        },
+        "user_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UUID"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "machine_principal_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UUID"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "credential_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UUID"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "contract_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UUID"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "billing_arrangement_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UUID"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "payer_organization_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UUID"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "organization_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "organization_type": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "context_binding_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "binding_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "grant_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UUID"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "grant_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "connections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ConnectionGrant"
+          }
+        },
+        "profiles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "context_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "payer_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "input_kinds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "s3_object",
+              "s3_sequencing",
+              "s3_trio_sequencing"
+            ]
+          }
+        },
+        "billing": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Billing"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "installation_id",
+        "client_id",
+        "actor_kind",
+        "user_id",
+        "machine_principal_id",
+        "credential_id",
+        "contract_id",
+        "billing_arrangement_id",
+        "payer_organization_id",
+        "organization_id",
+        "organization_type",
+        "role",
+        "context_binding_id",
+        "binding_version",
+        "grant_id",
+        "grant_version",
+        "scopes",
+        "connections",
+        "profiles",
+        "context_name",
+        "payer_name",
+        "input_kinds",
+        "billing"
+      ],
+      "additionalProperties": false
+    },
+    "StatusError": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "additionalProperties": false
+    },
+    "Warning": {
+      "type": "object",
+      "properties": {
+        "stage": {
+          "type": "string",
+          "enum": [
+            "phenotype_matching",
+            "literature_search",
+            "storage_migration"
+          ]
+        },
+        "code": {
+          "const": "optional_stage_failed"
+        }
+      },
+      "required": [
+        "stage",
+        "code"
+      ],
+      "additionalProperties": false
+    },
+    "SecondaryReview": {
+      "type": "object",
+      "properties": {
+        "qc_status": {},
+        "limitation_codes": {},
+        "review_reason": {},
+        "qc_validated": {}
+      },
+      "additionalProperties": false
+    },
+    "SecondaryAnalysis": {
+      "type": "object",
+      "properties": {
+        "job_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UUID"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "state": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "UPLOADING",
+                "VALIDATING",
+                "QC",
+                "ALIGNING",
+                "CALLING",
+                "NORMALIZING",
+                "READY_FOR_FOLKLORE",
+                "REVIEW",
+                "FAILED"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "attempt_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UUID"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "manifest_sha256": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Digest"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "review_required": {
+          "type": "boolean"
+        },
+        "review_acknowledged": {
+          "type": "boolean"
+        },
+        "review": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SecondaryReview"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "job_id",
+        "state",
+        "attempt_id",
+        "manifest_sha256",
+        "review_required",
+        "review_acknowledged",
+        "review"
+      ],
+      "additionalProperties": false
+    },
+    "PricingLine": {
+      "type": "object",
+      "properties": {
+        "operation_key": {},
+        "catalog_item_id": {},
+        "credit_units": {}
+      },
+      "additionalProperties": false
+    },
+    "StatusPricing": {
+      "type": "object",
+      "properties": {
+        "catalog_version_id": {},
+        "settlement_policy": {},
+        "line_items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PricingLine"
+          }
+        }
+      },
+      "required": [
+        "line_items"
+      ],
+      "additionalProperties": false
+    },
+    "AnalysisProjection": {
+      "type": "object",
+      "properties": {
+        "analysis_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "case_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "queued",
+            "running",
+            "succeeded",
+            "failed"
+          ]
+        },
+        "stage": {
+          "type": "string",
+          "enum": [
+            "import",
+            "secondary_analysis",
+            "review_required",
+            "validation",
+            "admission",
+            "analysis",
+            "publication",
+            "complete"
+          ]
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StatusError"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "cost": {
+          "type": "object",
+          "properties": {
+            "reserved_units": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "pricing": {
+              "$ref": "#/$defs/StatusPricing"
+            }
+          },
+          "required": [
+            "reserved_units"
+          ],
+          "additionalProperties": false
+        },
+        "billing": {
+          "type": "object",
+          "properties": {
+            "state": {
+              "type": "string",
+              "enum": [
+                "not_reserved",
+                "pending",
+                "reserved",
+                "settlement_pending",
+                "consumed",
+                "released",
+                "unknown"
+              ]
+            }
+          },
+          "required": [
+            "state"
+          ],
+          "additionalProperties": false
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Warning"
+          }
+        },
+        "links": {
+          "type": "object",
+          "properties": {
+            "self": {
+              "type": "string"
+            },
+            "results": {
+              "type": "string"
+            },
+            "folklore": {
+              "type": "string",
+              "format": "uri"
+            },
+            "review": {
+              "type": "string"
+            },
+            "cancel": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "self",
+            "results",
+            "folklore"
+          ],
+          "additionalProperties": false
+        },
+        "secondary_analysis": {
+          "$ref": "#/$defs/SecondaryAnalysis"
+        },
+        "cancellation_requested": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "analysis_id",
+        "case_id",
+        "status",
+        "stage",
+        "created_at",
+        "updated_at",
+        "error",
+        "cost",
+        "billing",
+        "warnings",
+        "links"
+      ],
+      "additionalProperties": false
+    },
+    "Artifact": {
+      "type": "object",
+      "properties": {
+        "artifact_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "json",
+            "pdf"
+          ]
+        },
+        "content_type": {
+          "type": "string",
+          "enum": [
+            "application/json",
+            "application/pdf"
+          ]
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sha256": {
+          "$ref": "#/$defs/Digest"
+        },
+        "download_url": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "kind",
+        "content_type",
+        "size_bytes",
+        "sha256",
+        "download_url"
+      ],
+      "additionalProperties": false
+    },
+    "Summary": {
+      "type": "object",
+      "properties": {
+        "classifier_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "classifier_version_label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "pathogenic_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "likely_pathogenic_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "classifier_version",
+        "classifier_version_label",
+        "pathogenic_count",
+        "likely_pathogenic_count"
+      ],
+      "additionalProperties": false
+    },
+    "ResultManifest": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "type": "string",
+          "enum": [
+            "1",
+            "2"
+          ]
+        },
+        "analysis_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "case_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "generation_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "report_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "summary": {
+          "$ref": "#/$defs/Summary"
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Artifact"
+          },
+          "maxItems": 2,
+          "minItems": 1
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Warning"
+          }
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "manifest_sha256": {
+          "$ref": "#/$defs/Digest"
+        }
+      },
+      "required": [
+        "schema_version",
+        "analysis_id",
+        "case_id",
+        "generation_id",
+        "report_id",
+        "summary",
+        "artifacts",
+        "warnings",
+        "expires_at",
+        "manifest_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "RequestError": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            },
+            "retryable": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "code",
+            "message",
+            "retryable"
+          ],
+          "additionalProperties": false
+        },
+        "request_id": {
+          "$ref": "#/$defs/UUID"
+        }
+      },
+      "required": [
+        "error",
+        "request_id"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "input_schemas": {
+    "list_analysis_contexts": {
+      "type": "object",
+      "properties": {},
+      "required": [],
+      "additionalProperties": false
+    },
+    "submit_case_analysis": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/SubmitV1"
+        },
+        {
+          "$ref": "#/$defs/SubmitV2"
+        },
+        {
+          "$ref": "#/$defs/SubmitSequencing"
+        }
+      ],
+      "type": "object"
+    },
+    "get_case_analysis_status": {
+      "type": "object",
+      "properties": {
+        "analysis_id": {
+          "$ref": "#/$defs/UUID"
+        }
+      },
+      "required": [
+        "analysis_id"
+      ],
+      "additionalProperties": false
+    },
+    "acknowledge_sequencing_qc_review": {
+      "type": "object",
+      "properties": {
+        "analysis_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "job_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "attempt_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "manifest_sha256": {
+          "$ref": "#/$defs/Digest"
+        },
+        "acknowledged": {
+          "const": true,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "analysis_id",
+        "job_id",
+        "attempt_id",
+        "manifest_sha256",
+        "acknowledged"
+      ],
+      "additionalProperties": false
+    },
+    "request_sequencing_analysis_cancellation": {
+      "type": "object",
+      "properties": {
+        "analysis_id": {
+          "$ref": "#/$defs/UUID"
+        }
+      },
+      "required": [
+        "analysis_id"
+      ],
+      "additionalProperties": false
+    },
+    "get_case_analysis_result_manifest": {
+      "type": "object",
+      "properties": {
+        "analysis_id": {
+          "$ref": "#/$defs/UUID"
+        }
+      },
+      "required": [
+        "analysis_id"
+      ],
+      "additionalProperties": false
+    },
+    "download_analysis_result_file": {
+      "type": "object",
+      "properties": {
+        "analysis_id": {
+          "$ref": "#/$defs/UUID"
+        },
+        "artifact_id": {
+          "$ref": "#/$defs/UUID"
+        }
+      },
+      "required": [
+        "analysis_id",
+        "artifact_id"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "api_output_structural_contracts": {
+    "list_analysis_contexts": {
+      "http_status": 200,
+      "source_schema": {
+        "type": "object",
+        "properties": {
+          "contexts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/PartnerContext"
+            }
+          }
+        },
+        "required": [
+          "contexts"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "submit_case_analysis": {
+      "http_status": 202,
+      "source_schema": {
+        "$ref": "#/$defs/AnalysisProjection"
+      }
+    },
+    "get_case_analysis_status": {
+      "http_status": 200,
+      "source_schema": {
+        "$ref": "#/$defs/AnalysisProjection"
+      }
+    },
+    "acknowledge_sequencing_qc_review": {
+      "http_status": 202,
+      "source_schema": {
+        "$ref": "#/$defs/AnalysisProjection"
+      }
+    },
+    "request_sequencing_analysis_cancellation": {
+      "http_status": 202,
+      "source_schema": {
+        "$ref": "#/$defs/AnalysisProjection"
+      }
+    },
+    "get_case_analysis_result_manifest": {
+      "http_status": 200,
+      "source_schema": {
+        "$ref": "#/$defs/ResultManifest"
+      }
+    },
+    "download_analysis_result_file": {
+      "http_status": 200,
+      "body": "Exact manifest-selected bytes, not JSON output",
+      "headers": [
+        "Content-Type",
+        "Content-Length",
+        "ETag",
+        "Content-Disposition",
+        "X-Request-ID",
+        "Cache-Control"
+      ],
+      "artifact_schema": {
+        "$ref": "#/$defs/Artifact"
+      }
+    }
+  },
+  "encoding": {
+    "input_safe_integer_cap": 9007199254740991,
+    "input_cap_scope": [
+      "demographics.age_years",
+      "reproductive.gestational_age_weeks"
+    ],
+    "input_cap_reason": "MCP encoding restriction; API clinical StrictInt has no source upper bound.",
+    "input_integer_rules": "Reject booleans, strings and fractional representations for integer fields. Validate source strictness after JSON Schema; format validation is enabled.",
+    "output_source_schemas": "Structural contracts describe source numeric types before MCP output encoding, not final MCP result schemas.",
+    "output_numeric_values": "Encode every numeric source value recursively as a canonical decimal string before result serialization; retain only adapter pagination/count/budget metadata as bounded JSON integers. Never round through binary64. Use decimal-aware parsing of source JSON. Preserve source integer versus decimal semantics in schema metadata.",
+    "maximum_cost": "Use exact decimal comparison, never a binary64 schema maximum for signed64 cost values."
+  },
+  "semantic_validators": [
+    "Apply source defaults before normalized-command hashing. Default modules={}, phenotype={}, legacy clinical={}, outputs=[json], optional profile fields=null where permitted. Do not insert forbidden unused root fields.",
+    "VCF profiles forbid explicitly supplied sequencing even null. V1 forbids explicitly supplied clinical_profile even null and requires json in outputs. V2 and singleton sequencing forbid explicitly supplied legacy clinical even empty. Trio is not accepted in Phase 1.",
+    "Key and version_id reject code points below 32. Version_id case-insensitive null/latest is invalid. VCF key must end case-insensitively .vcf or .vcf.gz.",
+    "The API independently enforces admitted source connection, bucket, relative root containment and immutable object version. No absolute keys, backslash or dot/dotdot segments are introduced by MCP.",
+    "Normalize HPO lists to sorted unique exact IDs; normalize outputs sorted unique; normalize panel UUID strings to sorted unique canonical UUIDs; check original source array-length bounds before deduplication.",
+    "Demographic age_years and age_days may not both be nonnull. Clinical screening true requires nonnull explicit secondary_findings and carrier_results consent choices. Nonempty panel_ids/custom_genes requires screening true.",
+    "Panel IDs parse as UUIDs. No whitespace trimming or gene uppercasing is invented. Preserve nullable fields versus omitted/defaulted command semantics.",
+    "FASTQ object roles must be exactly R1,R2 and suffix .fastq.gz/.fq.gz; BAM/CRAM exactly ALIGNMENT with matching extension. Object bucket/key pairs must be distinct even at different versions. Normalize objects sorted by role.",
+    "Sequencing prices contain exactly one inclusive tariff line; key sequencing.{assay lower}.{input_type lower}.{analysis_unit}; line cost equals total. Status pricing is an immutable allowlisted snapshot, not a new spending permission.",
+    "Machine input never contains an API key, fake user_id, caller payer, internal path or service secret. Credential is secure transport/configuration only.",
+    "Status source has conditional singleton sequencing fields and links. Preserve null secondary IDs before job creation. Review warning keys are optional and values are source-owned; no stronger source types are claimed.",
+    "Review body must match current job_id, attempt_id, manifest_sha256 and acknowledged=true. Exact stored review replay is valid; stale/different review conflicts. VCF review/cancel returns unsupported-profile conflict.",
+    "Cancellation of terminal/already-requested sequencing command returns current row; requested cancellation is not proof of stopped writers or settled billing.",
+    "Manifest identity must match requested analysis; artifact UUID/kind/type/size/digest and relative path must match exact constructed route. Digest is canonical sorted compact ensure_ascii JSON without manifest_sha256.",
+    "Retention expires_at is offset-aware and current. Do not hardcode configured default 30 days. Download same opened no-follow file verified for exact size/hash; no Range,304 or presigned download contract.",
+    "Source result statuses/stages and bounded schemas are closed for Phase 1; unknown source contract values yield typed source-contract mismatch rather than invented success."
+  ],
+  "replay": {
+    "machine_namespace": [
+      "installation_id",
+      "organization_id",
+      "machine_principal_id",
+      "idempotency_key"
+    ],
+    "normalization": "Source Pydantic serializer removes unused clinical/sequencing fields, materializes allowed defaults, normalizes HPO/output/panel/role ordering, hashes sorted compact ASCII-escaped JSON.",
+    "billing_match": [
+      "billing_arrangement_id",
+      "payer_organization_id"
+    ],
+    "credential_rotation": "Credential ID is not part of command idempotency namespace; current admission remains required.",
+    "uncertain_submit": "Replay original key and exact normalized command. Replayed POST may omit joined billing state; GET status is authoritative for current accounting.",
+    "review": "Exact same current receipt may replay; review_conflict covers stale identity, differing acknowledgement or no longer awaiting first review.",
+    "cancel": "Repeat original analysis cancellation and inspect current status; do not synthesize a cancelled status."
+  },
+  "errors": {
+    "source_schema": {
+      "$ref": "#/$defs/RequestError"
+    },
+    "common": [
+      [
+        401,
+        "authentication_required",
+        false
+      ],
+      [
+        401,
+        "admission_denied",
+        false
+      ],
+      [
+        403,
+        "admission_denied",
+        false
+      ],
+      [
+        404,
+        "admission_denied",
+        false
+      ],
+      [
+        404,
+        "analysis_not_found",
+        false
+      ],
+      [
+        404,
+        "artifact_not_found",
+        false
+      ],
+      [
+        409,
+        "idempotency_conflict",
+        false
+      ],
+      [
+        409,
+        "results_not_ready",
+        false
+      ],
+      [
+        409,
+        "review_conflict",
+        false
+      ],
+      [
+        409,
+        "review_not_available",
+        false
+      ],
+      [
+        409,
+        "cancellation_not_available",
+        false
+      ],
+      [
+        410,
+        "artifact_expired",
+        false
+      ],
+      [
+        422,
+        "invalid_request",
+        false
+      ],
+      [
+        503,
+        "partner_api_unavailable",
+        true
+      ],
+      [
+        503,
+        "admission_unavailable",
+        true
+      ],
+      [
+        503,
+        "artifact_unavailable",
+        true
+      ]
+    ],
+    "header_contract": "Handled partner responses carry server UUID X-Request-ID and no-store; handled 401 carries WWW-Authenticate: Bearer. Error request_id matches header. Gateway/middleware failures may have another envelope.",
+    "status_error": "Asynchronous command error is null or {code,message}, without retryable/request_id. Preserve independent status and billing state.",
+    "codes_policy": "Documented codes are established observations, not an exhaustive backend error enum."
+  },
+  "api_scope_mapping": {
+    "list_analysis_contexts": "admitted scope intersection; no dedicated context scope",
+    "submit_case_analysis": "analyses:create",
+    "get_case_analysis_status": "analyses:read",
+    "acknowledge_sequencing_qc_review": "analyses:create",
+    "request_sequencing_analysis_cancellation": "analyses:create",
+    "get_case_analysis_result_manifest": "results:read",
+    "download_analysis_result_file": "results:read",
+    "billing_details": "credits:read controls billing disclosure only"
+  }
+}

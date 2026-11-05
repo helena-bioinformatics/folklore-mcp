@@ -4,6 +4,7 @@ import asyncio
 import json
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from pathlib import Path
 from typing import Any
 
 import mcp.types as mcp_types
@@ -19,6 +20,9 @@ from folklore_mcp_service.application.literature_gateway import (
     LiteratureGatewayError,
 )
 from folklore_mcp_service.application.public_gene_gateway import PublicGeneGateway
+from folklore_mcp_service.case_tools.common import CaseError
+from folklore_mcp_service.case_tools.contracts import TOOLS as CASE_TOOL_NAMES
+from folklore_mcp_service.case_tools.main import CaseService
 from folklore_mcp_service.config.settings import Settings
 from folklore_mcp_service.domain.contracts import (
     SearchVariantArguments,
@@ -36,6 +40,7 @@ from folklore_mcp_service.domain.literature_contracts import (
     SearchVariantLiteratureArguments,
 )
 from folklore_mcp_service.domain.public_projection import public_result, public_schema
+from folklore_mcp_service.presentation.case_auth import current_api_key, machine_bearer
 from folklore_mcp_service.presentation.gene_disease import (
     DISEASE_TOOL,
     GENE_TOOL,
@@ -49,7 +54,7 @@ from folklore_mcp_service.presentation.public_gene import (
 )
 
 MCP_PROTOCOL_VERSION = "2026-07-28"
-MCP_ADAPTER_VERSION = "1.7.0"
+MCP_ADAPTER_VERSION = "2.0.0"
 MCP_SERVER_NAME = "folklore"
 MCP_TOOL_NAME = "classify_germline_variant"
 MCP_LITERATURE_TOOL_NAME = "search_variant_literature"
@@ -88,15 +93,26 @@ HELENA_GOOD_RESULT = {
 
 
 class FolkloreMcpApplication:
-    def __init__(self, app: ASGIApp, *, allowed_origins: frozenset[str]) -> None:
+    def __init__(
+        self,
+        app: ASGIApp,
+        *,
+        allowed_origins: frozenset[str],
+        case_manager: Any | None = None,
+    ) -> None:
         self._app = app
         self._allowed_origins = allowed_origins
+        self._case_manager = case_manager
 
     @asynccontextmanager
     async def lifespan(self) -> AsyncIterator[None]:
         router = self._app.router
-        async with router.lifespan_context(self._app):
-            yield
+        try:
+            async with router.lifespan_context(self._app):
+                yield
+        finally:
+            if self._case_manager is not None:
+                await self._case_manager.close()
 
     async def __call__(self, scope: Any, receive: Any, send: Any) -> None:
         if scope.get("type") == "http" and not self._origin_is_allowed(scope):
@@ -120,7 +136,64 @@ class FolkloreMcpApplication:
             )
             await send({"type": "http.response.body", "body": body})
             return
-        await self._app(scope, receive, send)
+        api_key = None
+        if scope.get("type") == "http" and self._case_manager is not None:
+            try:
+                api_key = machine_bearer(scope.get("headers", []))
+                if api_key is not None:
+                    await self._case_manager.authorize(api_key)
+            except CaseError as error:
+                status = 503 if error.retryable else 401
+                body = json.dumps(
+                    {
+                        "jsonrpc": "2.0",
+                        "id": None,
+                        "error": {
+                            "code": -32001,
+                            "message": "Machine API authentication failed.",
+                        },
+                    },
+                    separators=(",", ":"),
+                ).encode()
+                await send(
+                    {
+                        "type": "http.response.start",
+                        "status": status,
+                        "headers": [
+                            (b"content-type", b"application/json"),
+                            (b"content-length", str(len(body)).encode()),
+                            (b"cache-control", b"private, no-store"),
+                            (b"vary", b"Authorization"),
+                            (b"www-authenticate", b'Bearer realm="Folklore API"'),
+                        ],
+                    }
+                )
+                await send({"type": "http.response.body", "body": body})
+                return
+        original_send = send
+
+        async def private_cache_headers(message):
+            if (
+                message["type"] == "http.response.start"
+                and self._case_manager is not None
+            ):
+                headers = list(message.get("headers", []))
+                vary = [v for k, v in headers if k.lower() == b"vary"]
+                headers = [(k, v) for k, v in headers if k.lower() != b"vary"]
+                headers.append((b"vary", b", ".join(vary + [b"Authorization"])))
+                if api_key is not None:
+                    headers = [
+                        (k, v) for k, v in headers if k.lower() != b"cache-control"
+                    ]
+                    headers.append((b"cache-control", b"private, no-store"))
+                message = {**message, "headers": headers}
+            await original_send(message)
+
+        credential_token = current_api_key.set(api_key)
+        try:
+            await self._app(scope, receive, private_cache_headers)
+        finally:
+            current_api_key.reset(credential_token)
 
     def _origin_is_allowed(self, scope: Any) -> bool:
         raw_origins = [
@@ -143,11 +216,30 @@ def create_mcp_app(
     literature_gateway: LiteratureGateway,
     settings: Settings,
     observe: Any | None = None,
+    case_manager: Any | None = None,
     gene_disease_gateway: GeneDiseaseGateway | None = None,
     public_gene_gateway: PublicGeneGateway | None = None,
 ) -> FolkloreMcpApplication:
     """Compose the MCP transport without adding scientific behavior."""
 
+    case_tools = []
+    if settings.FOLKLORE_MCP_CASES_ENABLED:
+        from folklore_mcp_service.case_tools.hosted import (
+            HostedCaseManager,
+            hosted_tools,
+        )
+
+        if case_manager is None:
+            case_manager = HostedCaseManager(
+                Path(settings.FOLKLORE_MCP_CASE_STATE_DIR),
+                bytes.fromhex(
+                    settings.FOLKLORE_MCP_CASE_NAMESPACE_SECRET.get_secret_value()
+                ),
+                max_namespaces=settings.FOLKLORE_MCP_CASE_MAX_NAMESPACES,
+            )
+        case_tools = hosted_tools()
+    else:
+        case_manager = None
     semaphore = asyncio.Semaphore(settings.FOLKLORE_MCP_MAX_CONCURRENT)
     tool = mcp_types.Tool(
         name=MCP_TOOL_NAME,
@@ -439,8 +531,8 @@ def create_mcp_app(
         params: mcp_types.PaginatedRequestParams | None,
     ) -> mcp_types.ListToolsResult:
         _reject_unissued_cursor(params)
-        return mcp_types.ListToolsResult(
-            tools=(
+        public_tools = (
+            (
                 [
                     tool,
                     literature_tool,
@@ -464,9 +556,13 @@ def create_mcp_app(
                 if settings.FOLKLORE_PUBLIC_GENE_ENABLED
                 and public_gene_gateway is not None
                 else []
-            ),
-            ttl_ms=86_400_000,
-            cache_scope="public",
+            )
+        )
+        return mcp_types.ListToolsResult(
+            tools=public_tools
+            + (case_tools if current_api_key.get() is not None else []),
+            ttl_ms=0 if current_api_key.get() is not None else 86_400_000,
+            cache_scope="private" if current_api_key.get() is not None else "public",
         )
 
     async def call_tool(
@@ -585,6 +681,31 @@ def create_mcp_app(
             if observe is not None:
                 observe(outcome, asyncio.get_running_loop().time() - started)
 
+    async def observed_call_tool(
+        context: ServerRequestContext,
+        params: mcp_types.CallToolRequestParams,
+    ) -> mcp_types.CallToolResult:
+        if case_manager is not None and params.name in CASE_TOOL_NAMES:
+            api_key = current_api_key.get()
+            if api_key is None:
+                return CaseService._result(
+                    params.name,
+                    CaseService._error(CaseError("authentication_required")),
+                )
+            try:
+                async with asyncio.timeout(settings.FOLKLORE_MCP_DEADLINE_SECONDS):
+                    return await case_manager.call(
+                        api_key, params.name, params.arguments or {}
+                    )
+            except TimeoutError:
+                return CaseService._result(
+                    params.name,
+                    CaseService._error(
+                        CaseError("upstream_unavailable", retryable=True)
+                    ),
+                )
+        return await call_tool(context, params)
+
     async def list_resources(
         _: ServerRequestContext,
         params: mcp_types.PaginatedRequestParams | None,
@@ -620,9 +741,16 @@ def create_mcp_app(
         version=MCP_ADAPTER_VERSION,
         title="Folklore Clinical Variant Interpretation MCP",
         description=(
-            "ACMG/AMP germline variant classification, gene profiles, disease associations and literature."
+            "Germline ACMG/AMP classification, genes, disease associations, literature and API-key case analysis."
+            if case_manager is not None
+            else "ACMG/AMP germline variant classification, gene profiles, disease associations and literature."
         ),
         instructions=(
+            "For case analysis, authenticate with your Folklore machine API key in the Authorization Bearer header. Use list_analysis_contexts, browse_source_objects and submit_case_analysis with an explicit cost ceiling and original idempotency key. Read status and result manifest, then the frozen JSON views or authenticated original download URL. Subscription limits and native credit admission apply. "
+            if case_manager is not None
+            else ""
+        )
+        + (
             "Resolve a gene with resolve_gene, then use its selected HGNC gene_id and identity_snapshot_id as snapshot_id for get_gene_profile. get_gene_section provides continuation pages; search_gene_literature provides a separate live capture. Keep returned source assertions, snapshot identity and coverage. "
             if settings.FOLKLORE_PUBLIC_GENE_ENABLED and public_gene_gateway is not None
             else ""
@@ -646,7 +774,7 @@ def create_mcp_app(
             )
         ],
         on_list_tools=list_tools,
-        on_call_tool=call_tool,
+        on_call_tool=observed_call_tool,
         on_list_resources=list_resources,
         on_read_resource=read_resource,
         on_list_prompts=list_prompts,
@@ -662,6 +790,7 @@ def create_mcp_app(
     return FolkloreMcpApplication(
         app,
         allowed_origins=settings.folklore_mcp_allowed_origin_set,
+        case_manager=case_manager,
     )
 
 

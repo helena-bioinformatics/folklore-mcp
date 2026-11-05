@@ -20,6 +20,7 @@ jobs:
           cache: pip
       - run: python -m pip install -r requirements-dev.lock
       - run: python -m pip install --no-deps -e .
+      - run: python ops/check_public_export.py --base HEAD
       - run: pytest
       - run: node tests/client_journey.mjs
       - run: ruff check .

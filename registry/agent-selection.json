@@ -6,7 +6,7 @@
     "publisher": "Helena Bioinformatics",
     "registryName": "io.github.helena-bioinformatics/folklore",
     "endpoint": "https://api.helena.bio/folklore/v1/mcp",
-    "task": "Classify and interpret one supported public GRCh38 germline SNV or simple indel under ACMG/AMP with structured evidence, provenance and related literature. Retrieve ClinGen Gene-Disease Validity assertions for a public gene or disease as a separate genomic evidence workflow. Resolve public human gene identities and review source-qualified gene profiles with immutable snapshot identity and separate live literature captures."
+    "task": "Anonymous scientific routing below. Authenticated case, source and result tool schemas are defined separately in registry/authenticated-tools.json. Classify and interpret one supported public GRCh38 germline SNV or simple indel under ACMG/AMP with structured evidence, provenance and related literature. Retrieve ClinGen Gene-Disease Validity assertions for a public gene or disease as a separate genomic evidence workflow. Resolve public human gene identities and review source-qualified gene profiles with immutable snapshot identity and separate live literature captures."
   },
   "selection": {
     "implicit": true,
