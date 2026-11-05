@@ -212,10 +212,10 @@ def test_release_candidate_versions_and_dois_are_consistent() -> None:
     zenodo = json.loads((REPOSITORY / ".zenodo.json").read_text())
     citation = yaml.safe_load((REPOSITORY / "CITATION.cff").read_text())
     assert zenodo["version"] == citation["version"] == MCP_ADAPTER_VERSION
-    assert published["sourceCommit"] == "5eb6d77bce88a140418872ec19739459ec50cf8f"
-    assert published["tagObject"] == "64dbbc7382f83f900647af46f6a82e4ef088009c"
-    assert published["officialWorkflowRun"] == 41252550340
-    assert published["notes"] == "release-publication/1.7.0.md"
+    assert published["sourceCommit"] == "82e4f3802a908166424530f0989a7f7e20222ecb"
+    assert published["tagObject"] == "06aa31b9d738df1e15114668c950cc8cd8a0bdda"
+    assert published["officialWorkflowRun"] == 42128335960
+    assert published["notes"] == "release-publication/2.0.0.md"
     asset = REPOSITORY / published["asset"]
     assert hashlib.sha256(asset.read_bytes()).hexdigest() == published["assetSha256"]
     assert (
@@ -244,9 +244,20 @@ def test_release_candidate_versions_and_dois_are_consistent() -> None:
     assert archived["version"] == previous["version"] == "1.6.0"
     assert archived["doi"] == "10.5281/zenodo.23817704"
     assert "2.0.0" in (REPOSITORY / "README.md").read_text()
+    assert published["version"] == MCP_ADAPTER_VERSION == "2.0.0"
+    historical_publication = json.loads(
+        (REPOSITORY / "archive/publication-records/current-1.7.0.json").read_text()
+    )
+    assert historical_publication["version"] == "1.7.0"
     assert (
-        published["version"] == "1.7.0"
-    )  # Actual historical publication, not the prepared source.
+        historical_publication["sourceCommit"]
+        == "5eb6d77bce88a140418872ec19739459ec50cf8f"
+    )
+    assert (
+        historical_publication["tagObject"]
+        == "64dbbc7382f83f900647af46f6a82e4ef088009c"
+    )
+    assert historical_publication["officialWorkflowRun"] == 41252550340
 
 
 def test_public_benchmark_manifest_is_bounded_and_citable() -> None:
