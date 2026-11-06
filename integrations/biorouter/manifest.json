@@ -2,7 +2,7 @@
   "name": "folklore-clinical-variant-interpretation-mcp",
   "display_name": "Folklore Clinical Variant Interpretation MCP",
   "description": "ACMG/AMP germline variant classification, gene profiles, disease associations and literature.",
-  "version": "1.7.0",
+  "version": "2.0.0",
   "entry_point": "folklore-clinical-variant-interpretation-mcp",
   "repository": "https://github.com/helena-bioinformatics/folklore-mcp/tree/main/integrations/biorouter",
   "license": "Apache-2.0",

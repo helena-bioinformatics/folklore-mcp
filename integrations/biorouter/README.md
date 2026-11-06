@@ -4,8 +4,15 @@ This Biorouter `.brxt` extension connects Biorouter to Folklore Clinical Variant
 Interpretation MCP. Helena Bioinformatics publishes Folklore Clinical Variant
 Interpretation MCP.
 
-The extension is a local stdio bridge to the hosted, read-only Streamable HTTP
-endpoint. Access is anonymous. Scientific results come from the hosted service.
+The 2.0.0 extension connects Biorouter to the hosted Folklore MCP 2.0.0
+endpoint over Streamable HTTP. Biorouter discovers the eleven public tools
+through the anonymous stdio bridge. Scientific results come from the hosted
+service. Keep patient and private case data out of this connection.
+
+For case analysis, the hosted service offers eighteen additional tools to
+clients configured with a Folklore Bearer API key. Use the
+[Folklore MCP setup guide](https://folklore.helena.bio/integrations/mcp)
+to configure an authenticated client.
 
 ## Tools
 

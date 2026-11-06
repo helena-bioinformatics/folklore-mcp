@@ -158,7 +158,7 @@ def test_biorouter_recipe_preserves_identity_version_and_safety() -> None:
     }
     assert manifest["name"] == "folklore-clinical-variant-interpretation-mcp"
     assert manifest["display_name"] == "Folklore Clinical Variant Interpretation MCP"
-    assert manifest["version"] == "1.7.0"
+    assert manifest["version"] == "2.0.0"
     assert manifest["tools_count"] == 11
     assert manifest["env_vars"] == []
     assert project["project"]["version"] == manifest["version"]
@@ -193,7 +193,16 @@ def test_biorouter_brxt_contains_only_the_public_bridge_assets(tmp_path: Path) -
     digest = hashlib.sha256(first.read_bytes()).hexdigest()
     assert first.with_suffix(".brxt.sha256").read_text() == f"{digest}  first.brxt\n"
     with zipfile.ZipFile(first) as bundle:
+        assert bundle.testzip() is None
         names = set(bundle.namelist())
+        manifest = json.loads(bundle.read("manifest.json"))
+        project = tomllib.loads(bundle.read("pyproject.toml").decode())["project"]
+        lock = tomllib.loads(bundle.read("uv.lock").decode())
+        package = next(
+            item for item in lock["package"] if item["name"] == project["name"]
+        )
+        assert manifest["version"] == project["version"] == package["version"]
+        assert manifest["entry_point"] in project["scripts"]
     assert "manifest.json" in names
     assert "uv.lock" in names
     assert "src/folklore_biorouter/server.py" in names
