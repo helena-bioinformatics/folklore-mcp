@@ -162,7 +162,11 @@ def test_biorouter_recipe_preserves_identity_version_and_safety() -> None:
     assert manifest["tools_count"] == 11
     assert manifest["env_vars"] == []
     assert project["project"]["version"] == manifest["version"]
-    assert project["project"]["dependencies"] == ["fastmcp==3.4.2"]
+    assert project["project"]["dependencies"] == [
+        "fastmcp==3.4.10",
+        "certifi>=2026.10.19",
+        "mcp>=1.30.0,<2",
+    ]
     assert "Ambiguous candidates are never selected automatically" in skill
     assert "classify_germline_variant" in skill
     assert "snapshot" in skill

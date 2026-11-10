@@ -13,10 +13,15 @@ ENDPOINT = "https://api.helena.bio/folklore/v1/mcp"
 SERVER_NAME = "Folklore Clinical Variant Interpretation MCP"
 CLIENT_NAME = "Biorouter Folklore Clinical Variant Interpretation MCP extension"
 INSTRUCTIONS = (
+    "Use public reference inputs only. Do not provide patient, phenotype, family, "
+    "segregation or private case data. Public phenotype reference terms in literature "
+    "queries must not describe an individual patient or private case. "
     "Use classify_germline_variant for germline variant classification. "
     "Retrieve gene identities, profiles, disease associations and publications with the matching tools. "
     "Preserve returned typed outcomes, source provenance and snapshot identity. "
-    "Present ambiguous candidates for selection."
+    "Present ambiguous candidates for selection. "
+    "Results require qualified professional review and are not a diagnosis, "
+    "treatment recommendation or standalone clinical report."
 )
 
 
