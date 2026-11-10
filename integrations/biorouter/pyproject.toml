@@ -10,7 +10,7 @@ readme = "README.md"
 license = {text = "Apache-2.0"}
 authors = [{name = "Helena Bioinformatics", email = "contact@helena.bio"}]
 requires-python = ">=3.11"
-dependencies = ["fastmcp==3.4.2"]
+dependencies = ["fastmcp==3.4.10", "certifi>=2026.10.19", "mcp>=1.30.0,<2"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8.3.0,<10.0"]

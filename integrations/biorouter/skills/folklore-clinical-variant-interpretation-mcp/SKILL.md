@@ -13,6 +13,12 @@ publication records.
 
 ## Operating rules
 
+- Use public reference inputs only. Do not send patient, phenotype, family,
+  segregation or private case data through this anonymous connection. Public
+  phenotype reference terms in literature queries must not describe an individual
+  patient or private case.
+- Results require qualified professional review. They are not a diagnosis,
+  treatment recommendation or standalone clinical report.
 - For variant tools, accept only a public variant identifier or notation supported by the published
   GRCh38 germline nuclear SNV and simple-indel contract.
 - Call `get_gene_disease_associations` for one exact gene symbol/HGNC identifier; call `search_disease_genes` for an exact MONDO identifier or disease-name substring. Preserve distinct disease identities, source assertions, inheritance, evidence assessments and dates. These tools return ClinGen Gene-Disease Validity assertions. Empty results describe the queried snapshot.

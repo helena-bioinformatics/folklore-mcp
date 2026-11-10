@@ -25,6 +25,19 @@ def test_proxy_preserves_tool_schema_and_structured_result() -> None:
         assert proxy.name == SERVER_NAME
 
         async with Client(proxy, name="Biorouter bridge unit test") as client:
+            initialized = client.initialize_result
+            assert initialized is not None
+            instructions = initialized.instructions or ""
+            assert "Use public reference inputs only." in instructions
+            assert (
+                "Do not provide patient, phenotype, family, segregation or private case data."
+                in instructions
+            )
+            assert "qualified professional review" in instructions
+            assert (
+                "not a diagnosis, treatment recommendation or standalone clinical report"
+                in instructions
+            )
             tools = await client.list_tools()
             assert [tool.name for tool in tools] == ["classify_germline_variant"]
             schema = tools[0].inputSchema
